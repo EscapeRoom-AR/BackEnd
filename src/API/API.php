@@ -40,9 +40,8 @@ class API {
 
   public function teacherSearchGET(Request $request, Response $response, array $args) {
     $search = $args['search'];
-    $teacher = \API\Model\TeacherQuery::create()->filterByName($search, Criteria::LIKE)->orderByName()->find();
-    $data = $teachers->toArray();
-    return $response->withJson($data);
+    $teachers = \API\Model\TeacherQuery::create()->filterByName($search, Criteria::LIKE)->orderByName()->find();
+    return $response->withJson($teachers->toArray());
   }
 
   public function assignmentGET(Request $request, Response $response, array $args) {
