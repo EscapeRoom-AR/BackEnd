@@ -17,7 +17,7 @@ $slim->get('/hello/{name}', array($api, 'helloGET'));
 $slim->get('/json', array($api, 'jsonGET'));
 $slim->get('/teacher', array($api, 'teachersGET'));
 $slim->get('/teacher/{id}', array($api, 'teacherGET'));
-$slim->get('/teacher/search/{id}', array($api, 'teacherSearchGET'));
+$slim->get('/teacher/search/{search}', array($api, 'teacherSearchGET'));
 $slim->get('/assignment[/{id}]', array($api, 'assignmentGET'));
 
 # Execute the request
