@@ -14,7 +14,7 @@ class API {
 
   public function getAssignments(Request $request, Response $response, array $args) {
     $assignments = \API\Model\AssignmentQuery::create()->find();
-    $data = $assignments->toJson();
+    $data = json_decode($assignments->toJson());
     return $response->withJson($data);
   }
 };
