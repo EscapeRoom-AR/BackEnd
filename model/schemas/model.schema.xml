@@ -1,7 +1,7 @@
 <database name="default" defaultIdMethod="native"
           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
           xsi:noNamespaceSchemaLocation="http://xsd.propelorm.org/1.6/database.xsd"
-          namespace="\Model">
+          namespace="\API\Model">
 
   <table name="teacher">
     <column name="id" type="integer" primaryKey="true" autoIncrement="true" required="true" />
@@ -19,5 +19,5 @@
       <reference local="teacher_id" foreign="id"/>
     </foreign-key>
   </table>
-  
+
 </database>
