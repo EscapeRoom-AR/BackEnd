@@ -2,5 +2,22 @@
           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
           xsi:noNamespaceSchemaLocation="http://xsd.propelorm.org/1.6/database.xsd"
           namespace="\Model">
+
+  <table name="teacher">
+    <column name="id" type="integer" primaryKey="true" autoIncrement="true" required="true" />
+    <column name="name" type="varchar" size="255" />
+    <column name="email" type="varchar" size="255" />
+  </table>
+
+  <table name="assignment">
+    <column name="id" type="integer" primaryKey="true" autoIncrement="true" required="true" />
+    <column name="name" type="varchar" size="255" />
+    <column name="teacher_id" type="integer" />
+    <column name="start_date" type="timestamp" />
+    <column name="hours" type="integer" />
+    <foreign-key foreignTable="teacher">
+      <reference local="teacher_id" foreign="id"/>
+    </foreign-key>
+  </table>
   
 </database>
