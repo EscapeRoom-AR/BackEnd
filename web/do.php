@@ -1,3 +1,3 @@
 <?php
 
-include_once('../src/config.php');
+include_once('../src/main.php');
