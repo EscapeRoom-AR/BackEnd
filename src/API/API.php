@@ -89,9 +89,9 @@ class API extends \Slim\App {
   }
 
   public function tableGET($request, $response, $args) {
-    echo __DIRNAME__ . '/templates';
+    echo SRC_DIR . '/templates';
     exit;
-    $loader = new \Twig_Loader_Filesystem(__DIRNAME__ . '/templates');
+    $loader = new \Twig_Loader_Filesystem(SRC_DIR . '/templates');
     $twig = new Twig_Environment($loader, [
     'cache' => '/path/to/compilation_cache',
 ]);
