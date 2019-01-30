@@ -23,4 +23,6 @@ $COMPOSER --working-dir=$APIDIR dump-autoload
 # Post-backup
 backupAPI
 cd $APIDIR
-gp
+git add -A .
+git commit -m "`date`"
+git push origin master
