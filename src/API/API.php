@@ -6,8 +6,22 @@ use \Psr\Http\Message\ServerRequestInterface as Request;
 use \Psr\Http\Message\ResponseInterface as Response;
 use \Propel\Runtime\ActiveQuery\Criteria as Criteria;
 
-class API {
-  public function helloGET(Request $request, Response $response, array $args) {
+class API extends \Slim\App {
+
+  public function __construct() {
+    $settings = [ 'displayErrorDetails' => true ];
+    parent::__construct(['settings' => $settings]);
+
+    // Define the ROUTES
+    $slim->get('/hello/{name}',            '/API/API/helloGET');
+    $slim->get('/json',                    [$this,'jsonGET']);
+    $slim->get('/teacher',                 [$this,'teachersGET']);
+    $slim->get('/teacher/{id}',            [$this,'teacherGET']);
+    $slim->get('/teacher/search/{search}', [$this,'teacherSearchGET']);
+    $slim->get('/assignment[/{id}]',       [$this,'assignmentGET']);
+  }
+
+  public static function helloGET(Request $request, Response $response, array $args) {
     $name = $args['name'];
     $response->getBody()->write("Hello, $name");
     return $response;
