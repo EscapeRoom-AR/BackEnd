@@ -8,6 +8,7 @@ require '../vendor/autoload.php';
 
 $api = new API();
 $slim = new \Slim\App();
-$slim->get('/hello/{name}', array($api, 'getHello'));
-$slim->get('/assignments', array($api, 'getAssignments'));
+$slim
+  ->get('/hello/{name}', array($api, 'getHello'))
+  ->get('/assignments', array($api, 'getAssignments'));
 $slim->run();
