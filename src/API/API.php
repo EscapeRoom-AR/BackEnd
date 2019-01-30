@@ -14,7 +14,7 @@ class API {
 
   public function teacherGET(Request $request, Response $response, array $args) {
     $teachers = \API\Model\TeacherQuery::create()->find();
-    $data = $teachers->toArray();
+    $data = $args;
     return $response->withJson($data);
   }
 
