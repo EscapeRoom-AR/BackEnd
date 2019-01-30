@@ -60,7 +60,12 @@ class API {
     }
     else {
       $assignments = \API\Model\AssignmentQuery::create()->find();
-      $data = $assignments->toArray();
+      $data = [];
+      foreach($assignments as $assignment) {
+        $info = $assignment->toArray();
+        $info['Teacher'] = $assignment->getTeacher()->toArray();
+        $data[] = $info;
+      }
     }
     return $response->withJson($data, $status);
   }
