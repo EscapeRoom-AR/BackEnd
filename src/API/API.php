@@ -18,7 +18,7 @@ class API {
     if (isset($args['id'])) {
       $id = $args['id'];
       $teacher = \API\Model\TeacherQuery::create()->findPK($id);
-      if (!is_null($teacher)) $data = $teachers->toArray();
+      if (!is_null($teacher)) $data = $teacher->toArray();
       else $status = 404;
     }
     else {
