@@ -37,6 +37,7 @@ class API {
       $data = $teacher->toArray();
       $data['AssignmentCount'] = $teacher->getAssignmentCount();
       $data['TotalHours'] = $teacher->getTotalHours();
+      $data['Assignments'] = $teacher->getAssignments()->toArray();
       return $response->withJson($data);
     }
   }
