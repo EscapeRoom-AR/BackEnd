@@ -12,7 +12,7 @@ class API {
 
   public function getAssignments(Request $request, Response $response, array $args) {
     $data = array('name' => 'Bob', 'age' => 40);
-    $response->withJson($data);
+    $response = $response->withJson($data);
     return $response;
   }
 };
