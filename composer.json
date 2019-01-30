@@ -1,0 +1,12 @@
+{
+    "name": "felix/api",
+    "authors": [
+        {
+            "name": "Fèlix Galindo Allué",
+            "email": "felix@flx.cat"
+        }
+    ],
+    "require": {
+        "slim/slim": "^3.12"
+    }
+}
