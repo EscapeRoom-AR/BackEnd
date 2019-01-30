@@ -1,11 +1,14 @@
 {
-    "name": "felix/api",
+    "name": "DAM2T01/api",
     "authors": [
         {
-            "name": "Fèlix Galindo Allué",
-            "email": "felix@flx.cat"
+            "name": "DAM2T01",
+            "email": "dam2t01@stucom.flx.cat"
         }
     ],
+    "autoload": {
+        "psr-4": { "": "src/" }
+    },
     "require": {
         "slim/slim": "^3.12"
     }
