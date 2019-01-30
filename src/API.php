@@ -9,4 +9,8 @@ class API {
     $response->getBody()->write("Hello, $name");
     return $response;
   }
+
+  public function getAssignments(Request $request, Response $response, array $args) {
+    $response->getBody()->write(json_encode(array()));
+  }
 };
