@@ -1,5 +1,11 @@
 #!/bin/bash
 
+if [ `uname` == Darwin ]
+then
+  echo "Do it only from production server!!!"
+  exit
+fi
+
 FILESDIR=~/files
 DBNAME=$USER
 
