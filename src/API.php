@@ -13,10 +13,9 @@ class API {
   public function getAssignments(Request $request, Response $response, array $args) {
     $assignments = \Model\AssignmentQuery::create()->find();
     $data = [];
-    foreach($assignments as $assignment) {
-      $data[] = $assignment->toArray();
-    }
-    $response = $response->withJson($data);
-    return $response;
+    // foreach($assignments as $assignment) {
+    //   $data[] = $assignment->toArray();
+    // }
+    return $response->withJson($data);
   }
 };
