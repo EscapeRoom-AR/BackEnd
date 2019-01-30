@@ -17,4 +17,12 @@ use API\Model\Base\Teacher as BaseTeacher;
 class Teacher extends BaseTeacher
 {
 
+  public function getAssignmentCount() {
+    return $this->getAssignments()->count();
+  }
+
+  public function getTotalHours() {
+    return \API\Model\AssignmentQuery::create()->filterByTeacher($this)->withColumn('SUM(hours)', 'total')->select('total')->findOne();
+  }
+
 }

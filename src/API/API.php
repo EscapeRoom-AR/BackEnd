@@ -34,7 +34,10 @@ class API {
       return $response->withJson([], 404);
     } 
     else {
-      return $response->withJson($teacher->toArray());
+      $data = $teacher->toArray();
+      $data['AssignmentCount'] = $teacher->getAssignmentCount();
+      $data['TotalHours'] = $teacher->getTotalHours();
+      return $response->withJson($data);
     }
   }
 
