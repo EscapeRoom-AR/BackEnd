@@ -39,7 +39,8 @@ class API {
   }
 
   public function teacherSearchGET(Request $request, Response $response, array $args) {
-    $search = $args['search'];
+    $search = trim($args['search']);
+    $search = empty($search) ? '%' : ('%' . $search . '%');
     $teachers = \API\Model\TeacherQuery::create()->filterByName($search, Criteria::LIKE)->orderByName()->find();
     return $response->withJson($teachers->toArray());
   }
