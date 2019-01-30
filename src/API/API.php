@@ -89,8 +89,6 @@ class API extends \Slim\App {
   }
 
   public function tableGET($request, $response, $args) {
-    echo SRC_DIR . '/templates';
-    exit;
     $loader = new \Twig_Loader_Filesystem(SRC_DIR . '/templates');
     $twig = new Twig_Environment($loader, ['cache' => false]);
     $template = $twig->load('table.html');
