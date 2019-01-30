@@ -7,8 +7,6 @@ error_reporting(E_ALL | E_STRICT);
 require_once('../vendor/autoload.php');
 require_once('../model/generated-conf/config.php');
 
-$assignments = \API\Model\AssignmentQuery::create()->find();
-
 $api = new \API\API();
 $slim = new \Slim\App();
 $slim->get('/hello/{name}', array($api, 'getHello'));

@@ -1,4 +1,5 @@
 <?php
+
 namespace API;
 
 use \Psr\Http\Message\ServerRequestInterface as Request;
@@ -12,10 +13,8 @@ class API {
   }
 
   public function getAssignments(Request $request, Response $response, array $args) {
-    $data = [ 'hello' => 'yes' ];
-    // foreach($assignments as $assignment) {
-    //   $data[] = $assignment->toArray();
-    // }
+    $assignments = \Model\AssignmentQuery::create()->find();
+    $data = $assignments->toArray();
     return $response->withJson($data);
   }
 };
