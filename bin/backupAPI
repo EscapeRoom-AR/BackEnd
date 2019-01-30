@@ -1,0 +1,10 @@
+#!/bin/bash
+
+FILESDIR=~/files
+DBNAME=$USER
+
+cd $FILESDIR
+mysqldump --skip-dump-date $DBNAME > $DBNAME.db.sql
+git add -A .
+git commit -m "`date`"
+git push origin master

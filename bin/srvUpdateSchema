@@ -1,0 +1,18 @@
+#!/bin/bash
+
+if [ `uname` == Darwin ]
+then
+  echo "Do it only from production server!!!"
+  exit
+fi
+
+APIDIR=~/api
+MODELDIR=APIDIR/model
+PROPEL=APIDIR/vendor/bin/propel
+COMPOSER=composer
+
+backupAPI
+pushd $MODELDIR > /dev/null
+$PROPEL diff && $PROPEL migrate && $PROPEL build && $PROPEL config:convert
+popd > /dev/null
+$COMPOSER --working-dir=$APIDIR dump-autoload
