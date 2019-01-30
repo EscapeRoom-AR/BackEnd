@@ -13,9 +13,18 @@ class API {
   }
 
   public function teacherGET(Request $request, Response $response, array $args) {
-    $teachers = \API\Model\TeacherQuery::create()->find();
-    $data = $args;
-    return $response->withJson($data);
+    $data = [];
+    $status = 200;
+    if (isset($args['id'])) {
+      $teacher = \API\Model\TeacherQuery::create()->findPK($id);
+      if (!is_null($teacher)) $data = $teachers->toArray();
+      else $status = 404;
+    }
+    else {
+      $teachers = \API\Model\TeacherQuery::create()->find();
+      $data = $teachers->toArray();
+    }
+    return $response->withJson($data, $status);
   }
 
   public function assignmentGET(Request $request, Response $response, array $args) {
