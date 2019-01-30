@@ -12,7 +12,10 @@ class API {
 
   public function getAssignments(Request $request, Response $response, array $args) {
     $assignments = \Model\AssignmentQuery::create()->find();
-    $data = $assignments->asArray();
+    $data = [];
+    foreach($assignments as $assignment) {
+      $data[] = $assignment->asArray();
+    }
     $response = $response->withJson($data);
     return $response;
   }
