@@ -11,6 +11,7 @@ class API {
   }
 
   public function getAssignments(Request $request, Response $response, array $args) {
-    $response->getBody()->write(json_encode(array()));
+    $data = array('name' => 'Bob', 'age' => 40);
+    $response->withJson($data);
   }
 };
