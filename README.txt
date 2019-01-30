@@ -31,7 +31,13 @@ dam2t10 : d4m2+5tc0m3#
         composer update
         srvUpdateSchema
 
-5)  Return to your desktop machine and pull all the changes
+5)  Enter sample data to the database
+
+        cd ~/api
+        mysql $USER < testdata.sql
+        backupAPI
+
+6)  Return to your desktop machine and pull all the changes
 
 
 # WORKING WITH WEB RESOURCES:
@@ -46,6 +52,19 @@ dam2t10 : d4m2+5tc0m3#
 2)  `~/api/src/main.php` defines the sample routes
 3)  `~/api/src/API.php` defines a sample basic API routes
 4)  `~/api/src/Model` will be updated by PropelORM on schema changes, but you can modify the generated classes
+
+
+
+# WORKING WITH MySQL:
+
+Enter the MySQL console from terminal. No credentials needed as per `~/.my.cnf`:
+
+    mysql dam2tXX
+
+Or simply:
+
+    mysql $USER
+
 
 
 # WORKING WITH PROPEL ORM:
