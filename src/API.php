@@ -14,7 +14,7 @@ class API {
     $assignments = \Model\AssignmentQuery::create()->find();
     $data = [];
     foreach($assignments as $assignment) {
-      $data[] = $assignment->asArray();
+      $data[] = $assignment->toArray();
     }
     $response = $response->withJson($data);
     return $response;
