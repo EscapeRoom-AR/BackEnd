@@ -34,7 +34,7 @@ class API {
       return $response->withJson([], 404);
     } 
     else {
-      return $response->withJson($teacher->toArray(), $data);
+      return $response->withJson($teacher->toArray());
     }
   }
 
