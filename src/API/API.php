@@ -13,12 +13,13 @@ class API extends \Slim\App {
     parent::__construct(['settings' => $settings]);
 
     // Define the ROUTES
-    $this->get('/hello/{name}',            '\API\API:helloGET');
-    $this->get('/json',                    [$this,'jsonGET']);
-    $this->get('/teacher',                 [$this,'teachersGET']);
-    $this->get('/teacher/{id}',            [$this,'teacherGET']);
-    $this->get('/teacher/search/{search}', [$this,'teacherSearchGET']);
-    $this->get('/assignment[/{id}]',       [$this,'assignmentGET']);
+    $this->get('/hello/{name}',             '\API\API:helloGET');
+    $this->get('/json',                     [$this,'jsonGET']);
+    $this->get('/teacher',                  [$this,'teachersGET']);
+    $this->get('/teacher/{id}',             [$this,'teacherGET']);
+    $this->get('/teacher/search/{search}',  [$this,'teacherSearchGET']);
+    $this->get('/assignment[/{id}]',        [$this,'assignmentGET']);
+    $this->get('/table',                    [$this,'tableGET']);
   }
 
   public static function helloGET(Request $request, Response $response, array $args) {
@@ -85,5 +86,14 @@ class API extends \Slim\App {
       }
     }
     return $response->withJson($data, $status);
+  }
+
+  public function tableGET($request, $response, $args) {
+    echo __DIRNAME__ . '/templates';
+    exit;
+    $loader = new \Twig_Loader_Filesystem(__DIRNAME__ . '/templates');
+    $twig = new Twig_Environment($loader, [
+    'cache' => '/path/to/compilation_cache',
+]);
   }
 };
