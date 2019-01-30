@@ -14,4 +14,3 @@ INSERT INTO assignment VALUES (5, 'DAM2T1-M08 PMM (Programació Multimèdia i Di
 INSERT INTO assignment VALUES (6, 'DAM2T1-M09 PSP (Programació de serveis i Processos)', 3, '2018-09-14', 99);
 INSERT INTO assignment VALUES (7, 'DAM2T1-M10 SGE (Sistemes de Gestió Empresarial)', 4, '2018-09-14', 99);
 INSERT INTO assignment VALUES (8, 'DAM2T1-M13 PRJ (Projecte)', 3, '2018-09-14', 99);
-INSERT INTO assignment VALUES (9, 'DAM2T1-M14 FCT (Formació en Centres de Treball)', NULL, '2018-09-14', 99);
