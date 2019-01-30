@@ -92,8 +92,10 @@ class API extends \Slim\App {
     echo SRC_DIR . '/templates';
     exit;
     $loader = new \Twig_Loader_Filesystem(SRC_DIR . '/templates');
-    $twig = new Twig_Environment($loader, [
-    'cache' => '/path/to/compilation_cache',
-]);
+    $twig = new Twig_Environment($loader, ['cache' => false]);
+    $template = $twig->load('table.html');
+    $html = $template->render(['the' => 'variables', 'go' => 'here']);
+    $response->getBody()->write($html);
+    return $response;
   }
 };
