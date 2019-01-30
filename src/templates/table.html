@@ -5,8 +5,20 @@
   <title>Testing Twig, Slim and PropelORM</title>
 </head>
 <body>
-  Hello {{ name }}
-
-  
+  <h1>Existing Assignments:</h1>
+  <table>
+    <thead>
+      <tr>
+        <th>Id</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for row in Assignments %}
+      <tr>
+        <td>{{ row.Id }}</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
 </body>
 </html>

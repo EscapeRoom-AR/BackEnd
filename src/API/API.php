@@ -91,7 +91,15 @@ class API extends \Slim\App {
   public function tableGET($request, $response, $args) {
     $loader = new \Twig_Loader_Filesystem(SRC_DIR . '/templates');
     $twig = new \Twig_Environment($loader, ['cache' => false]);
-    $params = ['name' => 'Fèlix'];
+    $assignments = \API\Model\AssignmentQuery::create()->find();
+    $rows = [];
+    foreach($assignments as $assignment) {
+      $info = $assignment->toArray();
+      $teacher = $assignment->getTeacher();
+      $info['Teacher'] = !is_null($teacher) ? $teacher->getName() : '-';
+      $rows[] = $info;
+    }
+    $params = ['Assignments' => $rows];
     $html = $twig->render('table.html', $params);
     $response->getBody()->write($html);
     return $response;
