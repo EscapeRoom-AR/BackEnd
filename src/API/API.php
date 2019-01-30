@@ -63,7 +63,10 @@ class API {
       $data = [];
       foreach($assignments as $assignment) {
         $info = $assignment->toArray();
-        $info['Teacher'] = $assignment->getTeacher()->toArray();
+        $teacher = $assignment->getTeacher();
+        if (!is_null($teacher)) {
+          $info['Teacher'] = $teacher->toArray();
+        }
         $data[] = $info;
       }
     }
