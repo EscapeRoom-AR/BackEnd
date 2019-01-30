@@ -90,7 +90,7 @@ class API extends \Slim\App {
 
   public function tableGET($request, $response, $args) {
     $loader = new \Twig_Loader_Filesystem(SRC_DIR . '/templates');
-    $twig = new Twig_Environment($loader, ['cache' => false]);
+    $twig = new \Twig_Environment($loader, ['cache' => false]);
     $template = $twig->load('table.html');
     $html = $template->render(['the' => 'variables', 'go' => 'here']);
     $response->getBody()->write($html);
