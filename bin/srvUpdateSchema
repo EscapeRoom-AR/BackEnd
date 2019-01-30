@@ -7,8 +7,8 @@ then
 fi
 
 APIDIR=~/api
-MODELDIR=APIDIR/model
-PROPEL=APIDIR/vendor/bin/propel
+MODELDIR=$APIDIR/model
+PROPEL=$APIDIR/vendor/bin/propel
 COMPOSER=composer
 
 backupAPI
