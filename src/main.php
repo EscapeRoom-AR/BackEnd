@@ -2,10 +2,10 @@
 # DEBUGGING ERRORS (REMOVE IN PRODUCTION)
 ini_set("display_errors", 1);
 error_reporting(E_ALL | E_STRICT);
-    $assignments = Model\AssignmentQuery::create()->find();
-
 # Class autoloader
 require '../vendor/autoload.php';
+
+$assignments = Model\AssignmentQuery::create()->find();
 
 $api = new API();
 $slim = new \Slim\App();
