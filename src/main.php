@@ -14,8 +14,8 @@ $slim = new \Slim\App(['settings' => $settings]);
 # Routes
 $api = new \API\API();
 $slim->get('/hello/{name}', array($api, 'helloGET'));
-$slim->get('/teacher', array($api, 'teacherGET'));
-$slim->get('/assignment', array($api, 'assignmentGET'));
+$slim->get('/teacher/{id}', array($api, 'teacherGET'));
+$slim->get('/assignment/{id}', array($api, 'assignmentGET'));
 
 # Execute the request
 $slim->run();
