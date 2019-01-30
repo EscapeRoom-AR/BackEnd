@@ -5,9 +5,9 @@ error_reporting(E_ALL | E_STRICT);
 # Class autoloader
 require '../vendor/autoload.php';
 
-$assignments = Model\AssignmentQuery::create()->find();
+$assignments = \API\Model\AssignmentQuery::create()->find();
 
-$api = new API();
+$api = new \API\API();
 $slim = new \Slim\App();
 $slim->get('/hello/{name}', array($api, 'getHello'));
 $slim->get('/assignments', array($api, 'getAssignments'));
