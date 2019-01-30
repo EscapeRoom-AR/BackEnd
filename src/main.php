@@ -7,10 +7,14 @@ error_reporting(E_ALL | E_STRICT);
 require_once('../vendor/autoload.php');
 require_once('../model/generated-conf/config.php');
 
-# Slim routes
+# Slim init
 $settings['displayErrorDetails'] = true;
-$api = new \API\API(['settings' => $settings]);
-$slim = new \Slim\App();
+$slim = new \Slim\App(['settings' => $settings]);
+
+# Routes
+$api = new \API\API();
 $slim->get('/hello/{name}', array($api, 'getHello'));
 $slim->get('/assignments', array($api, 'getAssignments'));
+
+# Execute the request
 $slim->run();
