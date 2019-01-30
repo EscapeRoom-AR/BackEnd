@@ -1,6 +1,6 @@
 #!/bin/bash
 
-if [ `uname` == Darwin ]
+if [ `hostname` != srv.flx.cat ]
 then
   echo "Do it only from production server!!!"
   exit
