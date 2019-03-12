@@ -4,3 +4,4 @@ composer.lock
 tmp/*
 vendor/*
 /nbproject/private/
+README.txt
