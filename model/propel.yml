@@ -8,6 +8,6 @@ propel:
                 adapter: mysql
                 dsn: mysql:host=localhost;port=3306;dbname=dam2t02
                 user: dam2t02
-                password: escape.room
+                password: d4m2+5tc0m!2
                 settings:
                     charset: utf8
