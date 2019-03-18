@@ -1,9 +1,9 @@
 {
-    "name": "DAM2T01/api",
+    "name": "DAM2T02/api",
     "authors": [
         {
-            "name": "DAM2T01",
-            "email": "dam2t01@stucom.flx.cat"
+            "name": "DAM2T02",
+            "email": "dam2t02@stucom.flx.cat"
         }
     ],
     "autoload": {
