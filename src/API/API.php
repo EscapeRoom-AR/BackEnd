@@ -13,14 +13,15 @@ class API extends \Slim\App {
     parent::__construct(['settings' => $settings]);
 
     // Define the ROUTES
-    $this->get('/hello/{name}',             '\API\API:helloGET');
 	$this->get('/room/{code}/{name}',       '\API\API:tmpAddRoom');
+	$this->get('/room/{code}/',       '\API\API:getRoom');
+	/*$this->get('/hello/{name}',             '\API\API:helloGET');
     $this->get('/json',                     [$this,'jsonGET']);
     $this->get('/teacher',                  [$this,'teachersGET']);
     $this->get('/teacher/{id}',             [$this,'teacherGET']);
     $this->get('/teacher/search/{search}',  [$this,'teacherSearchGET']);
     $this->get('/assignment[/{id}]',        [$this,'assignmentGET']);
-    $this->get('/table',                    [$this,'tableGET']);
+    $this->get('/table',                    [$this,'tableGET']); */
   }
 
 
