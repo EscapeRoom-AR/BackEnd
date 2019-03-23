@@ -34,6 +34,9 @@ class API extends \Slim\App {
   	  $room = new \API\Model\Room();
 	  $room->setCode($args['code']);
 	  $room->setName($args['name']);
+	  $room->save();
+	  $response->getBody()->write("Room: ".$args['code'].",".$args['name']);
+	  return $response;
   }
 
   /*public static function helloGET(Request $request, Response $response, array $args) {
