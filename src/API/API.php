@@ -49,7 +49,7 @@ class API extends \Slim\App {
   }
 
   public static function getItems(Request $request, Response $response, array $args) {
-	$items = \API\Model\RoomQuery::create()->filterByRoomId($args['room'])->find();
+	$items = \API\Model\ItemQuery::create()->filterByRoomId($args['room'])->find();
 	if (is_null($items) || empty($items)) {
       return $response->withJson([], 404);
     } 
