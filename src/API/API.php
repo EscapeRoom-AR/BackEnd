@@ -28,10 +28,7 @@ class API extends \Slim\App {
   public static function getRoom(Request $request, Response $response, array $args) {
 	$id = $args['id'];
 	$room = \API\Model\RoomQuery::create()->findPK($id);
-	if (is_null($room)) {
-      return $response->withJson([], 404);
-    } 
-	return $response->withJson($room->getName());
+	$response->getBody()->write("Room: ".$args['id']);
   }
 
   public static function tmpAddRoom(Request $requuest, Response $response, array $args) {
