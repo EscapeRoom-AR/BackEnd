@@ -14,7 +14,7 @@ class API extends \Slim\App {
 
     // Define the ROUTES
 	$this->get('/room/{code}/{name}',       '\API\API:tmpAddRoom');
-	$this->get('/room/{id}',				'\API\API:getRoom');
+	$this->get('/room/{code}',				'\API\API:getRoom');
 	/*$this->get('/hello/{name}',             '\API\API:helloGET');
     $this->get('/json',                     [$this,'jsonGET']);
     $this->get('/teacher',                  [$this,'teachersGET']);
@@ -26,8 +26,8 @@ class API extends \Slim\App {
 
 
   public static function getRoom(Request $request, Response $response, array $args) {
-	$id = $args['id'];
-	$room = \API\Model\RoomQuery::create()->findPK(2);
+	$code = $args['code'];
+	$room = \API\Model\RoomQuery::create()->filterByCode($code)->find();
 	if (is_null($room)) {
       return $response->withJson([], 404);
     } 
