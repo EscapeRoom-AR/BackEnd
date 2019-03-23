@@ -14,6 +14,7 @@ class API extends \Slim\App {
 
     // Define the ROUTES
     $this->get('/hello/{name}',             '\API\API:helloGET');
+	$this->get('/room/{code}/{name}',       '\API\API:tmpAddRoom');
     $this->get('/json',                     [$this,'jsonGET']);
     $this->get('/teacher',                  [$this,'teachersGET']);
     $this->get('/teacher/{id}',             [$this,'teacherGET']);
@@ -22,7 +23,20 @@ class API extends \Slim\App {
     $this->get('/table',                    [$this,'tableGET']);
   }
 
-  public static function helloGET(Request $request, Response $response, array $args) {
+
+  public static function getRoom(Request $request, Response $response, array $args) {
+	$id = $args['id'];
+	$room = \API\Model\RoomQuery::create()->findPK($id);
+	return $response->withJson($room);
+  }
+
+  public static function tmpAddRoom(Request $requuest, Response response, array $args) {
+  	  $room = new \API\Model\Room();
+	  $room->setCode($args['code']);
+	  $room->setName($args['name']);
+  }
+
+  /*public static function helloGET(Request $request, Response $response, array $args) {
     $name = $args['name'];
     $response->getBody()->write("Hello, $name");
     return $response;
@@ -103,5 +117,5 @@ class API extends \Slim\App {
     $html = $twig->render('table.html', $params);
     $response->getBody()->write($html);
     return $response;
-  }
+  }*/
 };
