@@ -31,7 +31,7 @@ class API extends \Slim\App {
 	if (is_null($room)) {
       return $response->withJson([], 404);
     } 
-	return $response->withJson($room);
+	return $response->withJson($room->getName());
   }
 
   public static function tmpAddRoom(Request $requuest, Response $response, array $args) {
