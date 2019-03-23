@@ -14,7 +14,7 @@ class API extends \Slim\App {
 
     // Define the ROUTES
 	$this->get('/room/{code}/{name}',       '\API\API:tmpAddRoom');
-	$this->get('/room/{code}/',       '\API\API:getRoom');
+	$this->get('/room/{id}/',       '\API\API:getRoom');
 	/*$this->get('/hello/{name}',             '\API\API:helloGET');
     $this->get('/json',                     [$this,'jsonGET']);
     $this->get('/teacher',                  [$this,'teachersGET']);
