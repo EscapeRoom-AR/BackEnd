@@ -30,7 +30,7 @@ class API extends \Slim\App {
 	return $response->withJson($room);
   }
 
-  public static function tmpAddRoom(Request $requuest, Response response, array $args) {
+  public static function tmpAddRoom(Request $requuest, Response $response, array $args) {
   	  $room = new \API\Model\Room();
 	  $room->setCode($args['code']);
 	  $room->setName($args['name']);
