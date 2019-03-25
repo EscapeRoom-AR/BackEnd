@@ -117,6 +117,13 @@ abstract class User implements ActiveRecordInterface
     protected $image;
 
     /**
+     * The value for the password field.
+     *
+     * @var        string
+     */
+    protected $password;
+
+    /**
      * The value for the description field.
      *
      * Note: this column has a database default value of: 'Hi there! I\'m playing Scape Room AR!'
@@ -484,6 +491,16 @@ abstract class User implements ActiveRecordInterface
     }
 
     /**
+     * Get the [password] column value.
+     *
+     * @return string
+     */
+    public function getPassword()
+    {
+        return $this->password;
+    }
+
+    /**
      * Get the [description] column value.
      *
      * @return string
@@ -642,6 +659,26 @@ abstract class User implements ActiveRecordInterface
     } // setImage()
 
     /**
+     * Set the value of [password] column.
+     *
+     * @param string $v new value
+     * @return $this|\API\Model\User The current object (for fluent API support)
+     */
+    public function setPassword($v)
+    {
+        if ($v !== null) {
+            $v = (string) $v;
+        }
+
+        if ($this->password !== $v) {
+            $this->password = $v;
+            $this->modifiedColumns[UserTableMap::COL_PASSWORD] = true;
+        }
+
+        return $this;
+    } // setPassword()
+
+    /**
      * Set the value of [description] column.
      *
      * @param string $v new value
@@ -732,7 +769,10 @@ abstract class User implements ActiveRecordInterface
             $col = $row[TableMap::TYPE_NUM == $indexType ? 6 + $startcol : UserTableMap::translateFieldName('Image', TableMap::TYPE_PHPNAME, $indexType)];
             $this->image = (null !== $col) ? (string) $col : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 7 + $startcol : UserTableMap::translateFieldName('Description', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 7 + $startcol : UserTableMap::translateFieldName('Password', TableMap::TYPE_PHPNAME, $indexType)];
+            $this->password = (null !== $col) ? (string) $col : null;
+
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 8 + $startcol : UserTableMap::translateFieldName('Description', TableMap::TYPE_PHPNAME, $indexType)];
             $this->description = (null !== $col) ? (string) $col : null;
             $this->resetModified();
 
@@ -742,7 +782,7 @@ abstract class User implements ActiveRecordInterface
                 $this->ensureConsistency();
             }
 
-            return $startcol + 8; // 8 = UserTableMap::NUM_HYDRATE_COLUMNS.
+            return $startcol + 9; // 9 = UserTableMap::NUM_HYDRATE_COLUMNS.
 
         } catch (Exception $e) {
             throw new PropelException(sprintf('Error populating %s object', '\\API\\Model\\User'), 0, $e);
@@ -983,6 +1023,9 @@ abstract class User implements ActiveRecordInterface
         if ($this->isColumnModified(UserTableMap::COL_IMAGE)) {
             $modifiedColumns[':p' . $index++]  = 'image';
         }
+        if ($this->isColumnModified(UserTableMap::COL_PASSWORD)) {
+            $modifiedColumns[':p' . $index++]  = 'password';
+        }
         if ($this->isColumnModified(UserTableMap::COL_DESCRIPTION)) {
             $modifiedColumns[':p' . $index++]  = 'description';
         }
@@ -1017,6 +1060,9 @@ abstract class User implements ActiveRecordInterface
                         break;
                     case 'image':
                         $stmt->bindValue($identifier, $this->image, PDO::PARAM_STR);
+                        break;
+                    case 'password':
+                        $stmt->bindValue($identifier, $this->password, PDO::PARAM_STR);
                         break;
                     case 'description':
                         $stmt->bindValue($identifier, $this->description, PDO::PARAM_STR);
@@ -1105,6 +1151,9 @@ abstract class User implements ActiveRecordInterface
                 return $this->getImage();
                 break;
             case 7:
+                return $this->getPassword();
+                break;
+            case 8:
                 return $this->getDescription();
                 break;
             default:
@@ -1144,7 +1193,8 @@ abstract class User implements ActiveRecordInterface
             $keys[4] => $this->getEmail(),
             $keys[5] => $this->getPremium(),
             $keys[6] => $this->getImage(),
-            $keys[7] => $this->getDescription(),
+            $keys[7] => $this->getPassword(),
+            $keys[8] => $this->getDescription(),
         );
         if ($result[$keys[0]] instanceof \DateTimeInterface) {
             $result[$keys[0]] = $result[$keys[0]]->format('c');
@@ -1231,6 +1281,9 @@ abstract class User implements ActiveRecordInterface
                 $this->setImage($value);
                 break;
             case 7:
+                $this->setPassword($value);
+                break;
+            case 8:
                 $this->setDescription($value);
                 break;
         } // switch()
@@ -1281,7 +1334,10 @@ abstract class User implements ActiveRecordInterface
             $this->setImage($arr[$keys[6]]);
         }
         if (array_key_exists($keys[7], $arr)) {
-            $this->setDescription($arr[$keys[7]]);
+            $this->setPassword($arr[$keys[7]]);
+        }
+        if (array_key_exists($keys[8], $arr)) {
+            $this->setDescription($arr[$keys[8]]);
         }
     }
 
@@ -1344,6 +1400,9 @@ abstract class User implements ActiveRecordInterface
         }
         if ($this->isColumnModified(UserTableMap::COL_IMAGE)) {
             $criteria->add(UserTableMap::COL_IMAGE, $this->image);
+        }
+        if ($this->isColumnModified(UserTableMap::COL_PASSWORD)) {
+            $criteria->add(UserTableMap::COL_PASSWORD, $this->password);
         }
         if ($this->isColumnModified(UserTableMap::COL_DESCRIPTION)) {
             $criteria->add(UserTableMap::COL_DESCRIPTION, $this->description);
@@ -1440,6 +1499,7 @@ abstract class User implements ActiveRecordInterface
         $copyObj->setEmail($this->getEmail());
         $copyObj->setPremium($this->getPremium());
         $copyObj->setImage($this->getImage());
+        $copyObj->setPassword($this->getPassword());
         $copyObj->setDescription($this->getDescription());
 
         if ($deepCopy) {
@@ -1764,6 +1824,7 @@ abstract class User implements ActiveRecordInterface
         $this->email = null;
         $this->premium = null;
         $this->image = null;
+        $this->password = null;
         $this->description = null;
         $this->alreadyInSave = false;
         $this->clearAllReferences();

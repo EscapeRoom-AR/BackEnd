@@ -59,7 +59,7 @@ class UserTableMap extends TableMap
     /**
      * The total number of columns
      */
-    const NUM_COLUMNS = 8;
+    const NUM_COLUMNS = 9;
 
     /**
      * The number of lazy-loaded columns
@@ -69,7 +69,7 @@ class UserTableMap extends TableMap
     /**
      * The number of columns to hydrate (NUM_COLUMNS - NUM_LAZY_LOAD_COLUMNS)
      */
-    const NUM_HYDRATE_COLUMNS = 8;
+    const NUM_HYDRATE_COLUMNS = 9;
 
     /**
      * the column name for the created field
@@ -107,6 +107,11 @@ class UserTableMap extends TableMap
     const COL_IMAGE = 'user.image';
 
     /**
+     * the column name for the password field
+     */
+    const COL_PASSWORD = 'user.password';
+
+    /**
      * the column name for the description field
      */
     const COL_DESCRIPTION = 'user.description';
@@ -123,11 +128,11 @@ class UserTableMap extends TableMap
      * e.g. self::$fieldNames[self::TYPE_PHPNAME][0] = 'Id'
      */
     protected static $fieldNames = array (
-        self::TYPE_PHPNAME       => array('Created', 'Deleted', 'Code', 'Username', 'Email', 'Premium', 'Image', 'Description', ),
-        self::TYPE_CAMELNAME     => array('created', 'deleted', 'code', 'username', 'email', 'premium', 'image', 'description', ),
-        self::TYPE_COLNAME       => array(UserTableMap::COL_CREATED, UserTableMap::COL_DELETED, UserTableMap::COL_CODE, UserTableMap::COL_USERNAME, UserTableMap::COL_EMAIL, UserTableMap::COL_PREMIUM, UserTableMap::COL_IMAGE, UserTableMap::COL_DESCRIPTION, ),
-        self::TYPE_FIELDNAME     => array('created', 'deleted', 'code', 'username', 'email', 'premium', 'image', 'description', ),
-        self::TYPE_NUM           => array(0, 1, 2, 3, 4, 5, 6, 7, )
+        self::TYPE_PHPNAME       => array('Created', 'Deleted', 'Code', 'Username', 'Email', 'Premium', 'Image', 'Password', 'Description', ),
+        self::TYPE_CAMELNAME     => array('created', 'deleted', 'code', 'username', 'email', 'premium', 'image', 'password', 'description', ),
+        self::TYPE_COLNAME       => array(UserTableMap::COL_CREATED, UserTableMap::COL_DELETED, UserTableMap::COL_CODE, UserTableMap::COL_USERNAME, UserTableMap::COL_EMAIL, UserTableMap::COL_PREMIUM, UserTableMap::COL_IMAGE, UserTableMap::COL_PASSWORD, UserTableMap::COL_DESCRIPTION, ),
+        self::TYPE_FIELDNAME     => array('created', 'deleted', 'code', 'username', 'email', 'premium', 'image', 'password', 'description', ),
+        self::TYPE_NUM           => array(0, 1, 2, 3, 4, 5, 6, 7, 8, )
     );
 
     /**
@@ -137,11 +142,11 @@ class UserTableMap extends TableMap
      * e.g. self::$fieldKeys[self::TYPE_PHPNAME]['Id'] = 0
      */
     protected static $fieldKeys = array (
-        self::TYPE_PHPNAME       => array('Created' => 0, 'Deleted' => 1, 'Code' => 2, 'Username' => 3, 'Email' => 4, 'Premium' => 5, 'Image' => 6, 'Description' => 7, ),
-        self::TYPE_CAMELNAME     => array('created' => 0, 'deleted' => 1, 'code' => 2, 'username' => 3, 'email' => 4, 'premium' => 5, 'image' => 6, 'description' => 7, ),
-        self::TYPE_COLNAME       => array(UserTableMap::COL_CREATED => 0, UserTableMap::COL_DELETED => 1, UserTableMap::COL_CODE => 2, UserTableMap::COL_USERNAME => 3, UserTableMap::COL_EMAIL => 4, UserTableMap::COL_PREMIUM => 5, UserTableMap::COL_IMAGE => 6, UserTableMap::COL_DESCRIPTION => 7, ),
-        self::TYPE_FIELDNAME     => array('created' => 0, 'deleted' => 1, 'code' => 2, 'username' => 3, 'email' => 4, 'premium' => 5, 'image' => 6, 'description' => 7, ),
-        self::TYPE_NUM           => array(0, 1, 2, 3, 4, 5, 6, 7, )
+        self::TYPE_PHPNAME       => array('Created' => 0, 'Deleted' => 1, 'Code' => 2, 'Username' => 3, 'Email' => 4, 'Premium' => 5, 'Image' => 6, 'Password' => 7, 'Description' => 8, ),
+        self::TYPE_CAMELNAME     => array('created' => 0, 'deleted' => 1, 'code' => 2, 'username' => 3, 'email' => 4, 'premium' => 5, 'image' => 6, 'password' => 7, 'description' => 8, ),
+        self::TYPE_COLNAME       => array(UserTableMap::COL_CREATED => 0, UserTableMap::COL_DELETED => 1, UserTableMap::COL_CODE => 2, UserTableMap::COL_USERNAME => 3, UserTableMap::COL_EMAIL => 4, UserTableMap::COL_PREMIUM => 5, UserTableMap::COL_IMAGE => 6, UserTableMap::COL_PASSWORD => 7, UserTableMap::COL_DESCRIPTION => 8, ),
+        self::TYPE_FIELDNAME     => array('created' => 0, 'deleted' => 1, 'code' => 2, 'username' => 3, 'email' => 4, 'premium' => 5, 'image' => 6, 'password' => 7, 'description' => 8, ),
+        self::TYPE_NUM           => array(0, 1, 2, 3, 4, 5, 6, 7, 8, )
     );
 
     /**
@@ -168,6 +173,7 @@ class UserTableMap extends TableMap
         $this->addColumn('email', 'Email', 'VARCHAR', true, 255, null);
         $this->addColumn('premium', 'Premium', 'BOOLEAN', true, 1, false);
         $this->addColumn('image', 'Image', 'VARCHAR', false, 255, null);
+        $this->addColumn('password', 'Password', 'VARCHAR', true, 255, null);
         $this->addColumn('description', 'Description', 'VARCHAR', false, 255, 'Hi there! I\'m playing Scape Room AR!');
     } // initialize()
 
@@ -333,6 +339,7 @@ class UserTableMap extends TableMap
             $criteria->addSelectColumn(UserTableMap::COL_EMAIL);
             $criteria->addSelectColumn(UserTableMap::COL_PREMIUM);
             $criteria->addSelectColumn(UserTableMap::COL_IMAGE);
+            $criteria->addSelectColumn(UserTableMap::COL_PASSWORD);
             $criteria->addSelectColumn(UserTableMap::COL_DESCRIPTION);
         } else {
             $criteria->addSelectColumn($alias . '.created');
@@ -342,6 +349,7 @@ class UserTableMap extends TableMap
             $criteria->addSelectColumn($alias . '.email');
             $criteria->addSelectColumn($alias . '.premium');
             $criteria->addSelectColumn($alias . '.image');
+            $criteria->addSelectColumn($alias . '.password');
             $criteria->addSelectColumn($alias . '.description');
         }
     }
