@@ -59,7 +59,7 @@ class RoomTableMap extends TableMap
     /**
      * The total number of columns
      */
-    const NUM_COLUMNS = 3;
+    const NUM_COLUMNS = 4;
 
     /**
      * The number of lazy-loaded columns
@@ -69,7 +69,7 @@ class RoomTableMap extends TableMap
     /**
      * The number of columns to hydrate (NUM_COLUMNS - NUM_LAZY_LOAD_COLUMNS)
      */
-    const NUM_HYDRATE_COLUMNS = 3;
+    const NUM_HYDRATE_COLUMNS = 4;
 
     /**
      * the column name for the code field
@@ -80,6 +80,11 @@ class RoomTableMap extends TableMap
      * the column name for the name field
      */
     const COL_NAME = 'room.name';
+
+    /**
+     * the column name for the image field
+     */
+    const COL_IMAGE = 'room.image';
 
     /**
      * the column name for the premium field
@@ -98,11 +103,11 @@ class RoomTableMap extends TableMap
      * e.g. self::$fieldNames[self::TYPE_PHPNAME][0] = 'Id'
      */
     protected static $fieldNames = array (
-        self::TYPE_PHPNAME       => array('Code', 'Name', 'Premium', ),
-        self::TYPE_CAMELNAME     => array('code', 'name', 'premium', ),
-        self::TYPE_COLNAME       => array(RoomTableMap::COL_CODE, RoomTableMap::COL_NAME, RoomTableMap::COL_PREMIUM, ),
-        self::TYPE_FIELDNAME     => array('code', 'name', 'premium', ),
-        self::TYPE_NUM           => array(0, 1, 2, )
+        self::TYPE_PHPNAME       => array('Code', 'Name', 'Image', 'Premium', ),
+        self::TYPE_CAMELNAME     => array('code', 'name', 'image', 'premium', ),
+        self::TYPE_COLNAME       => array(RoomTableMap::COL_CODE, RoomTableMap::COL_NAME, RoomTableMap::COL_IMAGE, RoomTableMap::COL_PREMIUM, ),
+        self::TYPE_FIELDNAME     => array('code', 'name', 'image', 'premium', ),
+        self::TYPE_NUM           => array(0, 1, 2, 3, )
     );
 
     /**
@@ -112,11 +117,11 @@ class RoomTableMap extends TableMap
      * e.g. self::$fieldKeys[self::TYPE_PHPNAME]['Id'] = 0
      */
     protected static $fieldKeys = array (
-        self::TYPE_PHPNAME       => array('Code' => 0, 'Name' => 1, 'Premium' => 2, ),
-        self::TYPE_CAMELNAME     => array('code' => 0, 'name' => 1, 'premium' => 2, ),
-        self::TYPE_COLNAME       => array(RoomTableMap::COL_CODE => 0, RoomTableMap::COL_NAME => 1, RoomTableMap::COL_PREMIUM => 2, ),
-        self::TYPE_FIELDNAME     => array('code' => 0, 'name' => 1, 'premium' => 2, ),
-        self::TYPE_NUM           => array(0, 1, 2, )
+        self::TYPE_PHPNAME       => array('Code' => 0, 'Name' => 1, 'Image' => 2, 'Premium' => 3, ),
+        self::TYPE_CAMELNAME     => array('code' => 0, 'name' => 1, 'image' => 2, 'premium' => 3, ),
+        self::TYPE_COLNAME       => array(RoomTableMap::COL_CODE => 0, RoomTableMap::COL_NAME => 1, RoomTableMap::COL_IMAGE => 2, RoomTableMap::COL_PREMIUM => 3, ),
+        self::TYPE_FIELDNAME     => array('code' => 0, 'name' => 1, 'image' => 2, 'premium' => 3, ),
+        self::TYPE_NUM           => array(0, 1, 2, 3, )
     );
 
     /**
@@ -138,6 +143,7 @@ class RoomTableMap extends TableMap
         // columns
         $this->addPrimaryKey('code', 'Code', 'INTEGER', true, null, null);
         $this->addColumn('name', 'Name', 'VARCHAR', true, 255, null);
+        $this->addColumn('image', 'Image', 'VARCHAR', true, 255, null);
         $this->addColumn('premium', 'Premium', 'BOOLEAN', true, 1, false);
     } // initialize()
 
@@ -305,10 +311,12 @@ class RoomTableMap extends TableMap
         if (null === $alias) {
             $criteria->addSelectColumn(RoomTableMap::COL_CODE);
             $criteria->addSelectColumn(RoomTableMap::COL_NAME);
+            $criteria->addSelectColumn(RoomTableMap::COL_IMAGE);
             $criteria->addSelectColumn(RoomTableMap::COL_PREMIUM);
         } else {
             $criteria->addSelectColumn($alias . '.code');
             $criteria->addSelectColumn($alias . '.name');
+            $criteria->addSelectColumn($alias . '.image');
             $criteria->addSelectColumn($alias . '.premium');
         }
     }

@@ -4,10 +4,10 @@ use Propel\Generator\Manager\MigrationManager;
 
 /**
  * Data object containing the SQL and PHP code to migrate the database
- * up to version 1553539419.
- * Generated on 2019-03-25 19:43:39 by dam2t02
+ * up to version 1553540869.
+ * Generated on 2019-03-25 20:07:49 by dam2t02
  */
-class PropelMigration_1553539419
+class PropelMigration_1553540869
 {
     public $comment = '';
 
@@ -45,7 +45,9 @@ class PropelMigration_1553539419
 # It "suspends judgement" for fkey relationships until are tables are set.
 SET FOREIGN_KEY_CHECKS = 0;
 
-CREATE UNIQUE INDEX `room_u_d94269` ON `room` (`name`);
+ALTER TABLE `room`
+
+  ADD `image` VARCHAR(255) NOT NULL AFTER `name`;
 
 # This restores the fkey checks, after having unset them earlier
 SET FOREIGN_KEY_CHECKS = 1;
@@ -67,7 +69,9 @@ SET FOREIGN_KEY_CHECKS = 1;
 # It "suspends judgement" for fkey relationships until are tables are set.
 SET FOREIGN_KEY_CHECKS = 0;
 
-DROP INDEX `room_u_d94269` ON `room`;
+ALTER TABLE `room`
+
+  DROP `image`;
 
 # This restores the fkey checks, after having unset them earlier
 SET FOREIGN_KEY_CHECKS = 1;
