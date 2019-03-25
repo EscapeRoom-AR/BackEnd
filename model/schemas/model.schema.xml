@@ -24,6 +24,7 @@
   <table name="room">
     <column name="code" type="integer" primaryKey="true" autoIncrement="true" required="true"/>
     <column name="name" type="varchar" size="255" required="true"/>
+    <column name="image" type="varchar" size="255" required="true"/>
     <column name="premium" type="boolean" required="true" defaultValue="false" />
     <unique>
       <unique-column name="name" />
