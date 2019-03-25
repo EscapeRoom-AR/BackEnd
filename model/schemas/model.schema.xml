@@ -30,13 +30,13 @@
     <column name="code" type="varchar" size="255" primaryKey="true" autoIncrement="true" required="true"/>
     <column name="hints_used" type="integer" />
     <column name="time" type="integer" />
-    <column name="user_id" type="integer" />
-    <column name="room_id" type="integer" />
+    <column name="user_code" type="integer" />
+    <column name="room_code" type="integer" />
     <foreign-key foreignTable="user">
-      <reference local="user_id" foreign="id"/>
+      <reference local="user_code" foreign="code"/>
     </foreign-key>
     <foreign-key foreignTable="room">
-      <reference local="room_id" foreign="id"/>
+      <reference local="room_code" foreign="code"/>
     </foreign-key>
   </table>
 
@@ -44,17 +44,17 @@
     <column name="code" type="integer" primaryKey="true" autoIncrement="true" required="true"/>
     <column name="name" type="varchar" size="255" />
     <column name="qr_code" type="varchar" size="255" />
-    <column name="room_id" type="integer" />
+    <column name="room_code" type="integer" />
     <foreign-key foreignTable="room">
-      <reference local="room_id" foreign="id" />
+      <reference local="room_code" foreign="code" />
     </foreign-key>
   </table>
 
   <table name="hint">
     <column name="hint" type="varchar" size="255" />
-    <column name="item_id" type="integer" />
+    <column name="item_code" type="integer" />
     <foreign-key foreignTable="item">
-      <reference local="item_id" foreign="id" />
+      <reference local="item_code" foreign="code" />
     </foreign-key>
   </table>
 
