@@ -4,29 +4,30 @@
           namespace="API\Model">
 
   <table name="user">
-    <column name="id" type="integer" primaryKey="true" autoIncrement="true" required="true" />
     <column name="created" type="TIMESTAMP" />
     <column name="deleted" type="TIMESTAMP" />
-    <column name="code" type="varchar" size="255" />
-    <column name="username" type="varchar" size="255" />
+    <column name="code" type="varchar" size="255" primaryKey="true" autoIncrement="true" required="true"/>
+    <column name="username" type="varchar" size="255" unique="true"/>
     <column name="email" type="varchar" size="255" />
     <column name="premium" type="boolean" />
     <column name="image" type="varchar" size="255" />
     <column name="description" type="varchar" size="255" />  
+    <unique>
+      <unique-column name="username" />
+      <unique-column name="email" />
+    </unique>
   </table>
 
   <table name="room">
-    <column name="id" type="integer" primaryKey="true" autoIncrement="true" required="true" />
-    <column name="code" type="varchar" size="255" />
+    <column name="code" type="varchar" size="255" primaryKey="true" autoIncrement="true" required="true"/>
     <column name="name" type="varchar" size="255" />
     <column name="premium" type="boolean" />
   </table>
 
   <table name="game">
-    <column name="id" type="integer" primaryKey="true" autoIncrement="true" required="true" />
     <column name="created" type="TIMESTAMP" />
     <column name="deleted" type="TIMESTAMP" />
-    <column name="code" type="varchar" size="255" />
+    <column name="code" type="varchar" size="255" primaryKey="true" autoIncrement="true" required="true"/>
     <column name="hints_used" type="integer" />
     <column name="time" type="integer" />
     <column name="user_id" type="integer" />
@@ -40,8 +41,7 @@
   </table>
 
   <table name="item">
-    <column name="id" type="integer" primaryKey="true" autoIncrement="true" required="true" />
-    <column name="code" type="integer" />
+    <column name="code" type="integer" primaryKey="true" autoIncrement="true" required="true"/>
     <column name="name" type="varchar" size="255" />
     <column name="qr_code" type="varchar" size="255" />
     <column name="room_id" type="integer" />
@@ -51,7 +51,6 @@
   </table>
 
   <table name="hint">
-    <column name="id" type="integer" primaryKey="true" autoIncrement="true" required="true" />
     <column name="hint" type="varchar" size="255" />
     <column name="item_id" type="integer" />
     <foreign-key foreignTable="item">
