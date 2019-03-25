@@ -4,10 +4,10 @@ use Propel\Generator\Manager\MigrationManager;
 
 /**
  * Data object containing the SQL and PHP code to migrate the database
- * up to version 1553536777.
- * Generated on 2019-03-25 18:59:37 by dam2t02
+ * up to version 1553537181.
+ * Generated on 2019-03-25 19:06:21 by dam2t02
  */
-class PropelMigration_1553536777
+class PropelMigration_1553537181
 {
     public $comment = '';
 
@@ -49,7 +49,7 @@ CREATE TABLE `user`
 (
     `created` DATETIME,
     `deleted` DATETIME,
-    `code` VARCHAR(255) NOT NULL AUTO_INCREMENT,
+    `code` INTEGER NOT NULL AUTO_INCREMENT,
     `username` VARCHAR(255),
     `email` VARCHAR(255),
     `premium` TINYINT(1),
@@ -61,7 +61,7 @@ CREATE TABLE `user`
 
 CREATE TABLE `room`
 (
-    `code` VARCHAR(255) NOT NULL AUTO_INCREMENT,
+    `code` INTEGER NOT NULL AUTO_INCREMENT,
     `name` VARCHAR(255),
     `premium` TINYINT(1),
     PRIMARY KEY (`code`)
@@ -71,7 +71,7 @@ CREATE TABLE `game`
 (
     `created` DATETIME,
     `deleted` DATETIME,
-    `code` VARCHAR(255) NOT NULL AUTO_INCREMENT,
+    `code` INTEGER NOT NULL AUTO_INCREMENT,
     `hints_used` INTEGER,
     `time` INTEGER,
     `user_code` INTEGER,

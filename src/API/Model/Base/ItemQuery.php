@@ -20,17 +20,15 @@ use Propel\Runtime\Exception\PropelException;
  *
  *
  *
- * @method     ChildItemQuery orderById($order = Criteria::ASC) Order by the id column
  * @method     ChildItemQuery orderByCode($order = Criteria::ASC) Order by the code column
  * @method     ChildItemQuery orderByName($order = Criteria::ASC) Order by the name column
  * @method     ChildItemQuery orderByQrCode($order = Criteria::ASC) Order by the qr_code column
- * @method     ChildItemQuery orderByRoomId($order = Criteria::ASC) Order by the room_id column
+ * @method     ChildItemQuery orderByRoomCode($order = Criteria::ASC) Order by the room_code column
  *
- * @method     ChildItemQuery groupById() Group by the id column
  * @method     ChildItemQuery groupByCode() Group by the code column
  * @method     ChildItemQuery groupByName() Group by the name column
  * @method     ChildItemQuery groupByQrCode() Group by the qr_code column
- * @method     ChildItemQuery groupByRoomId() Group by the room_id column
+ * @method     ChildItemQuery groupByRoomCode() Group by the room_code column
  *
  * @method     ChildItemQuery leftJoin($relation) Adds a LEFT JOIN clause to the query
  * @method     ChildItemQuery rightJoin($relation) Adds a RIGHT JOIN clause to the query
@@ -65,27 +63,24 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildItem findOne(ConnectionInterface $con = null) Return the first ChildItem matching the query
  * @method     ChildItem findOneOrCreate(ConnectionInterface $con = null) Return the first ChildItem matching the query, or a new ChildItem object populated from the query conditions when no match is found
  *
- * @method     ChildItem findOneById(int $id) Return the first ChildItem filtered by the id column
  * @method     ChildItem findOneByCode(int $code) Return the first ChildItem filtered by the code column
  * @method     ChildItem findOneByName(string $name) Return the first ChildItem filtered by the name column
  * @method     ChildItem findOneByQrCode(string $qr_code) Return the first ChildItem filtered by the qr_code column
- * @method     ChildItem findOneByRoomId(int $room_id) Return the first ChildItem filtered by the room_id column *
+ * @method     ChildItem findOneByRoomCode(int $room_code) Return the first ChildItem filtered by the room_code column *
 
  * @method     ChildItem requirePk($key, ConnectionInterface $con = null) Return the ChildItem by primary key and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildItem requireOne(ConnectionInterface $con = null) Return the first ChildItem matching the query and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  *
- * @method     ChildItem requireOneById(int $id) Return the first ChildItem filtered by the id column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildItem requireOneByCode(int $code) Return the first ChildItem filtered by the code column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildItem requireOneByName(string $name) Return the first ChildItem filtered by the name column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildItem requireOneByQrCode(string $qr_code) Return the first ChildItem filtered by the qr_code column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
- * @method     ChildItem requireOneByRoomId(int $room_id) Return the first ChildItem filtered by the room_id column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
+ * @method     ChildItem requireOneByRoomCode(int $room_code) Return the first ChildItem filtered by the room_code column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  *
  * @method     ChildItem[]|ObjectCollection find(ConnectionInterface $con = null) Return ChildItem objects based on current ModelCriteria
- * @method     ChildItem[]|ObjectCollection findById(int $id) Return ChildItem objects filtered by the id column
  * @method     ChildItem[]|ObjectCollection findByCode(int $code) Return ChildItem objects filtered by the code column
  * @method     ChildItem[]|ObjectCollection findByName(string $name) Return ChildItem objects filtered by the name column
  * @method     ChildItem[]|ObjectCollection findByQrCode(string $qr_code) Return ChildItem objects filtered by the qr_code column
- * @method     ChildItem[]|ObjectCollection findByRoomId(int $room_id) Return ChildItem objects filtered by the room_id column
+ * @method     ChildItem[]|ObjectCollection findByRoomCode(int $room_code) Return ChildItem objects filtered by the room_code column
  * @method     ChildItem[]|\Propel\Runtime\Util\PropelModelPager paginate($page = 1, $maxPerPage = 10, ConnectionInterface $con = null) Issue a SELECT query based on the current ModelCriteria and uses a page and a maximum number of results per page to compute an offset and a limit
  *
  */
@@ -184,7 +179,7 @@ abstract class ItemQuery extends ModelCriteria
      */
     protected function findPkSimple($key, ConnectionInterface $con)
     {
-        $sql = 'SELECT id, code, name, qr_code, room_id FROM item WHERE id = :p0';
+        $sql = 'SELECT code, name, qr_code, room_code FROM item WHERE code = :p0';
         try {
             $stmt = $con->prepare($sql);
             $stmt->bindValue(':p0', $key, PDO::PARAM_INT);
@@ -258,7 +253,7 @@ abstract class ItemQuery extends ModelCriteria
     public function filterByPrimaryKey($key)
     {
 
-        return $this->addUsingAlias(ItemTableMap::COL_ID, $key, Criteria::EQUAL);
+        return $this->addUsingAlias(ItemTableMap::COL_CODE, $key, Criteria::EQUAL);
     }
 
     /**
@@ -271,48 +266,7 @@ abstract class ItemQuery extends ModelCriteria
     public function filterByPrimaryKeys($keys)
     {
 
-        return $this->addUsingAlias(ItemTableMap::COL_ID, $keys, Criteria::IN);
-    }
-
-    /**
-     * Filter the query on the id column
-     *
-     * Example usage:
-     * <code>
-     * $query->filterById(1234); // WHERE id = 1234
-     * $query->filterById(array(12, 34)); // WHERE id IN (12, 34)
-     * $query->filterById(array('min' => 12)); // WHERE id > 12
-     * </code>
-     *
-     * @param     mixed $id The value to use as filter.
-     *              Use scalar values for equality.
-     *              Use array values for in_array() equivalent.
-     *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
-     *
-     * @return $this|ChildItemQuery The current query, for fluid interface
-     */
-    public function filterById($id = null, $comparison = null)
-    {
-        if (is_array($id)) {
-            $useMinMax = false;
-            if (isset($id['min'])) {
-                $this->addUsingAlias(ItemTableMap::COL_ID, $id['min'], Criteria::GREATER_EQUAL);
-                $useMinMax = true;
-            }
-            if (isset($id['max'])) {
-                $this->addUsingAlias(ItemTableMap::COL_ID, $id['max'], Criteria::LESS_EQUAL);
-                $useMinMax = true;
-            }
-            if ($useMinMax) {
-                return $this;
-            }
-            if (null === $comparison) {
-                $comparison = Criteria::IN;
-            }
-        }
-
-        return $this->addUsingAlias(ItemTableMap::COL_ID, $id, $comparison);
+        return $this->addUsingAlias(ItemTableMap::COL_CODE, $keys, Criteria::IN);
     }
 
     /**
@@ -407,18 +361,18 @@ abstract class ItemQuery extends ModelCriteria
     }
 
     /**
-     * Filter the query on the room_id column
+     * Filter the query on the room_code column
      *
      * Example usage:
      * <code>
-     * $query->filterByRoomId(1234); // WHERE room_id = 1234
-     * $query->filterByRoomId(array(12, 34)); // WHERE room_id IN (12, 34)
-     * $query->filterByRoomId(array('min' => 12)); // WHERE room_id > 12
+     * $query->filterByRoomCode(1234); // WHERE room_code = 1234
+     * $query->filterByRoomCode(array(12, 34)); // WHERE room_code IN (12, 34)
+     * $query->filterByRoomCode(array('min' => 12)); // WHERE room_code > 12
      * </code>
      *
      * @see       filterByRoom()
      *
-     * @param     mixed $roomId The value to use as filter.
+     * @param     mixed $roomCode The value to use as filter.
      *              Use scalar values for equality.
      *              Use array values for in_array() equivalent.
      *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
@@ -426,16 +380,16 @@ abstract class ItemQuery extends ModelCriteria
      *
      * @return $this|ChildItemQuery The current query, for fluid interface
      */
-    public function filterByRoomId($roomId = null, $comparison = null)
+    public function filterByRoomCode($roomCode = null, $comparison = null)
     {
-        if (is_array($roomId)) {
+        if (is_array($roomCode)) {
             $useMinMax = false;
-            if (isset($roomId['min'])) {
-                $this->addUsingAlias(ItemTableMap::COL_ROOM_ID, $roomId['min'], Criteria::GREATER_EQUAL);
+            if (isset($roomCode['min'])) {
+                $this->addUsingAlias(ItemTableMap::COL_ROOM_CODE, $roomCode['min'], Criteria::GREATER_EQUAL);
                 $useMinMax = true;
             }
-            if (isset($roomId['max'])) {
-                $this->addUsingAlias(ItemTableMap::COL_ROOM_ID, $roomId['max'], Criteria::LESS_EQUAL);
+            if (isset($roomCode['max'])) {
+                $this->addUsingAlias(ItemTableMap::COL_ROOM_CODE, $roomCode['max'], Criteria::LESS_EQUAL);
                 $useMinMax = true;
             }
             if ($useMinMax) {
@@ -446,7 +400,7 @@ abstract class ItemQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(ItemTableMap::COL_ROOM_ID, $roomId, $comparison);
+        return $this->addUsingAlias(ItemTableMap::COL_ROOM_CODE, $roomCode, $comparison);
     }
 
     /**
@@ -463,14 +417,14 @@ abstract class ItemQuery extends ModelCriteria
     {
         if ($room instanceof \API\Model\Room) {
             return $this
-                ->addUsingAlias(ItemTableMap::COL_ROOM_ID, $room->getId(), $comparison);
+                ->addUsingAlias(ItemTableMap::COL_ROOM_CODE, $room->getCode(), $comparison);
         } elseif ($room instanceof ObjectCollection) {
             if (null === $comparison) {
                 $comparison = Criteria::IN;
             }
 
             return $this
-                ->addUsingAlias(ItemTableMap::COL_ROOM_ID, $room->toKeyValue('PrimaryKey', 'Id'), $comparison);
+                ->addUsingAlias(ItemTableMap::COL_ROOM_CODE, $room->toKeyValue('PrimaryKey', 'Code'), $comparison);
         } else {
             throw new PropelException('filterByRoom() only accepts arguments of type \API\Model\Room or Collection');
         }
@@ -538,7 +492,7 @@ abstract class ItemQuery extends ModelCriteria
     {
         if ($hint instanceof \API\Model\Hint) {
             return $this
-                ->addUsingAlias(ItemTableMap::COL_ID, $hint->getItemId(), $comparison);
+                ->addUsingAlias(ItemTableMap::COL_CODE, $hint->getItemCode(), $comparison);
         } elseif ($hint instanceof ObjectCollection) {
             return $this
                 ->useHintQuery()
@@ -609,7 +563,7 @@ abstract class ItemQuery extends ModelCriteria
     public function prune($item = null)
     {
         if ($item) {
-            $this->addUsingAlias(ItemTableMap::COL_ID, $item->getId(), Criteria::NOT_EQUAL);
+            $this->addUsingAlias(ItemTableMap::COL_CODE, $item->getCode(), Criteria::NOT_EQUAL);
         }
 
         return $this;

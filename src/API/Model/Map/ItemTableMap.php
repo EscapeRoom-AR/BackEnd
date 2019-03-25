@@ -59,7 +59,7 @@ class ItemTableMap extends TableMap
     /**
      * The total number of columns
      */
-    const NUM_COLUMNS = 5;
+    const NUM_COLUMNS = 4;
 
     /**
      * The number of lazy-loaded columns
@@ -69,12 +69,7 @@ class ItemTableMap extends TableMap
     /**
      * The number of columns to hydrate (NUM_COLUMNS - NUM_LAZY_LOAD_COLUMNS)
      */
-    const NUM_HYDRATE_COLUMNS = 5;
-
-    /**
-     * the column name for the id field
-     */
-    const COL_ID = 'item.id';
+    const NUM_HYDRATE_COLUMNS = 4;
 
     /**
      * the column name for the code field
@@ -92,9 +87,9 @@ class ItemTableMap extends TableMap
     const COL_QR_CODE = 'item.qr_code';
 
     /**
-     * the column name for the room_id field
+     * the column name for the room_code field
      */
-    const COL_ROOM_ID = 'item.room_id';
+    const COL_ROOM_CODE = 'item.room_code';
 
     /**
      * The default string format for model objects of the related table
@@ -108,11 +103,11 @@ class ItemTableMap extends TableMap
      * e.g. self::$fieldNames[self::TYPE_PHPNAME][0] = 'Id'
      */
     protected static $fieldNames = array (
-        self::TYPE_PHPNAME       => array('Id', 'Code', 'Name', 'QrCode', 'RoomId', ),
-        self::TYPE_CAMELNAME     => array('id', 'code', 'name', 'qrCode', 'roomId', ),
-        self::TYPE_COLNAME       => array(ItemTableMap::COL_ID, ItemTableMap::COL_CODE, ItemTableMap::COL_NAME, ItemTableMap::COL_QR_CODE, ItemTableMap::COL_ROOM_ID, ),
-        self::TYPE_FIELDNAME     => array('id', 'code', 'name', 'qr_code', 'room_id', ),
-        self::TYPE_NUM           => array(0, 1, 2, 3, 4, )
+        self::TYPE_PHPNAME       => array('Code', 'Name', 'QrCode', 'RoomCode', ),
+        self::TYPE_CAMELNAME     => array('code', 'name', 'qrCode', 'roomCode', ),
+        self::TYPE_COLNAME       => array(ItemTableMap::COL_CODE, ItemTableMap::COL_NAME, ItemTableMap::COL_QR_CODE, ItemTableMap::COL_ROOM_CODE, ),
+        self::TYPE_FIELDNAME     => array('code', 'name', 'qr_code', 'room_code', ),
+        self::TYPE_NUM           => array(0, 1, 2, 3, )
     );
 
     /**
@@ -122,11 +117,11 @@ class ItemTableMap extends TableMap
      * e.g. self::$fieldKeys[self::TYPE_PHPNAME]['Id'] = 0
      */
     protected static $fieldKeys = array (
-        self::TYPE_PHPNAME       => array('Id' => 0, 'Code' => 1, 'Name' => 2, 'QrCode' => 3, 'RoomId' => 4, ),
-        self::TYPE_CAMELNAME     => array('id' => 0, 'code' => 1, 'name' => 2, 'qrCode' => 3, 'roomId' => 4, ),
-        self::TYPE_COLNAME       => array(ItemTableMap::COL_ID => 0, ItemTableMap::COL_CODE => 1, ItemTableMap::COL_NAME => 2, ItemTableMap::COL_QR_CODE => 3, ItemTableMap::COL_ROOM_ID => 4, ),
-        self::TYPE_FIELDNAME     => array('id' => 0, 'code' => 1, 'name' => 2, 'qr_code' => 3, 'room_id' => 4, ),
-        self::TYPE_NUM           => array(0, 1, 2, 3, 4, )
+        self::TYPE_PHPNAME       => array('Code' => 0, 'Name' => 1, 'QrCode' => 2, 'RoomCode' => 3, ),
+        self::TYPE_CAMELNAME     => array('code' => 0, 'name' => 1, 'qrCode' => 2, 'roomCode' => 3, ),
+        self::TYPE_COLNAME       => array(ItemTableMap::COL_CODE => 0, ItemTableMap::COL_NAME => 1, ItemTableMap::COL_QR_CODE => 2, ItemTableMap::COL_ROOM_CODE => 3, ),
+        self::TYPE_FIELDNAME     => array('code' => 0, 'name' => 1, 'qr_code' => 2, 'room_code' => 3, ),
+        self::TYPE_NUM           => array(0, 1, 2, 3, )
     );
 
     /**
@@ -146,11 +141,10 @@ class ItemTableMap extends TableMap
         $this->setPackage('API.Model');
         $this->setUseIdGenerator(true);
         // columns
-        $this->addPrimaryKey('id', 'Id', 'INTEGER', true, null, null);
-        $this->addColumn('code', 'Code', 'INTEGER', false, null, null);
+        $this->addPrimaryKey('code', 'Code', 'INTEGER', true, null, null);
         $this->addColumn('name', 'Name', 'VARCHAR', false, 255, null);
         $this->addColumn('qr_code', 'QrCode', 'VARCHAR', false, 255, null);
-        $this->addForeignKey('room_id', 'RoomId', 'INTEGER', 'room', 'id', false, null, null);
+        $this->addForeignKey('room_code', 'RoomCode', 'INTEGER', 'room', 'code', false, null, null);
     } // initialize()
 
     /**
@@ -161,15 +155,15 @@ class ItemTableMap extends TableMap
         $this->addRelation('Room', '\\API\\Model\\Room', RelationMap::MANY_TO_ONE, array (
   0 =>
   array (
-    0 => ':room_id',
-    1 => ':id',
+    0 => ':room_code',
+    1 => ':code',
   ),
 ), null, null, null, false);
         $this->addRelation('Hint', '\\API\\Model\\Hint', RelationMap::ONE_TO_MANY, array (
   0 =>
   array (
-    0 => ':item_id',
-    1 => ':id',
+    0 => ':item_code',
+    1 => ':code',
   ),
 ), null, null, 'Hints', false);
     } // buildRelations()
@@ -190,11 +184,11 @@ class ItemTableMap extends TableMap
     public static function getPrimaryKeyHashFromRow($row, $offset = 0, $indexType = TableMap::TYPE_NUM)
     {
         // If the PK cannot be derived from the row, return NULL.
-        if ($row[TableMap::TYPE_NUM == $indexType ? 0 + $offset : static::translateFieldName('Id', TableMap::TYPE_PHPNAME, $indexType)] === null) {
+        if ($row[TableMap::TYPE_NUM == $indexType ? 0 + $offset : static::translateFieldName('Code', TableMap::TYPE_PHPNAME, $indexType)] === null) {
             return null;
         }
 
-        return null === $row[TableMap::TYPE_NUM == $indexType ? 0 + $offset : static::translateFieldName('Id', TableMap::TYPE_PHPNAME, $indexType)] || is_scalar($row[TableMap::TYPE_NUM == $indexType ? 0 + $offset : static::translateFieldName('Id', TableMap::TYPE_PHPNAME, $indexType)]) || is_callable([$row[TableMap::TYPE_NUM == $indexType ? 0 + $offset : static::translateFieldName('Id', TableMap::TYPE_PHPNAME, $indexType)], '__toString']) ? (string) $row[TableMap::TYPE_NUM == $indexType ? 0 + $offset : static::translateFieldName('Id', TableMap::TYPE_PHPNAME, $indexType)] : $row[TableMap::TYPE_NUM == $indexType ? 0 + $offset : static::translateFieldName('Id', TableMap::TYPE_PHPNAME, $indexType)];
+        return null === $row[TableMap::TYPE_NUM == $indexType ? 0 + $offset : static::translateFieldName('Code', TableMap::TYPE_PHPNAME, $indexType)] || is_scalar($row[TableMap::TYPE_NUM == $indexType ? 0 + $offset : static::translateFieldName('Code', TableMap::TYPE_PHPNAME, $indexType)]) || is_callable([$row[TableMap::TYPE_NUM == $indexType ? 0 + $offset : static::translateFieldName('Code', TableMap::TYPE_PHPNAME, $indexType)], '__toString']) ? (string) $row[TableMap::TYPE_NUM == $indexType ? 0 + $offset : static::translateFieldName('Code', TableMap::TYPE_PHPNAME, $indexType)] : $row[TableMap::TYPE_NUM == $indexType ? 0 + $offset : static::translateFieldName('Code', TableMap::TYPE_PHPNAME, $indexType)];
     }
 
     /**
@@ -214,7 +208,7 @@ class ItemTableMap extends TableMap
         return (int) $row[
             $indexType == TableMap::TYPE_NUM
                 ? 0 + $offset
-                : self::translateFieldName('Id', TableMap::TYPE_PHPNAME, $indexType)
+                : self::translateFieldName('Code', TableMap::TYPE_PHPNAME, $indexType)
         ];
     }
 
@@ -315,17 +309,15 @@ class ItemTableMap extends TableMap
     public static function addSelectColumns(Criteria $criteria, $alias = null)
     {
         if (null === $alias) {
-            $criteria->addSelectColumn(ItemTableMap::COL_ID);
             $criteria->addSelectColumn(ItemTableMap::COL_CODE);
             $criteria->addSelectColumn(ItemTableMap::COL_NAME);
             $criteria->addSelectColumn(ItemTableMap::COL_QR_CODE);
-            $criteria->addSelectColumn(ItemTableMap::COL_ROOM_ID);
+            $criteria->addSelectColumn(ItemTableMap::COL_ROOM_CODE);
         } else {
-            $criteria->addSelectColumn($alias . '.id');
             $criteria->addSelectColumn($alias . '.code');
             $criteria->addSelectColumn($alias . '.name');
             $criteria->addSelectColumn($alias . '.qr_code');
-            $criteria->addSelectColumn($alias . '.room_id');
+            $criteria->addSelectColumn($alias . '.room_code');
         }
     }
 
@@ -377,7 +369,7 @@ class ItemTableMap extends TableMap
             $criteria = $values->buildPkeyCriteria();
         } else { // it's a primary key, or an array of pks
             $criteria = new Criteria(ItemTableMap::DATABASE_NAME);
-            $criteria->add(ItemTableMap::COL_ID, (array) $values, Criteria::IN);
+            $criteria->add(ItemTableMap::COL_CODE, (array) $values, Criteria::IN);
         }
 
         $query = ItemQuery::create()->mergeWith($criteria);
@@ -425,8 +417,8 @@ class ItemTableMap extends TableMap
             $criteria = $criteria->buildCriteria(); // build Criteria from Item object
         }
 
-        if ($criteria->containsKey(ItemTableMap::COL_ID) && $criteria->keyContainsValue(ItemTableMap::COL_ID) ) {
-            throw new PropelException('Cannot insert a value for auto-increment primary key ('.ItemTableMap::COL_ID.')');
+        if ($criteria->containsKey(ItemTableMap::COL_CODE) && $criteria->keyContainsValue(ItemTableMap::COL_CODE) ) {
+            throw new PropelException('Cannot insert a value for auto-increment primary key ('.ItemTableMap::COL_CODE.')');
         }
 
 

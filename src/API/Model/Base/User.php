@@ -67,13 +67,6 @@ abstract class User implements ActiveRecordInterface
     protected $virtualColumns = array();
 
     /**
-     * The value for the id field.
-     *
-     * @var        int
-     */
-    protected $id;
-
-    /**
      * The value for the created field.
      *
      * @var        DateTime
@@ -90,7 +83,7 @@ abstract class User implements ActiveRecordInterface
     /**
      * The value for the code field.
      *
-     * @var        string
+     * @var        int
      */
     protected $code;
 
@@ -375,16 +368,6 @@ abstract class User implements ActiveRecordInterface
     }
 
     /**
-     * Get the [id] column value.
-     *
-     * @return int
-     */
-    public function getId()
-    {
-        return $this->id;
-    }
-
-    /**
      * Get the [optionally formatted] temporal [created] column value.
      *
      *
@@ -427,7 +410,7 @@ abstract class User implements ActiveRecordInterface
     /**
      * Get the [code] column value.
      *
-     * @return string
+     * @return int
      */
     public function getCode()
     {
@@ -495,26 +478,6 @@ abstract class User implements ActiveRecordInterface
     }
 
     /**
-     * Set the value of [id] column.
-     *
-     * @param int $v new value
-     * @return $this|\API\Model\User The current object (for fluent API support)
-     */
-    public function setId($v)
-    {
-        if ($v !== null) {
-            $v = (int) $v;
-        }
-
-        if ($this->id !== $v) {
-            $this->id = $v;
-            $this->modifiedColumns[UserTableMap::COL_ID] = true;
-        }
-
-        return $this;
-    } // setId()
-
-    /**
      * Sets the value of [created] column to a normalized version of the date/time value specified.
      *
      * @param  mixed $v string, integer (timestamp), or \DateTimeInterface value.
@@ -557,13 +520,13 @@ abstract class User implements ActiveRecordInterface
     /**
      * Set the value of [code] column.
      *
-     * @param string $v new value
+     * @param int $v new value
      * @return $this|\API\Model\User The current object (for fluent API support)
      */
     public function setCode($v)
     {
         if ($v !== null) {
-            $v = (string) $v;
+            $v = (int) $v;
         }
 
         if ($this->code !== $v) {
@@ -718,37 +681,34 @@ abstract class User implements ActiveRecordInterface
     {
         try {
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 0 + $startcol : UserTableMap::translateFieldName('Id', TableMap::TYPE_PHPNAME, $indexType)];
-            $this->id = (null !== $col) ? (int) $col : null;
-
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 1 + $startcol : UserTableMap::translateFieldName('Created', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 0 + $startcol : UserTableMap::translateFieldName('Created', TableMap::TYPE_PHPNAME, $indexType)];
             if ($col === '0000-00-00 00:00:00') {
                 $col = null;
             }
             $this->created = (null !== $col) ? PropelDateTime::newInstance($col, null, 'DateTime') : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 2 + $startcol : UserTableMap::translateFieldName('Deleted', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 1 + $startcol : UserTableMap::translateFieldName('Deleted', TableMap::TYPE_PHPNAME, $indexType)];
             if ($col === '0000-00-00 00:00:00') {
                 $col = null;
             }
             $this->deleted = (null !== $col) ? PropelDateTime::newInstance($col, null, 'DateTime') : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 3 + $startcol : UserTableMap::translateFieldName('Code', TableMap::TYPE_PHPNAME, $indexType)];
-            $this->code = (null !== $col) ? (string) $col : null;
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 2 + $startcol : UserTableMap::translateFieldName('Code', TableMap::TYPE_PHPNAME, $indexType)];
+            $this->code = (null !== $col) ? (int) $col : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 4 + $startcol : UserTableMap::translateFieldName('Username', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 3 + $startcol : UserTableMap::translateFieldName('Username', TableMap::TYPE_PHPNAME, $indexType)];
             $this->username = (null !== $col) ? (string) $col : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 5 + $startcol : UserTableMap::translateFieldName('Email', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 4 + $startcol : UserTableMap::translateFieldName('Email', TableMap::TYPE_PHPNAME, $indexType)];
             $this->email = (null !== $col) ? (string) $col : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 6 + $startcol : UserTableMap::translateFieldName('Premium', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 5 + $startcol : UserTableMap::translateFieldName('Premium', TableMap::TYPE_PHPNAME, $indexType)];
             $this->premium = (null !== $col) ? (boolean) $col : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 7 + $startcol : UserTableMap::translateFieldName('Image', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 6 + $startcol : UserTableMap::translateFieldName('Image', TableMap::TYPE_PHPNAME, $indexType)];
             $this->image = (null !== $col) ? (string) $col : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 8 + $startcol : UserTableMap::translateFieldName('Description', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 7 + $startcol : UserTableMap::translateFieldName('Description', TableMap::TYPE_PHPNAME, $indexType)];
             $this->description = (null !== $col) ? (string) $col : null;
             $this->resetModified();
 
@@ -758,7 +718,7 @@ abstract class User implements ActiveRecordInterface
                 $this->ensureConsistency();
             }
 
-            return $startcol + 9; // 9 = UserTableMap::NUM_HYDRATE_COLUMNS.
+            return $startcol + 8; // 8 = UserTableMap::NUM_HYDRATE_COLUMNS.
 
         } catch (Exception $e) {
             throw new PropelException(sprintf('Error populating %s object', '\\API\\Model\\User'), 0, $e);
@@ -973,15 +933,12 @@ abstract class User implements ActiveRecordInterface
         $modifiedColumns = array();
         $index = 0;
 
-        $this->modifiedColumns[UserTableMap::COL_ID] = true;
-        if (null !== $this->id) {
-            throw new PropelException('Cannot insert a value for auto-increment primary key (' . UserTableMap::COL_ID . ')');
+        $this->modifiedColumns[UserTableMap::COL_CODE] = true;
+        if (null !== $this->code) {
+            throw new PropelException('Cannot insert a value for auto-increment primary key (' . UserTableMap::COL_CODE . ')');
         }
 
          // check the columns in natural order for more readable SQL queries
-        if ($this->isColumnModified(UserTableMap::COL_ID)) {
-            $modifiedColumns[':p' . $index++]  = 'id';
-        }
         if ($this->isColumnModified(UserTableMap::COL_CREATED)) {
             $modifiedColumns[':p' . $index++]  = 'created';
         }
@@ -1017,9 +974,6 @@ abstract class User implements ActiveRecordInterface
             $stmt = $con->prepare($sql);
             foreach ($modifiedColumns as $identifier => $columnName) {
                 switch ($columnName) {
-                    case 'id':
-                        $stmt->bindValue($identifier, $this->id, PDO::PARAM_INT);
-                        break;
                     case 'created':
                         $stmt->bindValue($identifier, $this->created ? $this->created->format("Y-m-d H:i:s.u") : null, PDO::PARAM_STR);
                         break;
@@ -1027,7 +981,7 @@ abstract class User implements ActiveRecordInterface
                         $stmt->bindValue($identifier, $this->deleted ? $this->deleted->format("Y-m-d H:i:s.u") : null, PDO::PARAM_STR);
                         break;
                     case 'code':
-                        $stmt->bindValue($identifier, $this->code, PDO::PARAM_STR);
+                        $stmt->bindValue($identifier, $this->code, PDO::PARAM_INT);
                         break;
                     case 'username':
                         $stmt->bindValue($identifier, $this->username, PDO::PARAM_STR);
@@ -1057,7 +1011,7 @@ abstract class User implements ActiveRecordInterface
         } catch (Exception $e) {
             throw new PropelException('Unable to get autoincrement id.', 0, $e);
         }
-        $this->setId($pk);
+        $this->setCode($pk);
 
         $this->setNew(false);
     }
@@ -1107,30 +1061,27 @@ abstract class User implements ActiveRecordInterface
     {
         switch ($pos) {
             case 0:
-                return $this->getId();
-                break;
-            case 1:
                 return $this->getCreated();
                 break;
-            case 2:
+            case 1:
                 return $this->getDeleted();
                 break;
-            case 3:
+            case 2:
                 return $this->getCode();
                 break;
-            case 4:
+            case 3:
                 return $this->getUsername();
                 break;
-            case 5:
+            case 4:
                 return $this->getEmail();
                 break;
-            case 6:
+            case 5:
                 return $this->getPremium();
                 break;
-            case 7:
+            case 6:
                 return $this->getImage();
                 break;
-            case 8:
+            case 7:
                 return $this->getDescription();
                 break;
             default:
@@ -1163,22 +1114,21 @@ abstract class User implements ActiveRecordInterface
         $alreadyDumpedObjects['User'][$this->hashCode()] = true;
         $keys = UserTableMap::getFieldNames($keyType);
         $result = array(
-            $keys[0] => $this->getId(),
-            $keys[1] => $this->getCreated(),
-            $keys[2] => $this->getDeleted(),
-            $keys[3] => $this->getCode(),
-            $keys[4] => $this->getUsername(),
-            $keys[5] => $this->getEmail(),
-            $keys[6] => $this->getPremium(),
-            $keys[7] => $this->getImage(),
-            $keys[8] => $this->getDescription(),
+            $keys[0] => $this->getCreated(),
+            $keys[1] => $this->getDeleted(),
+            $keys[2] => $this->getCode(),
+            $keys[3] => $this->getUsername(),
+            $keys[4] => $this->getEmail(),
+            $keys[5] => $this->getPremium(),
+            $keys[6] => $this->getImage(),
+            $keys[7] => $this->getDescription(),
         );
-        if ($result[$keys[1]] instanceof \DateTimeInterface) {
-            $result[$keys[1]] = $result[$keys[1]]->format('c');
+        if ($result[$keys[0]] instanceof \DateTimeInterface) {
+            $result[$keys[0]] = $result[$keys[0]]->format('c');
         }
 
-        if ($result[$keys[2]] instanceof \DateTimeInterface) {
-            $result[$keys[2]] = $result[$keys[2]]->format('c');
+        if ($result[$keys[1]] instanceof \DateTimeInterface) {
+            $result[$keys[1]] = $result[$keys[1]]->format('c');
         }
 
         $virtualColumns = $this->virtualColumns;
@@ -1237,30 +1187,27 @@ abstract class User implements ActiveRecordInterface
     {
         switch ($pos) {
             case 0:
-                $this->setId($value);
-                break;
-            case 1:
                 $this->setCreated($value);
                 break;
-            case 2:
+            case 1:
                 $this->setDeleted($value);
                 break;
-            case 3:
+            case 2:
                 $this->setCode($value);
                 break;
-            case 4:
+            case 3:
                 $this->setUsername($value);
                 break;
-            case 5:
+            case 4:
                 $this->setEmail($value);
                 break;
-            case 6:
+            case 5:
                 $this->setPremium($value);
                 break;
-            case 7:
+            case 6:
                 $this->setImage($value);
                 break;
-            case 8:
+            case 7:
                 $this->setDescription($value);
                 break;
         } // switch()
@@ -1290,31 +1237,28 @@ abstract class User implements ActiveRecordInterface
         $keys = UserTableMap::getFieldNames($keyType);
 
         if (array_key_exists($keys[0], $arr)) {
-            $this->setId($arr[$keys[0]]);
+            $this->setCreated($arr[$keys[0]]);
         }
         if (array_key_exists($keys[1], $arr)) {
-            $this->setCreated($arr[$keys[1]]);
+            $this->setDeleted($arr[$keys[1]]);
         }
         if (array_key_exists($keys[2], $arr)) {
-            $this->setDeleted($arr[$keys[2]]);
+            $this->setCode($arr[$keys[2]]);
         }
         if (array_key_exists($keys[3], $arr)) {
-            $this->setCode($arr[$keys[3]]);
+            $this->setUsername($arr[$keys[3]]);
         }
         if (array_key_exists($keys[4], $arr)) {
-            $this->setUsername($arr[$keys[4]]);
+            $this->setEmail($arr[$keys[4]]);
         }
         if (array_key_exists($keys[5], $arr)) {
-            $this->setEmail($arr[$keys[5]]);
+            $this->setPremium($arr[$keys[5]]);
         }
         if (array_key_exists($keys[6], $arr)) {
-            $this->setPremium($arr[$keys[6]]);
+            $this->setImage($arr[$keys[6]]);
         }
         if (array_key_exists($keys[7], $arr)) {
-            $this->setImage($arr[$keys[7]]);
-        }
-        if (array_key_exists($keys[8], $arr)) {
-            $this->setDescription($arr[$keys[8]]);
+            $this->setDescription($arr[$keys[7]]);
         }
     }
 
@@ -1357,9 +1301,6 @@ abstract class User implements ActiveRecordInterface
     {
         $criteria = new Criteria(UserTableMap::DATABASE_NAME);
 
-        if ($this->isColumnModified(UserTableMap::COL_ID)) {
-            $criteria->add(UserTableMap::COL_ID, $this->id);
-        }
         if ($this->isColumnModified(UserTableMap::COL_CREATED)) {
             $criteria->add(UserTableMap::COL_CREATED, $this->created);
         }
@@ -1401,7 +1342,7 @@ abstract class User implements ActiveRecordInterface
     public function buildPkeyCriteria()
     {
         $criteria = ChildUserQuery::create();
-        $criteria->add(UserTableMap::COL_ID, $this->id);
+        $criteria->add(UserTableMap::COL_CODE, $this->code);
 
         return $criteria;
     }
@@ -1414,7 +1355,7 @@ abstract class User implements ActiveRecordInterface
      */
     public function hashCode()
     {
-        $validPk = null !== $this->getId();
+        $validPk = null !== $this->getCode();
 
         $validPrimaryKeyFKs = 0;
         $primaryKeyFKs = [];
@@ -1434,18 +1375,18 @@ abstract class User implements ActiveRecordInterface
      */
     public function getPrimaryKey()
     {
-        return $this->getId();
+        return $this->getCode();
     }
 
     /**
-     * Generic method to set the primary key (id column).
+     * Generic method to set the primary key (code column).
      *
      * @param       int $key Primary key.
      * @return void
      */
     public function setPrimaryKey($key)
     {
-        $this->setId($key);
+        $this->setCode($key);
     }
 
     /**
@@ -1454,7 +1395,7 @@ abstract class User implements ActiveRecordInterface
      */
     public function isPrimaryKeyNull()
     {
-        return null === $this->getId();
+        return null === $this->getCode();
     }
 
     /**
@@ -1472,7 +1413,6 @@ abstract class User implements ActiveRecordInterface
     {
         $copyObj->setCreated($this->getCreated());
         $copyObj->setDeleted($this->getDeleted());
-        $copyObj->setCode($this->getCode());
         $copyObj->setUsername($this->getUsername());
         $copyObj->setEmail($this->getEmail());
         $copyObj->setPremium($this->getPremium());
@@ -1494,7 +1434,7 @@ abstract class User implements ActiveRecordInterface
 
         if ($makeNew) {
             $copyObj->setNew(true);
-            $copyObj->setId(NULL); // this is a auto-increment column, so set to default value
+            $copyObj->setCode(NULL); // this is a auto-increment column, so set to default value
         }
     }
 
@@ -1794,7 +1734,6 @@ abstract class User implements ActiveRecordInterface
      */
     public function clear()
     {
-        $this->id = null;
         $this->created = null;
         $this->deleted = null;
         $this->code = null;

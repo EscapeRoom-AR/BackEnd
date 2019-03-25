@@ -59,7 +59,7 @@ class UserTableMap extends TableMap
     /**
      * The total number of columns
      */
-    const NUM_COLUMNS = 9;
+    const NUM_COLUMNS = 8;
 
     /**
      * The number of lazy-loaded columns
@@ -69,12 +69,7 @@ class UserTableMap extends TableMap
     /**
      * The number of columns to hydrate (NUM_COLUMNS - NUM_LAZY_LOAD_COLUMNS)
      */
-    const NUM_HYDRATE_COLUMNS = 9;
-
-    /**
-     * the column name for the id field
-     */
-    const COL_ID = 'user.id';
+    const NUM_HYDRATE_COLUMNS = 8;
 
     /**
      * the column name for the created field
@@ -128,11 +123,11 @@ class UserTableMap extends TableMap
      * e.g. self::$fieldNames[self::TYPE_PHPNAME][0] = 'Id'
      */
     protected static $fieldNames = array (
-        self::TYPE_PHPNAME       => array('Id', 'Created', 'Deleted', 'Code', 'Username', 'Email', 'Premium', 'Image', 'Description', ),
-        self::TYPE_CAMELNAME     => array('id', 'created', 'deleted', 'code', 'username', 'email', 'premium', 'image', 'description', ),
-        self::TYPE_COLNAME       => array(UserTableMap::COL_ID, UserTableMap::COL_CREATED, UserTableMap::COL_DELETED, UserTableMap::COL_CODE, UserTableMap::COL_USERNAME, UserTableMap::COL_EMAIL, UserTableMap::COL_PREMIUM, UserTableMap::COL_IMAGE, UserTableMap::COL_DESCRIPTION, ),
-        self::TYPE_FIELDNAME     => array('id', 'created', 'deleted', 'code', 'username', 'email', 'premium', 'image', 'description', ),
-        self::TYPE_NUM           => array(0, 1, 2, 3, 4, 5, 6, 7, 8, )
+        self::TYPE_PHPNAME       => array('Created', 'Deleted', 'Code', 'Username', 'Email', 'Premium', 'Image', 'Description', ),
+        self::TYPE_CAMELNAME     => array('created', 'deleted', 'code', 'username', 'email', 'premium', 'image', 'description', ),
+        self::TYPE_COLNAME       => array(UserTableMap::COL_CREATED, UserTableMap::COL_DELETED, UserTableMap::COL_CODE, UserTableMap::COL_USERNAME, UserTableMap::COL_EMAIL, UserTableMap::COL_PREMIUM, UserTableMap::COL_IMAGE, UserTableMap::COL_DESCRIPTION, ),
+        self::TYPE_FIELDNAME     => array('created', 'deleted', 'code', 'username', 'email', 'premium', 'image', 'description', ),
+        self::TYPE_NUM           => array(0, 1, 2, 3, 4, 5, 6, 7, )
     );
 
     /**
@@ -142,11 +137,11 @@ class UserTableMap extends TableMap
      * e.g. self::$fieldKeys[self::TYPE_PHPNAME]['Id'] = 0
      */
     protected static $fieldKeys = array (
-        self::TYPE_PHPNAME       => array('Id' => 0, 'Created' => 1, 'Deleted' => 2, 'Code' => 3, 'Username' => 4, 'Email' => 5, 'Premium' => 6, 'Image' => 7, 'Description' => 8, ),
-        self::TYPE_CAMELNAME     => array('id' => 0, 'created' => 1, 'deleted' => 2, 'code' => 3, 'username' => 4, 'email' => 5, 'premium' => 6, 'image' => 7, 'description' => 8, ),
-        self::TYPE_COLNAME       => array(UserTableMap::COL_ID => 0, UserTableMap::COL_CREATED => 1, UserTableMap::COL_DELETED => 2, UserTableMap::COL_CODE => 3, UserTableMap::COL_USERNAME => 4, UserTableMap::COL_EMAIL => 5, UserTableMap::COL_PREMIUM => 6, UserTableMap::COL_IMAGE => 7, UserTableMap::COL_DESCRIPTION => 8, ),
-        self::TYPE_FIELDNAME     => array('id' => 0, 'created' => 1, 'deleted' => 2, 'code' => 3, 'username' => 4, 'email' => 5, 'premium' => 6, 'image' => 7, 'description' => 8, ),
-        self::TYPE_NUM           => array(0, 1, 2, 3, 4, 5, 6, 7, 8, )
+        self::TYPE_PHPNAME       => array('Created' => 0, 'Deleted' => 1, 'Code' => 2, 'Username' => 3, 'Email' => 4, 'Premium' => 5, 'Image' => 6, 'Description' => 7, ),
+        self::TYPE_CAMELNAME     => array('created' => 0, 'deleted' => 1, 'code' => 2, 'username' => 3, 'email' => 4, 'premium' => 5, 'image' => 6, 'description' => 7, ),
+        self::TYPE_COLNAME       => array(UserTableMap::COL_CREATED => 0, UserTableMap::COL_DELETED => 1, UserTableMap::COL_CODE => 2, UserTableMap::COL_USERNAME => 3, UserTableMap::COL_EMAIL => 4, UserTableMap::COL_PREMIUM => 5, UserTableMap::COL_IMAGE => 6, UserTableMap::COL_DESCRIPTION => 7, ),
+        self::TYPE_FIELDNAME     => array('created' => 0, 'deleted' => 1, 'code' => 2, 'username' => 3, 'email' => 4, 'premium' => 5, 'image' => 6, 'description' => 7, ),
+        self::TYPE_NUM           => array(0, 1, 2, 3, 4, 5, 6, 7, )
     );
 
     /**
@@ -166,10 +161,9 @@ class UserTableMap extends TableMap
         $this->setPackage('API.Model');
         $this->setUseIdGenerator(true);
         // columns
-        $this->addPrimaryKey('id', 'Id', 'INTEGER', true, null, null);
         $this->addColumn('created', 'Created', 'TIMESTAMP', false, null, null);
         $this->addColumn('deleted', 'Deleted', 'TIMESTAMP', false, null, null);
-        $this->addColumn('code', 'Code', 'VARCHAR', false, 255, null);
+        $this->addPrimaryKey('code', 'Code', 'INTEGER', true, null, null);
         $this->addColumn('username', 'Username', 'VARCHAR', false, 255, null);
         $this->addColumn('email', 'Email', 'VARCHAR', false, 255, null);
         $this->addColumn('premium', 'Premium', 'BOOLEAN', false, 1, null);
@@ -185,8 +179,8 @@ class UserTableMap extends TableMap
         $this->addRelation('Game', '\\API\\Model\\Game', RelationMap::ONE_TO_MANY, array (
   0 =>
   array (
-    0 => ':user_id',
-    1 => ':id',
+    0 => ':user_code',
+    1 => ':code',
   ),
 ), null, null, 'Games', false);
     } // buildRelations()
@@ -207,11 +201,11 @@ class UserTableMap extends TableMap
     public static function getPrimaryKeyHashFromRow($row, $offset = 0, $indexType = TableMap::TYPE_NUM)
     {
         // If the PK cannot be derived from the row, return NULL.
-        if ($row[TableMap::TYPE_NUM == $indexType ? 0 + $offset : static::translateFieldName('Id', TableMap::TYPE_PHPNAME, $indexType)] === null) {
+        if ($row[TableMap::TYPE_NUM == $indexType ? 2 + $offset : static::translateFieldName('Code', TableMap::TYPE_PHPNAME, $indexType)] === null) {
             return null;
         }
 
-        return null === $row[TableMap::TYPE_NUM == $indexType ? 0 + $offset : static::translateFieldName('Id', TableMap::TYPE_PHPNAME, $indexType)] || is_scalar($row[TableMap::TYPE_NUM == $indexType ? 0 + $offset : static::translateFieldName('Id', TableMap::TYPE_PHPNAME, $indexType)]) || is_callable([$row[TableMap::TYPE_NUM == $indexType ? 0 + $offset : static::translateFieldName('Id', TableMap::TYPE_PHPNAME, $indexType)], '__toString']) ? (string) $row[TableMap::TYPE_NUM == $indexType ? 0 + $offset : static::translateFieldName('Id', TableMap::TYPE_PHPNAME, $indexType)] : $row[TableMap::TYPE_NUM == $indexType ? 0 + $offset : static::translateFieldName('Id', TableMap::TYPE_PHPNAME, $indexType)];
+        return null === $row[TableMap::TYPE_NUM == $indexType ? 2 + $offset : static::translateFieldName('Code', TableMap::TYPE_PHPNAME, $indexType)] || is_scalar($row[TableMap::TYPE_NUM == $indexType ? 2 + $offset : static::translateFieldName('Code', TableMap::TYPE_PHPNAME, $indexType)]) || is_callable([$row[TableMap::TYPE_NUM == $indexType ? 2 + $offset : static::translateFieldName('Code', TableMap::TYPE_PHPNAME, $indexType)], '__toString']) ? (string) $row[TableMap::TYPE_NUM == $indexType ? 2 + $offset : static::translateFieldName('Code', TableMap::TYPE_PHPNAME, $indexType)] : $row[TableMap::TYPE_NUM == $indexType ? 2 + $offset : static::translateFieldName('Code', TableMap::TYPE_PHPNAME, $indexType)];
     }
 
     /**
@@ -230,8 +224,8 @@ class UserTableMap extends TableMap
     {
         return (int) $row[
             $indexType == TableMap::TYPE_NUM
-                ? 0 + $offset
-                : self::translateFieldName('Id', TableMap::TYPE_PHPNAME, $indexType)
+                ? 2 + $offset
+                : self::translateFieldName('Code', TableMap::TYPE_PHPNAME, $indexType)
         ];
     }
 
@@ -332,7 +326,6 @@ class UserTableMap extends TableMap
     public static function addSelectColumns(Criteria $criteria, $alias = null)
     {
         if (null === $alias) {
-            $criteria->addSelectColumn(UserTableMap::COL_ID);
             $criteria->addSelectColumn(UserTableMap::COL_CREATED);
             $criteria->addSelectColumn(UserTableMap::COL_DELETED);
             $criteria->addSelectColumn(UserTableMap::COL_CODE);
@@ -342,7 +335,6 @@ class UserTableMap extends TableMap
             $criteria->addSelectColumn(UserTableMap::COL_IMAGE);
             $criteria->addSelectColumn(UserTableMap::COL_DESCRIPTION);
         } else {
-            $criteria->addSelectColumn($alias . '.id');
             $criteria->addSelectColumn($alias . '.created');
             $criteria->addSelectColumn($alias . '.deleted');
             $criteria->addSelectColumn($alias . '.code');
@@ -402,7 +394,7 @@ class UserTableMap extends TableMap
             $criteria = $values->buildPkeyCriteria();
         } else { // it's a primary key, or an array of pks
             $criteria = new Criteria(UserTableMap::DATABASE_NAME);
-            $criteria->add(UserTableMap::COL_ID, (array) $values, Criteria::IN);
+            $criteria->add(UserTableMap::COL_CODE, (array) $values, Criteria::IN);
         }
 
         $query = UserQuery::create()->mergeWith($criteria);
@@ -450,8 +442,8 @@ class UserTableMap extends TableMap
             $criteria = $criteria->buildCriteria(); // build Criteria from User object
         }
 
-        if ($criteria->containsKey(UserTableMap::COL_ID) && $criteria->keyContainsValue(UserTableMap::COL_ID) ) {
-            throw new PropelException('Cannot insert a value for auto-increment primary key ('.UserTableMap::COL_ID.')');
+        if ($criteria->containsKey(UserTableMap::COL_CODE) && $criteria->keyContainsValue(UserTableMap::COL_CODE) ) {
+            throw new PropelException('Cannot insert a value for auto-increment primary key ('.UserTableMap::COL_CODE.')');
         }
 
 
