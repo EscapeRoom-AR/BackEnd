@@ -718,10 +718,9 @@ abstract class Item implements ActiveRecordInterface
 
             if ($this->hintsScheduledForDeletion !== null) {
                 if (!$this->hintsScheduledForDeletion->isEmpty()) {
-                    foreach ($this->hintsScheduledForDeletion as $hint) {
-                        // need to save related object because we set the relation to null
-                        $hint->save($con);
-                    }
+                    \API\Model\HintQuery::create()
+                        ->filterByPrimaryKeys($this->hintsScheduledForDeletion->getPrimaryKeys(false))
+                        ->delete($con);
                     $this->hintsScheduledForDeletion = null;
                 }
             }
@@ -1494,7 +1493,7 @@ abstract class Item implements ActiveRecordInterface
                 $this->hintsScheduledForDeletion = clone $this->collHints;
                 $this->hintsScheduledForDeletion->clear();
             }
-            $this->hintsScheduledForDeletion[]= $hint;
+            $this->hintsScheduledForDeletion[]= clone $hint;
             $hint->setItem(null);
         }
 

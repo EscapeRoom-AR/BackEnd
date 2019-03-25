@@ -132,8 +132,8 @@ class HintTableMap extends TableMap
         $this->setPackage('API.Model');
         $this->setUseIdGenerator(false);
         // columns
-        $this->addColumn('hint', 'Hint', 'VARCHAR', false, 255, null);
-        $this->addForeignKey('item_code', 'ItemCode', 'INTEGER', 'item', 'code', false, null, null);
+        $this->addColumn('hint', 'Hint', 'VARCHAR', true, 255, null);
+        $this->addForeignKey('item_code', 'ItemCode', 'INTEGER', 'item', 'code', true, null, null);
     } // initialize()
 
     /**

@@ -265,7 +265,7 @@ abstract class HintQuery extends ModelCriteria
      *
      * @return $this|ChildHintQuery The current query, for fluid interface
      */
-    public function joinItem($relationAlias = null, $joinType = Criteria::LEFT_JOIN)
+    public function joinItem($relationAlias = null, $joinType = Criteria::INNER_JOIN)
     {
         $tableMap = $this->getTableMap();
         $relationMap = $tableMap->getRelation('Item');
@@ -300,7 +300,7 @@ abstract class HintQuery extends ModelCriteria
      *
      * @return \API\Model\ItemQuery A secondary query class using the current class as primary query
      */
-    public function useItemQuery($relationAlias = null, $joinType = Criteria::LEFT_JOIN)
+    public function useItemQuery($relationAlias = null, $joinType = Criteria::INNER_JOIN)
     {
         return $this
             ->joinItem($relationAlias, $joinType)

@@ -104,6 +104,7 @@ abstract class User implements ActiveRecordInterface
     /**
      * The value for the premium field.
      *
+     * Note: this column has a database default value of: false
      * @var        boolean
      */
     protected $premium;
@@ -118,6 +119,7 @@ abstract class User implements ActiveRecordInterface
     /**
      * The value for the description field.
      *
+     * Note: this column has a database default value of: 'Hi there! I\'m playing Scape Room AR!'
      * @var        string
      */
     protected $description;
@@ -143,10 +145,24 @@ abstract class User implements ActiveRecordInterface
     protected $gamesScheduledForDeletion = null;
 
     /**
+     * Applies default values to this object.
+     * This method should be called from the object's constructor (or
+     * equivalent initialization method).
+     * @see __construct()
+     */
+    public function applyDefaultValues()
+    {
+        $this->premium = false;
+        $this->description = 'Hi there! I\'m playing Scape Room AR!';
+    }
+
+    /**
      * Initializes internal state of API\Model\Base\User object.
+     * @see applyDefaults()
      */
     public function __construct()
     {
+        $this->applyDefaultValues();
     }
 
     /**
@@ -655,6 +671,14 @@ abstract class User implements ActiveRecordInterface
      */
     public function hasOnlyDefaultValues()
     {
+            if ($this->premium !== false) {
+                return false;
+            }
+
+            if ($this->description !== 'Hi there! I\'m playing Scape Room AR!') {
+                return false;
+            }
+
         // otherwise, everything was equal, so return TRUE
         return true;
     } // hasOnlyDefaultValues()
@@ -897,10 +921,9 @@ abstract class User implements ActiveRecordInterface
 
             if ($this->gamesScheduledForDeletion !== null) {
                 if (!$this->gamesScheduledForDeletion->isEmpty()) {
-                    foreach ($this->gamesScheduledForDeletion as $game) {
-                        // need to save related object because we set the relation to null
-                        $game->save($con);
-                    }
+                    \API\Model\GameQuery::create()
+                        ->filterByPrimaryKeys($this->gamesScheduledForDeletion->getPrimaryKeys(false))
+                        ->delete($con);
                     $this->gamesScheduledForDeletion = null;
                 }
             }
@@ -1695,7 +1718,7 @@ abstract class User implements ActiveRecordInterface
                 $this->gamesScheduledForDeletion = clone $this->collGames;
                 $this->gamesScheduledForDeletion->clear();
             }
-            $this->gamesScheduledForDeletion[]= $game;
+            $this->gamesScheduledForDeletion[]= clone $game;
             $game->setUser(null);
         }
 
@@ -1744,6 +1767,7 @@ abstract class User implements ActiveRecordInterface
         $this->description = null;
         $this->alreadyInSave = false;
         $this->clearAllReferences();
+        $this->applyDefaultValues();
         $this->resetModified();
         $this->setNew(true);
         $this->setDeleted(false);
