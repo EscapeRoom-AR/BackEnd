@@ -6,7 +6,7 @@
   <table name="user">
     <column name="created" type="TIMESTAMP" />
     <column name="deleted" type="TIMESTAMP" />
-    <column name="code" type="varchar" size="255" primaryKey="true" autoIncrement="true" required="true"/>
+    <column name="code" type="integer" primaryKey="true" autoIncrement="true" required="true"/>
     <column name="username" type="varchar" size="255" unique="true"/>
     <column name="email" type="varchar" size="255" />
     <column name="premium" type="boolean" />
@@ -19,7 +19,7 @@
   </table>
 
   <table name="room">
-    <column name="code" type="varchar" size="255" primaryKey="true" autoIncrement="true" required="true"/>
+    <column name="code" type="integer" primaryKey="true" autoIncrement="true" required="true"/>
     <column name="name" type="varchar" size="255" />
     <column name="premium" type="boolean" />
   </table>
@@ -27,7 +27,7 @@
   <table name="game">
     <column name="created" type="TIMESTAMP" />
     <column name="deleted" type="TIMESTAMP" />
-    <column name="code" type="varchar" size="255" primaryKey="true" autoIncrement="true" required="true"/>
+    <column name="code" type="integer"  primaryKey="true" autoIncrement="true" required="true"/>
     <column name="hints_used" type="integer" />
     <column name="time" type="integer" />
     <column name="user_code" type="integer" />
