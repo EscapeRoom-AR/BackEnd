@@ -66,13 +66,6 @@ abstract class Game implements ActiveRecordInterface
     protected $virtualColumns = array();
 
     /**
-     * The value for the id field.
-     *
-     * @var        int
-     */
-    protected $id;
-
-    /**
      * The value for the created field.
      *
      * @var        DateTime
@@ -89,7 +82,7 @@ abstract class Game implements ActiveRecordInterface
     /**
      * The value for the code field.
      *
-     * @var        string
+     * @var        int
      */
     protected $code;
 
@@ -108,18 +101,18 @@ abstract class Game implements ActiveRecordInterface
     protected $time;
 
     /**
-     * The value for the user_id field.
+     * The value for the user_code field.
      *
      * @var        int
      */
-    protected $user_id;
+    protected $user_code;
 
     /**
-     * The value for the room_id field.
+     * The value for the room_code field.
      *
      * @var        int
      */
-    protected $room_id;
+    protected $room_code;
 
     /**
      * @var        ChildUser
@@ -365,16 +358,6 @@ abstract class Game implements ActiveRecordInterface
     }
 
     /**
-     * Get the [id] column value.
-     *
-     * @return int
-     */
-    public function getId()
-    {
-        return $this->id;
-    }
-
-    /**
      * Get the [optionally formatted] temporal [created] column value.
      *
      *
@@ -417,7 +400,7 @@ abstract class Game implements ActiveRecordInterface
     /**
      * Get the [code] column value.
      *
-     * @return string
+     * @return int
      */
     public function getCode()
     {
@@ -445,44 +428,24 @@ abstract class Game implements ActiveRecordInterface
     }
 
     /**
-     * Get the [user_id] column value.
+     * Get the [user_code] column value.
      *
      * @return int
      */
-    public function getUserId()
+    public function getUserCode()
     {
-        return $this->user_id;
+        return $this->user_code;
     }
 
     /**
-     * Get the [room_id] column value.
+     * Get the [room_code] column value.
      *
      * @return int
      */
-    public function getRoomId()
+    public function getRoomCode()
     {
-        return $this->room_id;
+        return $this->room_code;
     }
-
-    /**
-     * Set the value of [id] column.
-     *
-     * @param int $v new value
-     * @return $this|\API\Model\Game The current object (for fluent API support)
-     */
-    public function setId($v)
-    {
-        if ($v !== null) {
-            $v = (int) $v;
-        }
-
-        if ($this->id !== $v) {
-            $this->id = $v;
-            $this->modifiedColumns[GameTableMap::COL_ID] = true;
-        }
-
-        return $this;
-    } // setId()
 
     /**
      * Sets the value of [created] column to a normalized version of the date/time value specified.
@@ -527,13 +490,13 @@ abstract class Game implements ActiveRecordInterface
     /**
      * Set the value of [code] column.
      *
-     * @param string $v new value
+     * @param int $v new value
      * @return $this|\API\Model\Game The current object (for fluent API support)
      */
     public function setCode($v)
     {
         if ($v !== null) {
-            $v = (string) $v;
+            $v = (int) $v;
         }
 
         if ($this->code !== $v) {
@@ -585,52 +548,52 @@ abstract class Game implements ActiveRecordInterface
     } // setTime()
 
     /**
-     * Set the value of [user_id] column.
+     * Set the value of [user_code] column.
      *
      * @param int $v new value
      * @return $this|\API\Model\Game The current object (for fluent API support)
      */
-    public function setUserId($v)
+    public function setUserCode($v)
     {
         if ($v !== null) {
             $v = (int) $v;
         }
 
-        if ($this->user_id !== $v) {
-            $this->user_id = $v;
-            $this->modifiedColumns[GameTableMap::COL_USER_ID] = true;
+        if ($this->user_code !== $v) {
+            $this->user_code = $v;
+            $this->modifiedColumns[GameTableMap::COL_USER_CODE] = true;
         }
 
-        if ($this->aUser !== null && $this->aUser->getId() !== $v) {
+        if ($this->aUser !== null && $this->aUser->getCode() !== $v) {
             $this->aUser = null;
         }
 
         return $this;
-    } // setUserId()
+    } // setUserCode()
 
     /**
-     * Set the value of [room_id] column.
+     * Set the value of [room_code] column.
      *
      * @param int $v new value
      * @return $this|\API\Model\Game The current object (for fluent API support)
      */
-    public function setRoomId($v)
+    public function setRoomCode($v)
     {
         if ($v !== null) {
             $v = (int) $v;
         }
 
-        if ($this->room_id !== $v) {
-            $this->room_id = $v;
-            $this->modifiedColumns[GameTableMap::COL_ROOM_ID] = true;
+        if ($this->room_code !== $v) {
+            $this->room_code = $v;
+            $this->modifiedColumns[GameTableMap::COL_ROOM_CODE] = true;
         }
 
-        if ($this->aRoom !== null && $this->aRoom->getId() !== $v) {
+        if ($this->aRoom !== null && $this->aRoom->getCode() !== $v) {
             $this->aRoom = null;
         }
 
         return $this;
-    } // setRoomId()
+    } // setRoomCode()
 
     /**
      * Indicates whether the columns in this object are only set to default values.
@@ -668,35 +631,32 @@ abstract class Game implements ActiveRecordInterface
     {
         try {
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 0 + $startcol : GameTableMap::translateFieldName('Id', TableMap::TYPE_PHPNAME, $indexType)];
-            $this->id = (null !== $col) ? (int) $col : null;
-
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 1 + $startcol : GameTableMap::translateFieldName('Created', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 0 + $startcol : GameTableMap::translateFieldName('Created', TableMap::TYPE_PHPNAME, $indexType)];
             if ($col === '0000-00-00 00:00:00') {
                 $col = null;
             }
             $this->created = (null !== $col) ? PropelDateTime::newInstance($col, null, 'DateTime') : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 2 + $startcol : GameTableMap::translateFieldName('Deleted', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 1 + $startcol : GameTableMap::translateFieldName('Deleted', TableMap::TYPE_PHPNAME, $indexType)];
             if ($col === '0000-00-00 00:00:00') {
                 $col = null;
             }
             $this->deleted = (null !== $col) ? PropelDateTime::newInstance($col, null, 'DateTime') : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 3 + $startcol : GameTableMap::translateFieldName('Code', TableMap::TYPE_PHPNAME, $indexType)];
-            $this->code = (null !== $col) ? (string) $col : null;
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 2 + $startcol : GameTableMap::translateFieldName('Code', TableMap::TYPE_PHPNAME, $indexType)];
+            $this->code = (null !== $col) ? (int) $col : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 4 + $startcol : GameTableMap::translateFieldName('HintsUsed', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 3 + $startcol : GameTableMap::translateFieldName('HintsUsed', TableMap::TYPE_PHPNAME, $indexType)];
             $this->hints_used = (null !== $col) ? (int) $col : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 5 + $startcol : GameTableMap::translateFieldName('Time', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 4 + $startcol : GameTableMap::translateFieldName('Time', TableMap::TYPE_PHPNAME, $indexType)];
             $this->time = (null !== $col) ? (int) $col : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 6 + $startcol : GameTableMap::translateFieldName('UserId', TableMap::TYPE_PHPNAME, $indexType)];
-            $this->user_id = (null !== $col) ? (int) $col : null;
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 5 + $startcol : GameTableMap::translateFieldName('UserCode', TableMap::TYPE_PHPNAME, $indexType)];
+            $this->user_code = (null !== $col) ? (int) $col : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 7 + $startcol : GameTableMap::translateFieldName('RoomId', TableMap::TYPE_PHPNAME, $indexType)];
-            $this->room_id = (null !== $col) ? (int) $col : null;
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 6 + $startcol : GameTableMap::translateFieldName('RoomCode', TableMap::TYPE_PHPNAME, $indexType)];
+            $this->room_code = (null !== $col) ? (int) $col : null;
             $this->resetModified();
 
             $this->setNew(false);
@@ -705,7 +665,7 @@ abstract class Game implements ActiveRecordInterface
                 $this->ensureConsistency();
             }
 
-            return $startcol + 8; // 8 = GameTableMap::NUM_HYDRATE_COLUMNS.
+            return $startcol + 7; // 7 = GameTableMap::NUM_HYDRATE_COLUMNS.
 
         } catch (Exception $e) {
             throw new PropelException(sprintf('Error populating %s object', '\\API\\Model\\Game'), 0, $e);
@@ -727,10 +687,10 @@ abstract class Game implements ActiveRecordInterface
      */
     public function ensureConsistency()
     {
-        if ($this->aUser !== null && $this->user_id !== $this->aUser->getId()) {
+        if ($this->aUser !== null && $this->user_code !== $this->aUser->getCode()) {
             $this->aUser = null;
         }
-        if ($this->aRoom !== null && $this->room_id !== $this->aRoom->getId()) {
+        if ($this->aRoom !== null && $this->room_code !== $this->aRoom->getCode()) {
             $this->aRoom = null;
         }
     } // ensureConsistency
@@ -927,15 +887,12 @@ abstract class Game implements ActiveRecordInterface
         $modifiedColumns = array();
         $index = 0;
 
-        $this->modifiedColumns[GameTableMap::COL_ID] = true;
-        if (null !== $this->id) {
-            throw new PropelException('Cannot insert a value for auto-increment primary key (' . GameTableMap::COL_ID . ')');
+        $this->modifiedColumns[GameTableMap::COL_CODE] = true;
+        if (null !== $this->code) {
+            throw new PropelException('Cannot insert a value for auto-increment primary key (' . GameTableMap::COL_CODE . ')');
         }
 
          // check the columns in natural order for more readable SQL queries
-        if ($this->isColumnModified(GameTableMap::COL_ID)) {
-            $modifiedColumns[':p' . $index++]  = 'id';
-        }
         if ($this->isColumnModified(GameTableMap::COL_CREATED)) {
             $modifiedColumns[':p' . $index++]  = 'created';
         }
@@ -951,11 +908,11 @@ abstract class Game implements ActiveRecordInterface
         if ($this->isColumnModified(GameTableMap::COL_TIME)) {
             $modifiedColumns[':p' . $index++]  = 'time';
         }
-        if ($this->isColumnModified(GameTableMap::COL_USER_ID)) {
-            $modifiedColumns[':p' . $index++]  = 'user_id';
+        if ($this->isColumnModified(GameTableMap::COL_USER_CODE)) {
+            $modifiedColumns[':p' . $index++]  = 'user_code';
         }
-        if ($this->isColumnModified(GameTableMap::COL_ROOM_ID)) {
-            $modifiedColumns[':p' . $index++]  = 'room_id';
+        if ($this->isColumnModified(GameTableMap::COL_ROOM_CODE)) {
+            $modifiedColumns[':p' . $index++]  = 'room_code';
         }
 
         $sql = sprintf(
@@ -968,9 +925,6 @@ abstract class Game implements ActiveRecordInterface
             $stmt = $con->prepare($sql);
             foreach ($modifiedColumns as $identifier => $columnName) {
                 switch ($columnName) {
-                    case 'id':
-                        $stmt->bindValue($identifier, $this->id, PDO::PARAM_INT);
-                        break;
                     case 'created':
                         $stmt->bindValue($identifier, $this->created ? $this->created->format("Y-m-d H:i:s.u") : null, PDO::PARAM_STR);
                         break;
@@ -978,7 +932,7 @@ abstract class Game implements ActiveRecordInterface
                         $stmt->bindValue($identifier, $this->deleted ? $this->deleted->format("Y-m-d H:i:s.u") : null, PDO::PARAM_STR);
                         break;
                     case 'code':
-                        $stmt->bindValue($identifier, $this->code, PDO::PARAM_STR);
+                        $stmt->bindValue($identifier, $this->code, PDO::PARAM_INT);
                         break;
                     case 'hints_used':
                         $stmt->bindValue($identifier, $this->hints_used, PDO::PARAM_INT);
@@ -986,11 +940,11 @@ abstract class Game implements ActiveRecordInterface
                     case 'time':
                         $stmt->bindValue($identifier, $this->time, PDO::PARAM_INT);
                         break;
-                    case 'user_id':
-                        $stmt->bindValue($identifier, $this->user_id, PDO::PARAM_INT);
+                    case 'user_code':
+                        $stmt->bindValue($identifier, $this->user_code, PDO::PARAM_INT);
                         break;
-                    case 'room_id':
-                        $stmt->bindValue($identifier, $this->room_id, PDO::PARAM_INT);
+                    case 'room_code':
+                        $stmt->bindValue($identifier, $this->room_code, PDO::PARAM_INT);
                         break;
                 }
             }
@@ -1005,7 +959,7 @@ abstract class Game implements ActiveRecordInterface
         } catch (Exception $e) {
             throw new PropelException('Unable to get autoincrement id.', 0, $e);
         }
-        $this->setId($pk);
+        $this->setCode($pk);
 
         $this->setNew(false);
     }
@@ -1055,28 +1009,25 @@ abstract class Game implements ActiveRecordInterface
     {
         switch ($pos) {
             case 0:
-                return $this->getId();
-                break;
-            case 1:
                 return $this->getCreated();
                 break;
-            case 2:
+            case 1:
                 return $this->getDeleted();
                 break;
-            case 3:
+            case 2:
                 return $this->getCode();
                 break;
-            case 4:
+            case 3:
                 return $this->getHintsUsed();
                 break;
-            case 5:
+            case 4:
                 return $this->getTime();
                 break;
-            case 6:
-                return $this->getUserId();
+            case 5:
+                return $this->getUserCode();
                 break;
-            case 7:
-                return $this->getRoomId();
+            case 6:
+                return $this->getRoomCode();
                 break;
             default:
                 return null;
@@ -1108,21 +1059,20 @@ abstract class Game implements ActiveRecordInterface
         $alreadyDumpedObjects['Game'][$this->hashCode()] = true;
         $keys = GameTableMap::getFieldNames($keyType);
         $result = array(
-            $keys[0] => $this->getId(),
-            $keys[1] => $this->getCreated(),
-            $keys[2] => $this->getDeleted(),
-            $keys[3] => $this->getCode(),
-            $keys[4] => $this->getHintsUsed(),
-            $keys[5] => $this->getTime(),
-            $keys[6] => $this->getUserId(),
-            $keys[7] => $this->getRoomId(),
+            $keys[0] => $this->getCreated(),
+            $keys[1] => $this->getDeleted(),
+            $keys[2] => $this->getCode(),
+            $keys[3] => $this->getHintsUsed(),
+            $keys[4] => $this->getTime(),
+            $keys[5] => $this->getUserCode(),
+            $keys[6] => $this->getRoomCode(),
         );
-        if ($result[$keys[1]] instanceof \DateTimeInterface) {
-            $result[$keys[1]] = $result[$keys[1]]->format('c');
+        if ($result[$keys[0]] instanceof \DateTimeInterface) {
+            $result[$keys[0]] = $result[$keys[0]]->format('c');
         }
 
-        if ($result[$keys[2]] instanceof \DateTimeInterface) {
-            $result[$keys[2]] = $result[$keys[2]]->format('c');
+        if ($result[$keys[1]] instanceof \DateTimeInterface) {
+            $result[$keys[1]] = $result[$keys[1]]->format('c');
         }
 
         $virtualColumns = $this->virtualColumns;
@@ -1196,28 +1146,25 @@ abstract class Game implements ActiveRecordInterface
     {
         switch ($pos) {
             case 0:
-                $this->setId($value);
-                break;
-            case 1:
                 $this->setCreated($value);
                 break;
-            case 2:
+            case 1:
                 $this->setDeleted($value);
                 break;
-            case 3:
+            case 2:
                 $this->setCode($value);
                 break;
-            case 4:
+            case 3:
                 $this->setHintsUsed($value);
                 break;
-            case 5:
+            case 4:
                 $this->setTime($value);
                 break;
-            case 6:
-                $this->setUserId($value);
+            case 5:
+                $this->setUserCode($value);
                 break;
-            case 7:
-                $this->setRoomId($value);
+            case 6:
+                $this->setRoomCode($value);
                 break;
         } // switch()
 
@@ -1246,28 +1193,25 @@ abstract class Game implements ActiveRecordInterface
         $keys = GameTableMap::getFieldNames($keyType);
 
         if (array_key_exists($keys[0], $arr)) {
-            $this->setId($arr[$keys[0]]);
+            $this->setCreated($arr[$keys[0]]);
         }
         if (array_key_exists($keys[1], $arr)) {
-            $this->setCreated($arr[$keys[1]]);
+            $this->setDeleted($arr[$keys[1]]);
         }
         if (array_key_exists($keys[2], $arr)) {
-            $this->setDeleted($arr[$keys[2]]);
+            $this->setCode($arr[$keys[2]]);
         }
         if (array_key_exists($keys[3], $arr)) {
-            $this->setCode($arr[$keys[3]]);
+            $this->setHintsUsed($arr[$keys[3]]);
         }
         if (array_key_exists($keys[4], $arr)) {
-            $this->setHintsUsed($arr[$keys[4]]);
+            $this->setTime($arr[$keys[4]]);
         }
         if (array_key_exists($keys[5], $arr)) {
-            $this->setTime($arr[$keys[5]]);
+            $this->setUserCode($arr[$keys[5]]);
         }
         if (array_key_exists($keys[6], $arr)) {
-            $this->setUserId($arr[$keys[6]]);
-        }
-        if (array_key_exists($keys[7], $arr)) {
-            $this->setRoomId($arr[$keys[7]]);
+            $this->setRoomCode($arr[$keys[6]]);
         }
     }
 
@@ -1310,9 +1254,6 @@ abstract class Game implements ActiveRecordInterface
     {
         $criteria = new Criteria(GameTableMap::DATABASE_NAME);
 
-        if ($this->isColumnModified(GameTableMap::COL_ID)) {
-            $criteria->add(GameTableMap::COL_ID, $this->id);
-        }
         if ($this->isColumnModified(GameTableMap::COL_CREATED)) {
             $criteria->add(GameTableMap::COL_CREATED, $this->created);
         }
@@ -1328,11 +1269,11 @@ abstract class Game implements ActiveRecordInterface
         if ($this->isColumnModified(GameTableMap::COL_TIME)) {
             $criteria->add(GameTableMap::COL_TIME, $this->time);
         }
-        if ($this->isColumnModified(GameTableMap::COL_USER_ID)) {
-            $criteria->add(GameTableMap::COL_USER_ID, $this->user_id);
+        if ($this->isColumnModified(GameTableMap::COL_USER_CODE)) {
+            $criteria->add(GameTableMap::COL_USER_CODE, $this->user_code);
         }
-        if ($this->isColumnModified(GameTableMap::COL_ROOM_ID)) {
-            $criteria->add(GameTableMap::COL_ROOM_ID, $this->room_id);
+        if ($this->isColumnModified(GameTableMap::COL_ROOM_CODE)) {
+            $criteria->add(GameTableMap::COL_ROOM_CODE, $this->room_code);
         }
 
         return $criteria;
@@ -1351,7 +1292,7 @@ abstract class Game implements ActiveRecordInterface
     public function buildPkeyCriteria()
     {
         $criteria = ChildGameQuery::create();
-        $criteria->add(GameTableMap::COL_ID, $this->id);
+        $criteria->add(GameTableMap::COL_CODE, $this->code);
 
         return $criteria;
     }
@@ -1364,7 +1305,7 @@ abstract class Game implements ActiveRecordInterface
      */
     public function hashCode()
     {
-        $validPk = null !== $this->getId();
+        $validPk = null !== $this->getCode();
 
         $validPrimaryKeyFKs = 0;
         $primaryKeyFKs = [];
@@ -1384,18 +1325,18 @@ abstract class Game implements ActiveRecordInterface
      */
     public function getPrimaryKey()
     {
-        return $this->getId();
+        return $this->getCode();
     }
 
     /**
-     * Generic method to set the primary key (id column).
+     * Generic method to set the primary key (code column).
      *
      * @param       int $key Primary key.
      * @return void
      */
     public function setPrimaryKey($key)
     {
-        $this->setId($key);
+        $this->setCode($key);
     }
 
     /**
@@ -1404,7 +1345,7 @@ abstract class Game implements ActiveRecordInterface
      */
     public function isPrimaryKeyNull()
     {
-        return null === $this->getId();
+        return null === $this->getCode();
     }
 
     /**
@@ -1422,14 +1363,13 @@ abstract class Game implements ActiveRecordInterface
     {
         $copyObj->setCreated($this->getCreated());
         $copyObj->setDeleted($this->getDeleted());
-        $copyObj->setCode($this->getCode());
         $copyObj->setHintsUsed($this->getHintsUsed());
         $copyObj->setTime($this->getTime());
-        $copyObj->setUserId($this->getUserId());
-        $copyObj->setRoomId($this->getRoomId());
+        $copyObj->setUserCode($this->getUserCode());
+        $copyObj->setRoomCode($this->getRoomCode());
         if ($makeNew) {
             $copyObj->setNew(true);
-            $copyObj->setId(NULL); // this is a auto-increment column, so set to default value
+            $copyObj->setCode(NULL); // this is a auto-increment column, so set to default value
         }
     }
 
@@ -1465,9 +1405,9 @@ abstract class Game implements ActiveRecordInterface
     public function setUser(ChildUser $v = null)
     {
         if ($v === null) {
-            $this->setUserId(NULL);
+            $this->setUserCode(NULL);
         } else {
-            $this->setUserId($v->getId());
+            $this->setUserCode($v->getCode());
         }
 
         $this->aUser = $v;
@@ -1492,8 +1432,8 @@ abstract class Game implements ActiveRecordInterface
      */
     public function getUser(ConnectionInterface $con = null)
     {
-        if ($this->aUser === null && ($this->user_id != 0)) {
-            $this->aUser = ChildUserQuery::create()->findPk($this->user_id, $con);
+        if ($this->aUser === null && ($this->user_code != 0)) {
+            $this->aUser = ChildUserQuery::create()->findPk($this->user_code, $con);
             /* The following can be used additionally to
                 guarantee the related object contains a reference
                 to this object.  This level of coupling may, however, be
@@ -1516,9 +1456,9 @@ abstract class Game implements ActiveRecordInterface
     public function setRoom(ChildRoom $v = null)
     {
         if ($v === null) {
-            $this->setRoomId(NULL);
+            $this->setRoomCode(NULL);
         } else {
-            $this->setRoomId($v->getId());
+            $this->setRoomCode($v->getCode());
         }
 
         $this->aRoom = $v;
@@ -1543,8 +1483,8 @@ abstract class Game implements ActiveRecordInterface
      */
     public function getRoom(ConnectionInterface $con = null)
     {
-        if ($this->aRoom === null && ($this->room_id != 0)) {
-            $this->aRoom = ChildRoomQuery::create()->findPk($this->room_id, $con);
+        if ($this->aRoom === null && ($this->room_code != 0)) {
+            $this->aRoom = ChildRoomQuery::create()->findPk($this->room_code, $con);
             /* The following can be used additionally to
                 guarantee the related object contains a reference
                 to this object.  This level of coupling may, however, be
@@ -1570,14 +1510,13 @@ abstract class Game implements ActiveRecordInterface
         if (null !== $this->aRoom) {
             $this->aRoom->removeGame($this);
         }
-        $this->id = null;
         $this->created = null;
         $this->deleted = null;
         $this->code = null;
         $this->hints_used = null;
         $this->time = null;
-        $this->user_id = null;
-        $this->room_id = null;
+        $this->user_code = null;
+        $this->room_code = null;
         $this->alreadyInSave = false;
         $this->clearAllReferences();
         $this->resetModified();
