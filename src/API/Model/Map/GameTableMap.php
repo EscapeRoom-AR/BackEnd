@@ -156,13 +156,13 @@ class GameTableMap extends TableMap
         $this->setPackage('API.Model');
         $this->setUseIdGenerator(true);
         // columns
-        $this->addColumn('created', 'Created', 'TIMESTAMP', false, null, null);
+        $this->addColumn('created', 'Created', 'TIMESTAMP', true, null, null);
         $this->addColumn('deleted', 'Deleted', 'TIMESTAMP', false, null, null);
         $this->addPrimaryKey('code', 'Code', 'INTEGER', true, null, null);
-        $this->addColumn('hints_used', 'HintsUsed', 'INTEGER', false, null, null);
-        $this->addColumn('time', 'Time', 'INTEGER', false, null, null);
-        $this->addForeignKey('user_code', 'UserCode', 'INTEGER', 'user', 'code', false, null, null);
-        $this->addForeignKey('room_code', 'RoomCode', 'INTEGER', 'room', 'code', false, null, null);
+        $this->addColumn('hints_used', 'HintsUsed', 'INTEGER', true, null, 0);
+        $this->addColumn('time', 'Time', 'INTEGER', true, null, null);
+        $this->addForeignKey('user_code', 'UserCode', 'INTEGER', 'user', 'code', true, null, null);
+        $this->addForeignKey('room_code', 'RoomCode', 'INTEGER', 'room', 'code', true, null, null);
     } // initialize()
 
     /**

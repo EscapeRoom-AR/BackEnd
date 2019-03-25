@@ -84,6 +84,7 @@ abstract class Room implements ActiveRecordInterface
     /**
      * The value for the premium field.
      *
+     * Note: this column has a database default value of: false
      * @var        boolean
      */
     protected $premium;
@@ -121,10 +122,23 @@ abstract class Room implements ActiveRecordInterface
     protected $itemsScheduledForDeletion = null;
 
     /**
+     * Applies default values to this object.
+     * This method should be called from the object's constructor (or
+     * equivalent initialization method).
+     * @see __construct()
+     */
+    public function applyDefaultValues()
+    {
+        $this->premium = false;
+    }
+
+    /**
      * Initializes internal state of API\Model\Base\Room object.
+     * @see applyDefaults()
      */
     public function __construct()
     {
+        $this->applyDefaultValues();
     }
 
     /**
@@ -463,6 +477,10 @@ abstract class Room implements ActiveRecordInterface
      */
     public function hasOnlyDefaultValues()
     {
+            if ($this->premium !== false) {
+                return false;
+            }
+
         // otherwise, everything was equal, so return TRUE
         return true;
     } // hasOnlyDefaultValues()
@@ -686,10 +704,9 @@ abstract class Room implements ActiveRecordInterface
 
             if ($this->gamesScheduledForDeletion !== null) {
                 if (!$this->gamesScheduledForDeletion->isEmpty()) {
-                    foreach ($this->gamesScheduledForDeletion as $game) {
-                        // need to save related object because we set the relation to null
-                        $game->save($con);
-                    }
+                    \API\Model\GameQuery::create()
+                        ->filterByPrimaryKeys($this->gamesScheduledForDeletion->getPrimaryKeys(false))
+                        ->delete($con);
                     $this->gamesScheduledForDeletion = null;
                 }
             }
@@ -704,10 +721,9 @@ abstract class Room implements ActiveRecordInterface
 
             if ($this->itemsScheduledForDeletion !== null) {
                 if (!$this->itemsScheduledForDeletion->isEmpty()) {
-                    foreach ($this->itemsScheduledForDeletion as $item) {
-                        // need to save related object because we set the relation to null
-                        $item->save($con);
-                    }
+                    \API\Model\ItemQuery::create()
+                        ->filterByPrimaryKeys($this->itemsScheduledForDeletion->getPrimaryKeys(false))
+                        ->delete($con);
                     $this->itemsScheduledForDeletion = null;
                 }
             }
@@ -1419,7 +1435,7 @@ abstract class Room implements ActiveRecordInterface
                 $this->gamesScheduledForDeletion = clone $this->collGames;
                 $this->gamesScheduledForDeletion->clear();
             }
-            $this->gamesScheduledForDeletion[]= $game;
+            $this->gamesScheduledForDeletion[]= clone $game;
             $game->setRoom(null);
         }
 
@@ -1669,7 +1685,7 @@ abstract class Room implements ActiveRecordInterface
                 $this->itemsScheduledForDeletion = clone $this->collItems;
                 $this->itemsScheduledForDeletion->clear();
             }
-            $this->itemsScheduledForDeletion[]= $item;
+            $this->itemsScheduledForDeletion[]= clone $item;
             $item->setRoom(null);
         }
 
@@ -1688,6 +1704,7 @@ abstract class Room implements ActiveRecordInterface
         $this->premium = null;
         $this->alreadyInSave = false;
         $this->clearAllReferences();
+        $this->applyDefaultValues();
         $this->resetModified();
         $this->setNew(true);
         $this->setDeleted(false);

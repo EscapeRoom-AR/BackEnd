@@ -137,8 +137,8 @@ class RoomTableMap extends TableMap
         $this->setUseIdGenerator(true);
         // columns
         $this->addPrimaryKey('code', 'Code', 'INTEGER', true, null, null);
-        $this->addColumn('name', 'Name', 'VARCHAR', false, 255, null);
-        $this->addColumn('premium', 'Premium', 'BOOLEAN', false, 1, null);
+        $this->addColumn('name', 'Name', 'VARCHAR', true, 255, null);
+        $this->addColumn('premium', 'Premium', 'BOOLEAN', true, 1, false);
     } // initialize()
 
     /**

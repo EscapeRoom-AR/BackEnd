@@ -161,14 +161,14 @@ class UserTableMap extends TableMap
         $this->setPackage('API.Model');
         $this->setUseIdGenerator(true);
         // columns
-        $this->addColumn('created', 'Created', 'TIMESTAMP', false, null, null);
+        $this->addColumn('created', 'Created', 'TIMESTAMP', true, null, null);
         $this->addColumn('deleted', 'Deleted', 'TIMESTAMP', false, null, null);
         $this->addPrimaryKey('code', 'Code', 'INTEGER', true, null, null);
-        $this->addColumn('username', 'Username', 'VARCHAR', false, 255, null);
-        $this->addColumn('email', 'Email', 'VARCHAR', false, 255, null);
-        $this->addColumn('premium', 'Premium', 'BOOLEAN', false, 1, null);
+        $this->addColumn('username', 'Username', 'VARCHAR', true, 255, null);
+        $this->addColumn('email', 'Email', 'VARCHAR', true, 255, null);
+        $this->addColumn('premium', 'Premium', 'BOOLEAN', true, 1, false);
         $this->addColumn('image', 'Image', 'VARCHAR', false, 255, null);
-        $this->addColumn('description', 'Description', 'VARCHAR', false, 255, null);
+        $this->addColumn('description', 'Description', 'VARCHAR', false, 255, 'Hi there! I\'m playing Scape Room AR!');
     } // initialize()
 
     /**

@@ -438,7 +438,7 @@ abstract class ItemQuery extends ModelCriteria
      *
      * @return $this|ChildItemQuery The current query, for fluid interface
      */
-    public function joinRoom($relationAlias = null, $joinType = Criteria::LEFT_JOIN)
+    public function joinRoom($relationAlias = null, $joinType = Criteria::INNER_JOIN)
     {
         $tableMap = $this->getTableMap();
         $relationMap = $tableMap->getRelation('Room');
@@ -473,7 +473,7 @@ abstract class ItemQuery extends ModelCriteria
      *
      * @return \API\Model\RoomQuery A secondary query class using the current class as primary query
      */
-    public function useRoomQuery($relationAlias = null, $joinType = Criteria::LEFT_JOIN)
+    public function useRoomQuery($relationAlias = null, $joinType = Criteria::INNER_JOIN)
     {
         return $this
             ->joinRoom($relationAlias, $joinType)
@@ -511,7 +511,7 @@ abstract class ItemQuery extends ModelCriteria
      *
      * @return $this|ChildItemQuery The current query, for fluid interface
      */
-    public function joinHint($relationAlias = null, $joinType = Criteria::LEFT_JOIN)
+    public function joinHint($relationAlias = null, $joinType = Criteria::INNER_JOIN)
     {
         $tableMap = $this->getTableMap();
         $relationMap = $tableMap->getRelation('Hint');
@@ -546,7 +546,7 @@ abstract class ItemQuery extends ModelCriteria
      *
      * @return \API\Model\HintQuery A secondary query class using the current class as primary query
      */
-    public function useHintQuery($relationAlias = null, $joinType = Criteria::LEFT_JOIN)
+    public function useHintQuery($relationAlias = null, $joinType = Criteria::INNER_JOIN)
     {
         return $this
             ->joinHint($relationAlias, $joinType)

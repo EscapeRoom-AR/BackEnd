@@ -614,7 +614,7 @@ abstract class GameQuery extends ModelCriteria
      *
      * @return $this|ChildGameQuery The current query, for fluid interface
      */
-    public function joinUser($relationAlias = null, $joinType = Criteria::LEFT_JOIN)
+    public function joinUser($relationAlias = null, $joinType = Criteria::INNER_JOIN)
     {
         $tableMap = $this->getTableMap();
         $relationMap = $tableMap->getRelation('User');
@@ -649,7 +649,7 @@ abstract class GameQuery extends ModelCriteria
      *
      * @return \API\Model\UserQuery A secondary query class using the current class as primary query
      */
-    public function useUserQuery($relationAlias = null, $joinType = Criteria::LEFT_JOIN)
+    public function useUserQuery($relationAlias = null, $joinType = Criteria::INNER_JOIN)
     {
         return $this
             ->joinUser($relationAlias, $joinType)
@@ -691,7 +691,7 @@ abstract class GameQuery extends ModelCriteria
      *
      * @return $this|ChildGameQuery The current query, for fluid interface
      */
-    public function joinRoom($relationAlias = null, $joinType = Criteria::LEFT_JOIN)
+    public function joinRoom($relationAlias = null, $joinType = Criteria::INNER_JOIN)
     {
         $tableMap = $this->getTableMap();
         $relationMap = $tableMap->getRelation('Room');
@@ -726,7 +726,7 @@ abstract class GameQuery extends ModelCriteria
      *
      * @return \API\Model\RoomQuery A secondary query class using the current class as primary query
      */
-    public function useRoomQuery($relationAlias = null, $joinType = Criteria::LEFT_JOIN)
+    public function useRoomQuery($relationAlias = null, $joinType = Criteria::INNER_JOIN)
     {
         return $this
             ->joinRoom($relationAlias, $joinType)
