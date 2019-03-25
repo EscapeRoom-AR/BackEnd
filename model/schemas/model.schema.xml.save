@@ -1,0 +1,62 @@
+<database name="default" defaultIdMethod="native"
+          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:noNamespaceSchemaLocation="http://xsd.propelorm.org/1.6/database.xsd"
+          namespace="API\Model">
+
+  <table name="user">
+    <column name="id" type="integer" primaryKey="true" autoIncrement="true" required="true" />
+    <column name="created" type="TIMESTAMP" />
+    <column name="deleted" type="TIMESTAMP" />
+    <column name="code" type="varchar" size="255" />
+    <column name="username" type="varchar" size="255" />
+    <column name="email" type="varchar" size="255" />
+    <column name="premium" type="boolean" />
+    <column name="image" type="varchar" size="255" />
+    <column name="description" type="varchar" size="255" />  
+  </table>
+
+  <table name="room">
+    <column name="id" type="integer" primaryKey="true" autoIncrement="true" required="true" />
+    <column name="code" type="varchar" size="255" />
+    <column name="name" type="varchar" size="255" />
+    <column name="premium" type="boolean" />
+  </table>
+
+  <table name="game">
+    <column name="id" type="integer" primaryKey="true" autoIncrement="true" required="true" />
+    <column name="created" type="TIMESTAMP" />
+    <column name="deleted" type="TIMESTAMP" />
+    <column name="code" type="varchar" size="255" />
+    <column name="hints_used" type="integer" />
+    <column name="time" type="integer" />
+    <column name="user_id" type="integer" />
+    <column name="room_id" type="integer" />
+    <foreign-key foreignTable="user">
+      <reference local="user_id" foreign="id"/>
+    </foreign-key>
+    <foreign-key foreignTable="room">
+      <reference local="room_id" foreign="id"/>
+    </foreign-key>
+  </table>
+
+  <table name="item">
+    <column name="id" type="integer" primaryKey="true" autoIncrement="true" required="true" />
+    <column name="code" type="integer" />
+    <column name="name" type="TIMESTAMP" size="255" />
+    <column name="qr_code" type="varchar" size="255" />
+    <column name="room_id" type="integer" />
+    <foreign-key foreignTable="room">
+      <reference local="room_id" foreign="id" />
+    </foreign-key>
+  </table>
+
+  <table name="hint">
+    <column name="id" type="integer" primaryKey="true" autoIncrement="true" required="true" />
+    <column name="hint" type="varchar" size="255" />
+    <column name="item_id" type="integer" />
+    <foreign-key foreignTable="item">
+      <reference local="item_id" foreign="id" />
+    </foreign-key>
+  </table>
+
+</database>
