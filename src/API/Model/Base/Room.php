@@ -68,16 +68,9 @@ abstract class Room implements ActiveRecordInterface
     protected $virtualColumns = array();
 
     /**
-     * The value for the id field.
-     *
-     * @var        int
-     */
-    protected $id;
-
-    /**
      * The value for the code field.
      *
-     * @var        string
+     * @var        int
      */
     protected $code;
 
@@ -91,6 +84,7 @@ abstract class Room implements ActiveRecordInterface
     /**
      * The value for the premium field.
      *
+     * Note: this column has a database default value of: false
      * @var        boolean
      */
     protected $premium;
@@ -128,10 +122,23 @@ abstract class Room implements ActiveRecordInterface
     protected $itemsScheduledForDeletion = null;
 
     /**
+     * Applies default values to this object.
+     * This method should be called from the object's constructor (or
+     * equivalent initialization method).
+     * @see __construct()
+     */
+    public function applyDefaultValues()
+    {
+        $this->premium = false;
+    }
+
+    /**
      * Initializes internal state of API\Model\Base\Room object.
+     * @see applyDefaults()
      */
     public function __construct()
     {
+        $this->applyDefaultValues();
     }
 
     /**
@@ -353,19 +360,9 @@ abstract class Room implements ActiveRecordInterface
     }
 
     /**
-     * Get the [id] column value.
-     *
-     * @return int
-     */
-    public function getId()
-    {
-        return $this->id;
-    }
-
-    /**
      * Get the [code] column value.
      *
-     * @return string
+     * @return int
      */
     public function getCode()
     {
@@ -403,35 +400,15 @@ abstract class Room implements ActiveRecordInterface
     }
 
     /**
-     * Set the value of [id] column.
-     *
-     * @param int $v new value
-     * @return $this|\API\Model\Room The current object (for fluent API support)
-     */
-    public function setId($v)
-    {
-        if ($v !== null) {
-            $v = (int) $v;
-        }
-
-        if ($this->id !== $v) {
-            $this->id = $v;
-            $this->modifiedColumns[RoomTableMap::COL_ID] = true;
-        }
-
-        return $this;
-    } // setId()
-
-    /**
      * Set the value of [code] column.
      *
-     * @param string $v new value
+     * @param int $v new value
      * @return $this|\API\Model\Room The current object (for fluent API support)
      */
     public function setCode($v)
     {
         if ($v !== null) {
-            $v = (string) $v;
+            $v = (int) $v;
         }
 
         if ($this->code !== $v) {
@@ -500,6 +477,10 @@ abstract class Room implements ActiveRecordInterface
      */
     public function hasOnlyDefaultValues()
     {
+            if ($this->premium !== false) {
+                return false;
+            }
+
         // otherwise, everything was equal, so return TRUE
         return true;
     } // hasOnlyDefaultValues()
@@ -526,16 +507,13 @@ abstract class Room implements ActiveRecordInterface
     {
         try {
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 0 + $startcol : RoomTableMap::translateFieldName('Id', TableMap::TYPE_PHPNAME, $indexType)];
-            $this->id = (null !== $col) ? (int) $col : null;
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 0 + $startcol : RoomTableMap::translateFieldName('Code', TableMap::TYPE_PHPNAME, $indexType)];
+            $this->code = (null !== $col) ? (int) $col : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 1 + $startcol : RoomTableMap::translateFieldName('Code', TableMap::TYPE_PHPNAME, $indexType)];
-            $this->code = (null !== $col) ? (string) $col : null;
-
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 2 + $startcol : RoomTableMap::translateFieldName('Name', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 1 + $startcol : RoomTableMap::translateFieldName('Name', TableMap::TYPE_PHPNAME, $indexType)];
             $this->name = (null !== $col) ? (string) $col : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 3 + $startcol : RoomTableMap::translateFieldName('Premium', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 2 + $startcol : RoomTableMap::translateFieldName('Premium', TableMap::TYPE_PHPNAME, $indexType)];
             $this->premium = (null !== $col) ? (boolean) $col : null;
             $this->resetModified();
 
@@ -545,7 +523,7 @@ abstract class Room implements ActiveRecordInterface
                 $this->ensureConsistency();
             }
 
-            return $startcol + 4; // 4 = RoomTableMap::NUM_HYDRATE_COLUMNS.
+            return $startcol + 3; // 3 = RoomTableMap::NUM_HYDRATE_COLUMNS.
 
         } catch (Exception $e) {
             throw new PropelException(sprintf('Error populating %s object', '\\API\\Model\\Room'), 0, $e);
@@ -726,10 +704,9 @@ abstract class Room implements ActiveRecordInterface
 
             if ($this->gamesScheduledForDeletion !== null) {
                 if (!$this->gamesScheduledForDeletion->isEmpty()) {
-                    foreach ($this->gamesScheduledForDeletion as $game) {
-                        // need to save related object because we set the relation to null
-                        $game->save($con);
-                    }
+                    \API\Model\GameQuery::create()
+                        ->filterByPrimaryKeys($this->gamesScheduledForDeletion->getPrimaryKeys(false))
+                        ->delete($con);
                     $this->gamesScheduledForDeletion = null;
                 }
             }
@@ -744,10 +721,9 @@ abstract class Room implements ActiveRecordInterface
 
             if ($this->itemsScheduledForDeletion !== null) {
                 if (!$this->itemsScheduledForDeletion->isEmpty()) {
-                    foreach ($this->itemsScheduledForDeletion as $item) {
-                        // need to save related object because we set the relation to null
-                        $item->save($con);
-                    }
+                    \API\Model\ItemQuery::create()
+                        ->filterByPrimaryKeys($this->itemsScheduledForDeletion->getPrimaryKeys(false))
+                        ->delete($con);
                     $this->itemsScheduledForDeletion = null;
                 }
             }
@@ -780,15 +756,12 @@ abstract class Room implements ActiveRecordInterface
         $modifiedColumns = array();
         $index = 0;
 
-        $this->modifiedColumns[RoomTableMap::COL_ID] = true;
-        if (null !== $this->id) {
-            throw new PropelException('Cannot insert a value for auto-increment primary key (' . RoomTableMap::COL_ID . ')');
+        $this->modifiedColumns[RoomTableMap::COL_CODE] = true;
+        if (null !== $this->code) {
+            throw new PropelException('Cannot insert a value for auto-increment primary key (' . RoomTableMap::COL_CODE . ')');
         }
 
          // check the columns in natural order for more readable SQL queries
-        if ($this->isColumnModified(RoomTableMap::COL_ID)) {
-            $modifiedColumns[':p' . $index++]  = 'id';
-        }
         if ($this->isColumnModified(RoomTableMap::COL_CODE)) {
             $modifiedColumns[':p' . $index++]  = 'code';
         }
@@ -809,11 +782,8 @@ abstract class Room implements ActiveRecordInterface
             $stmt = $con->prepare($sql);
             foreach ($modifiedColumns as $identifier => $columnName) {
                 switch ($columnName) {
-                    case 'id':
-                        $stmt->bindValue($identifier, $this->id, PDO::PARAM_INT);
-                        break;
                     case 'code':
-                        $stmt->bindValue($identifier, $this->code, PDO::PARAM_STR);
+                        $stmt->bindValue($identifier, $this->code, PDO::PARAM_INT);
                         break;
                     case 'name':
                         $stmt->bindValue($identifier, $this->name, PDO::PARAM_STR);
@@ -834,7 +804,7 @@ abstract class Room implements ActiveRecordInterface
         } catch (Exception $e) {
             throw new PropelException('Unable to get autoincrement id.', 0, $e);
         }
-        $this->setId($pk);
+        $this->setCode($pk);
 
         $this->setNew(false);
     }
@@ -884,15 +854,12 @@ abstract class Room implements ActiveRecordInterface
     {
         switch ($pos) {
             case 0:
-                return $this->getId();
-                break;
-            case 1:
                 return $this->getCode();
                 break;
-            case 2:
+            case 1:
                 return $this->getName();
                 break;
-            case 3:
+            case 2:
                 return $this->getPremium();
                 break;
             default:
@@ -925,10 +892,9 @@ abstract class Room implements ActiveRecordInterface
         $alreadyDumpedObjects['Room'][$this->hashCode()] = true;
         $keys = RoomTableMap::getFieldNames($keyType);
         $result = array(
-            $keys[0] => $this->getId(),
-            $keys[1] => $this->getCode(),
-            $keys[2] => $this->getName(),
-            $keys[3] => $this->getPremium(),
+            $keys[0] => $this->getCode(),
+            $keys[1] => $this->getName(),
+            $keys[2] => $this->getPremium(),
         );
         $virtualColumns = $this->virtualColumns;
         foreach ($virtualColumns as $key => $virtualColumn) {
@@ -1001,15 +967,12 @@ abstract class Room implements ActiveRecordInterface
     {
         switch ($pos) {
             case 0:
-                $this->setId($value);
-                break;
-            case 1:
                 $this->setCode($value);
                 break;
-            case 2:
+            case 1:
                 $this->setName($value);
                 break;
-            case 3:
+            case 2:
                 $this->setPremium($value);
                 break;
         } // switch()
@@ -1039,16 +1002,13 @@ abstract class Room implements ActiveRecordInterface
         $keys = RoomTableMap::getFieldNames($keyType);
 
         if (array_key_exists($keys[0], $arr)) {
-            $this->setId($arr[$keys[0]]);
+            $this->setCode($arr[$keys[0]]);
         }
         if (array_key_exists($keys[1], $arr)) {
-            $this->setCode($arr[$keys[1]]);
+            $this->setName($arr[$keys[1]]);
         }
         if (array_key_exists($keys[2], $arr)) {
-            $this->setName($arr[$keys[2]]);
-        }
-        if (array_key_exists($keys[3], $arr)) {
-            $this->setPremium($arr[$keys[3]]);
+            $this->setPremium($arr[$keys[2]]);
         }
     }
 
@@ -1091,9 +1051,6 @@ abstract class Room implements ActiveRecordInterface
     {
         $criteria = new Criteria(RoomTableMap::DATABASE_NAME);
 
-        if ($this->isColumnModified(RoomTableMap::COL_ID)) {
-            $criteria->add(RoomTableMap::COL_ID, $this->id);
-        }
         if ($this->isColumnModified(RoomTableMap::COL_CODE)) {
             $criteria->add(RoomTableMap::COL_CODE, $this->code);
         }
@@ -1120,7 +1077,7 @@ abstract class Room implements ActiveRecordInterface
     public function buildPkeyCriteria()
     {
         $criteria = ChildRoomQuery::create();
-        $criteria->add(RoomTableMap::COL_ID, $this->id);
+        $criteria->add(RoomTableMap::COL_CODE, $this->code);
 
         return $criteria;
     }
@@ -1133,7 +1090,7 @@ abstract class Room implements ActiveRecordInterface
      */
     public function hashCode()
     {
-        $validPk = null !== $this->getId();
+        $validPk = null !== $this->getCode();
 
         $validPrimaryKeyFKs = 0;
         $primaryKeyFKs = [];
@@ -1153,18 +1110,18 @@ abstract class Room implements ActiveRecordInterface
      */
     public function getPrimaryKey()
     {
-        return $this->getId();
+        return $this->getCode();
     }
 
     /**
-     * Generic method to set the primary key (id column).
+     * Generic method to set the primary key (code column).
      *
      * @param       int $key Primary key.
      * @return void
      */
     public function setPrimaryKey($key)
     {
-        $this->setId($key);
+        $this->setCode($key);
     }
 
     /**
@@ -1173,7 +1130,7 @@ abstract class Room implements ActiveRecordInterface
      */
     public function isPrimaryKeyNull()
     {
-        return null === $this->getId();
+        return null === $this->getCode();
     }
 
     /**
@@ -1189,7 +1146,6 @@ abstract class Room implements ActiveRecordInterface
      */
     public function copyInto($copyObj, $deepCopy = false, $makeNew = true)
     {
-        $copyObj->setCode($this->getCode());
         $copyObj->setName($this->getName());
         $copyObj->setPremium($this->getPremium());
 
@@ -1214,7 +1170,7 @@ abstract class Room implements ActiveRecordInterface
 
         if ($makeNew) {
             $copyObj->setNew(true);
-            $copyObj->setId(NULL); // this is a auto-increment column, so set to default value
+            $copyObj->setCode(NULL); // this is a auto-increment column, so set to default value
         }
     }
 
@@ -1479,7 +1435,7 @@ abstract class Room implements ActiveRecordInterface
                 $this->gamesScheduledForDeletion = clone $this->collGames;
                 $this->gamesScheduledForDeletion->clear();
             }
-            $this->gamesScheduledForDeletion[]= $game;
+            $this->gamesScheduledForDeletion[]= clone $game;
             $game->setRoom(null);
         }
 
@@ -1729,7 +1685,7 @@ abstract class Room implements ActiveRecordInterface
                 $this->itemsScheduledForDeletion = clone $this->collItems;
                 $this->itemsScheduledForDeletion->clear();
             }
-            $this->itemsScheduledForDeletion[]= $item;
+            $this->itemsScheduledForDeletion[]= clone $item;
             $item->setRoom(null);
         }
 
@@ -1743,12 +1699,12 @@ abstract class Room implements ActiveRecordInterface
      */
     public function clear()
     {
-        $this->id = null;
         $this->code = null;
         $this->name = null;
         $this->premium = null;
         $this->alreadyInSave = false;
         $this->clearAllReferences();
+        $this->applyDefaultValues();
         $this->resetModified();
         $this->setNew(true);
         $this->setDeleted(false);

@@ -4,58 +4,63 @@
           namespace="API\Model">
 
   <table name="user">
-    <column name="id" type="integer" primaryKey="true" autoIncrement="true" required="true" />
-    <column name="created" type="TIMESTAMP" />
+    <column name="created" type="TIMESTAMP" required="true"/>
     <column name="deleted" type="TIMESTAMP" />
-    <column name="code" type="varchar" size="255" />
-    <column name="username" type="varchar" size="255" />
-    <column name="email" type="varchar" size="255" />
-    <column name="premium" type="boolean" />
+    <column name="code" type="integer" primaryKey="true" autoIncrement="true" required="true"/>
+    <column name="username" type="varchar" size="255" required="true"/>
+    <column name="email" type="varchar" size="255" required="true" />
+    <column name="premium" type="boolean" required="true" defaultValue="false" />
     <column name="image" type="varchar" size="255" />
-    <column name="description" type="varchar" size="255" />  
+    <column name="password" type="varchar" size="255" required="true"/>
+    <column name="description" type="varchar" size="255" defaultValue="Hi there! I'm playing Scape Room AR!" />  
+    <unique>
+      <unique-column name="username" />
+    </unique>
+    <unique>
+    <unique-column name="email" />
+    </unique>
   </table>
 
   <table name="room">
-    <column name="id" type="integer" primaryKey="true" autoIncrement="true" required="true" />
-    <column name="code" type="varchar" size="255" />
-    <column name="name" type="varchar" size="255" />
-    <column name="premium" type="boolean" />
+    <column name="code" type="integer" primaryKey="true" autoIncrement="true" required="true"/>
+    <column name="name" type="varchar" size="255" required="true"/>
+    <column name="premium" type="boolean" required="true" defaultValue="false" />
+    <unique>
+      <unique-column name="name" />
+    </unique>
   </table>
 
   <table name="game">
-    <column name="id" type="integer" primaryKey="true" autoIncrement="true" required="true" />
-    <column name="created" type="TIMESTAMP" />
+    <column name="created" type="TIMESTAMP" required="true"/>
     <column name="deleted" type="TIMESTAMP" />
-    <column name="code" type="varchar" size="255" />
-    <column name="hints_used" type="integer" />
-    <column name="time" type="integer" />
-    <column name="user_id" type="integer" />
-    <column name="room_id" type="integer" />
+    <column name="code" type="integer"  primaryKey="true" autoIncrement="true" required="true"/>
+    <column name="hints_used" type="integer" required="true" defaultValue="0"/>
+    <column name="time" type="integer" required="true" />
+    <column name="user_code" type="integer" required="true"/>
+    <column name="room_code" type="integer" required="true"/>
     <foreign-key foreignTable="user">
-      <reference local="user_id" foreign="id"/>
+      <reference local="user_code" foreign="code"/>
     </foreign-key>
     <foreign-key foreignTable="room">
-      <reference local="room_id" foreign="id"/>
+      <reference local="room_code" foreign="code"/>
     </foreign-key>
   </table>
 
   <table name="item">
-    <column name="id" type="integer" primaryKey="true" autoIncrement="true" required="true" />
-    <column name="code" type="integer" />
-    <column name="name" type="varchar" size="255" />
+    <column name="code" type="integer" primaryKey="true" autoIncrement="true" required="true"/>
+    <column name="name" type="varchar" size="255" required="true"/>
     <column name="qr_code" type="varchar" size="255" />
-    <column name="room_id" type="integer" />
+    <column name="room_code" type="integer" required="true"/>
     <foreign-key foreignTable="room">
-      <reference local="room_id" foreign="id" />
+      <reference local="room_code" foreign="code" />
     </foreign-key>
   </table>
 
   <table name="hint">
-    <column name="id" type="integer" primaryKey="true" autoIncrement="true" required="true" />
-    <column name="hint" type="varchar" size="255" />
-    <column name="item_id" type="integer" />
+    <column name="hint" type="varchar" size="255" required="true" />
+    <column name="item_code" type="integer" required="true" />
     <foreign-key foreignTable="item">
-      <reference local="item_id" foreign="id" />
+      <reference local="item_code" foreign="code" />
     </foreign-key>
   </table>
 

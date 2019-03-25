@@ -20,23 +20,21 @@ use Propel\Runtime\Exception\PropelException;
  *
  *
  *
- * @method     ChildGameQuery orderById($order = Criteria::ASC) Order by the id column
  * @method     ChildGameQuery orderByCreated($order = Criteria::ASC) Order by the created column
  * @method     ChildGameQuery orderByDeleted($order = Criteria::ASC) Order by the deleted column
  * @method     ChildGameQuery orderByCode($order = Criteria::ASC) Order by the code column
  * @method     ChildGameQuery orderByHintsUsed($order = Criteria::ASC) Order by the hints_used column
  * @method     ChildGameQuery orderByTime($order = Criteria::ASC) Order by the time column
- * @method     ChildGameQuery orderByUserId($order = Criteria::ASC) Order by the user_id column
- * @method     ChildGameQuery orderByRoomId($order = Criteria::ASC) Order by the room_id column
+ * @method     ChildGameQuery orderByUserCode($order = Criteria::ASC) Order by the user_code column
+ * @method     ChildGameQuery orderByRoomCode($order = Criteria::ASC) Order by the room_code column
  *
- * @method     ChildGameQuery groupById() Group by the id column
  * @method     ChildGameQuery groupByCreated() Group by the created column
  * @method     ChildGameQuery groupByDeleted() Group by the deleted column
  * @method     ChildGameQuery groupByCode() Group by the code column
  * @method     ChildGameQuery groupByHintsUsed() Group by the hints_used column
  * @method     ChildGameQuery groupByTime() Group by the time column
- * @method     ChildGameQuery groupByUserId() Group by the user_id column
- * @method     ChildGameQuery groupByRoomId() Group by the room_id column
+ * @method     ChildGameQuery groupByUserCode() Group by the user_code column
+ * @method     ChildGameQuery groupByRoomCode() Group by the room_code column
  *
  * @method     ChildGameQuery leftJoin($relation) Adds a LEFT JOIN clause to the query
  * @method     ChildGameQuery rightJoin($relation) Adds a RIGHT JOIN clause to the query
@@ -71,36 +69,33 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildGame findOne(ConnectionInterface $con = null) Return the first ChildGame matching the query
  * @method     ChildGame findOneOrCreate(ConnectionInterface $con = null) Return the first ChildGame matching the query, or a new ChildGame object populated from the query conditions when no match is found
  *
- * @method     ChildGame findOneById(int $id) Return the first ChildGame filtered by the id column
  * @method     ChildGame findOneByCreated(string $created) Return the first ChildGame filtered by the created column
  * @method     ChildGame findOneByDeleted(string $deleted) Return the first ChildGame filtered by the deleted column
- * @method     ChildGame findOneByCode(string $code) Return the first ChildGame filtered by the code column
+ * @method     ChildGame findOneByCode(int $code) Return the first ChildGame filtered by the code column
  * @method     ChildGame findOneByHintsUsed(int $hints_used) Return the first ChildGame filtered by the hints_used column
  * @method     ChildGame findOneByTime(int $time) Return the first ChildGame filtered by the time column
- * @method     ChildGame findOneByUserId(int $user_id) Return the first ChildGame filtered by the user_id column
- * @method     ChildGame findOneByRoomId(int $room_id) Return the first ChildGame filtered by the room_id column *
+ * @method     ChildGame findOneByUserCode(int $user_code) Return the first ChildGame filtered by the user_code column
+ * @method     ChildGame findOneByRoomCode(int $room_code) Return the first ChildGame filtered by the room_code column *
 
  * @method     ChildGame requirePk($key, ConnectionInterface $con = null) Return the ChildGame by primary key and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildGame requireOne(ConnectionInterface $con = null) Return the first ChildGame matching the query and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  *
- * @method     ChildGame requireOneById(int $id) Return the first ChildGame filtered by the id column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildGame requireOneByCreated(string $created) Return the first ChildGame filtered by the created column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildGame requireOneByDeleted(string $deleted) Return the first ChildGame filtered by the deleted column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
- * @method     ChildGame requireOneByCode(string $code) Return the first ChildGame filtered by the code column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
+ * @method     ChildGame requireOneByCode(int $code) Return the first ChildGame filtered by the code column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildGame requireOneByHintsUsed(int $hints_used) Return the first ChildGame filtered by the hints_used column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildGame requireOneByTime(int $time) Return the first ChildGame filtered by the time column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
- * @method     ChildGame requireOneByUserId(int $user_id) Return the first ChildGame filtered by the user_id column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
- * @method     ChildGame requireOneByRoomId(int $room_id) Return the first ChildGame filtered by the room_id column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
+ * @method     ChildGame requireOneByUserCode(int $user_code) Return the first ChildGame filtered by the user_code column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
+ * @method     ChildGame requireOneByRoomCode(int $room_code) Return the first ChildGame filtered by the room_code column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  *
  * @method     ChildGame[]|ObjectCollection find(ConnectionInterface $con = null) Return ChildGame objects based on current ModelCriteria
- * @method     ChildGame[]|ObjectCollection findById(int $id) Return ChildGame objects filtered by the id column
  * @method     ChildGame[]|ObjectCollection findByCreated(string $created) Return ChildGame objects filtered by the created column
  * @method     ChildGame[]|ObjectCollection findByDeleted(string $deleted) Return ChildGame objects filtered by the deleted column
- * @method     ChildGame[]|ObjectCollection findByCode(string $code) Return ChildGame objects filtered by the code column
+ * @method     ChildGame[]|ObjectCollection findByCode(int $code) Return ChildGame objects filtered by the code column
  * @method     ChildGame[]|ObjectCollection findByHintsUsed(int $hints_used) Return ChildGame objects filtered by the hints_used column
  * @method     ChildGame[]|ObjectCollection findByTime(int $time) Return ChildGame objects filtered by the time column
- * @method     ChildGame[]|ObjectCollection findByUserId(int $user_id) Return ChildGame objects filtered by the user_id column
- * @method     ChildGame[]|ObjectCollection findByRoomId(int $room_id) Return ChildGame objects filtered by the room_id column
+ * @method     ChildGame[]|ObjectCollection findByUserCode(int $user_code) Return ChildGame objects filtered by the user_code column
+ * @method     ChildGame[]|ObjectCollection findByRoomCode(int $room_code) Return ChildGame objects filtered by the room_code column
  * @method     ChildGame[]|\Propel\Runtime\Util\PropelModelPager paginate($page = 1, $maxPerPage = 10, ConnectionInterface $con = null) Issue a SELECT query based on the current ModelCriteria and uses a page and a maximum number of results per page to compute an offset and a limit
  *
  */
@@ -199,7 +194,7 @@ abstract class GameQuery extends ModelCriteria
      */
     protected function findPkSimple($key, ConnectionInterface $con)
     {
-        $sql = 'SELECT id, created, deleted, code, hints_used, time, user_id, room_id FROM game WHERE id = :p0';
+        $sql = 'SELECT created, deleted, code, hints_used, time, user_code, room_code FROM game WHERE code = :p0';
         try {
             $stmt = $con->prepare($sql);
             $stmt->bindValue(':p0', $key, PDO::PARAM_INT);
@@ -273,7 +268,7 @@ abstract class GameQuery extends ModelCriteria
     public function filterByPrimaryKey($key)
     {
 
-        return $this->addUsingAlias(GameTableMap::COL_ID, $key, Criteria::EQUAL);
+        return $this->addUsingAlias(GameTableMap::COL_CODE, $key, Criteria::EQUAL);
     }
 
     /**
@@ -286,48 +281,7 @@ abstract class GameQuery extends ModelCriteria
     public function filterByPrimaryKeys($keys)
     {
 
-        return $this->addUsingAlias(GameTableMap::COL_ID, $keys, Criteria::IN);
-    }
-
-    /**
-     * Filter the query on the id column
-     *
-     * Example usage:
-     * <code>
-     * $query->filterById(1234); // WHERE id = 1234
-     * $query->filterById(array(12, 34)); // WHERE id IN (12, 34)
-     * $query->filterById(array('min' => 12)); // WHERE id > 12
-     * </code>
-     *
-     * @param     mixed $id The value to use as filter.
-     *              Use scalar values for equality.
-     *              Use array values for in_array() equivalent.
-     *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
-     *
-     * @return $this|ChildGameQuery The current query, for fluid interface
-     */
-    public function filterById($id = null, $comparison = null)
-    {
-        if (is_array($id)) {
-            $useMinMax = false;
-            if (isset($id['min'])) {
-                $this->addUsingAlias(GameTableMap::COL_ID, $id['min'], Criteria::GREATER_EQUAL);
-                $useMinMax = true;
-            }
-            if (isset($id['max'])) {
-                $this->addUsingAlias(GameTableMap::COL_ID, $id['max'], Criteria::LESS_EQUAL);
-                $useMinMax = true;
-            }
-            if ($useMinMax) {
-                return $this;
-            }
-            if (null === $comparison) {
-                $comparison = Criteria::IN;
-            }
-        }
-
-        return $this->addUsingAlias(GameTableMap::COL_ID, $id, $comparison);
+        return $this->addUsingAlias(GameTableMap::COL_CODE, $keys, Criteria::IN);
     }
 
     /**
@@ -421,19 +375,35 @@ abstract class GameQuery extends ModelCriteria
      *
      * Example usage:
      * <code>
-     * $query->filterByCode('fooValue');   // WHERE code = 'fooValue'
-     * $query->filterByCode('%fooValue%', Criteria::LIKE); // WHERE code LIKE '%fooValue%'
+     * $query->filterByCode(1234); // WHERE code = 1234
+     * $query->filterByCode(array(12, 34)); // WHERE code IN (12, 34)
+     * $query->filterByCode(array('min' => 12)); // WHERE code > 12
      * </code>
      *
-     * @param     string $code The value to use as filter.
+     * @param     mixed $code The value to use as filter.
+     *              Use scalar values for equality.
+     *              Use array values for in_array() equivalent.
+     *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
      * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
      * @return $this|ChildGameQuery The current query, for fluid interface
      */
     public function filterByCode($code = null, $comparison = null)
     {
-        if (null === $comparison) {
-            if (is_array($code)) {
+        if (is_array($code)) {
+            $useMinMax = false;
+            if (isset($code['min'])) {
+                $this->addUsingAlias(GameTableMap::COL_CODE, $code['min'], Criteria::GREATER_EQUAL);
+                $useMinMax = true;
+            }
+            if (isset($code['max'])) {
+                $this->addUsingAlias(GameTableMap::COL_CODE, $code['max'], Criteria::LESS_EQUAL);
+                $useMinMax = true;
+            }
+            if ($useMinMax) {
+                return $this;
+            }
+            if (null === $comparison) {
                 $comparison = Criteria::IN;
             }
         }
@@ -524,18 +494,18 @@ abstract class GameQuery extends ModelCriteria
     }
 
     /**
-     * Filter the query on the user_id column
+     * Filter the query on the user_code column
      *
      * Example usage:
      * <code>
-     * $query->filterByUserId(1234); // WHERE user_id = 1234
-     * $query->filterByUserId(array(12, 34)); // WHERE user_id IN (12, 34)
-     * $query->filterByUserId(array('min' => 12)); // WHERE user_id > 12
+     * $query->filterByUserCode(1234); // WHERE user_code = 1234
+     * $query->filterByUserCode(array(12, 34)); // WHERE user_code IN (12, 34)
+     * $query->filterByUserCode(array('min' => 12)); // WHERE user_code > 12
      * </code>
      *
      * @see       filterByUser()
      *
-     * @param     mixed $userId The value to use as filter.
+     * @param     mixed $userCode The value to use as filter.
      *              Use scalar values for equality.
      *              Use array values for in_array() equivalent.
      *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
@@ -543,16 +513,16 @@ abstract class GameQuery extends ModelCriteria
      *
      * @return $this|ChildGameQuery The current query, for fluid interface
      */
-    public function filterByUserId($userId = null, $comparison = null)
+    public function filterByUserCode($userCode = null, $comparison = null)
     {
-        if (is_array($userId)) {
+        if (is_array($userCode)) {
             $useMinMax = false;
-            if (isset($userId['min'])) {
-                $this->addUsingAlias(GameTableMap::COL_USER_ID, $userId['min'], Criteria::GREATER_EQUAL);
+            if (isset($userCode['min'])) {
+                $this->addUsingAlias(GameTableMap::COL_USER_CODE, $userCode['min'], Criteria::GREATER_EQUAL);
                 $useMinMax = true;
             }
-            if (isset($userId['max'])) {
-                $this->addUsingAlias(GameTableMap::COL_USER_ID, $userId['max'], Criteria::LESS_EQUAL);
+            if (isset($userCode['max'])) {
+                $this->addUsingAlias(GameTableMap::COL_USER_CODE, $userCode['max'], Criteria::LESS_EQUAL);
                 $useMinMax = true;
             }
             if ($useMinMax) {
@@ -563,22 +533,22 @@ abstract class GameQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(GameTableMap::COL_USER_ID, $userId, $comparison);
+        return $this->addUsingAlias(GameTableMap::COL_USER_CODE, $userCode, $comparison);
     }
 
     /**
-     * Filter the query on the room_id column
+     * Filter the query on the room_code column
      *
      * Example usage:
      * <code>
-     * $query->filterByRoomId(1234); // WHERE room_id = 1234
-     * $query->filterByRoomId(array(12, 34)); // WHERE room_id IN (12, 34)
-     * $query->filterByRoomId(array('min' => 12)); // WHERE room_id > 12
+     * $query->filterByRoomCode(1234); // WHERE room_code = 1234
+     * $query->filterByRoomCode(array(12, 34)); // WHERE room_code IN (12, 34)
+     * $query->filterByRoomCode(array('min' => 12)); // WHERE room_code > 12
      * </code>
      *
      * @see       filterByRoom()
      *
-     * @param     mixed $roomId The value to use as filter.
+     * @param     mixed $roomCode The value to use as filter.
      *              Use scalar values for equality.
      *              Use array values for in_array() equivalent.
      *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
@@ -586,16 +556,16 @@ abstract class GameQuery extends ModelCriteria
      *
      * @return $this|ChildGameQuery The current query, for fluid interface
      */
-    public function filterByRoomId($roomId = null, $comparison = null)
+    public function filterByRoomCode($roomCode = null, $comparison = null)
     {
-        if (is_array($roomId)) {
+        if (is_array($roomCode)) {
             $useMinMax = false;
-            if (isset($roomId['min'])) {
-                $this->addUsingAlias(GameTableMap::COL_ROOM_ID, $roomId['min'], Criteria::GREATER_EQUAL);
+            if (isset($roomCode['min'])) {
+                $this->addUsingAlias(GameTableMap::COL_ROOM_CODE, $roomCode['min'], Criteria::GREATER_EQUAL);
                 $useMinMax = true;
             }
-            if (isset($roomId['max'])) {
-                $this->addUsingAlias(GameTableMap::COL_ROOM_ID, $roomId['max'], Criteria::LESS_EQUAL);
+            if (isset($roomCode['max'])) {
+                $this->addUsingAlias(GameTableMap::COL_ROOM_CODE, $roomCode['max'], Criteria::LESS_EQUAL);
                 $useMinMax = true;
             }
             if ($useMinMax) {
@@ -606,7 +576,7 @@ abstract class GameQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(GameTableMap::COL_ROOM_ID, $roomId, $comparison);
+        return $this->addUsingAlias(GameTableMap::COL_ROOM_CODE, $roomCode, $comparison);
     }
 
     /**
@@ -623,14 +593,14 @@ abstract class GameQuery extends ModelCriteria
     {
         if ($user instanceof \API\Model\User) {
             return $this
-                ->addUsingAlias(GameTableMap::COL_USER_ID, $user->getId(), $comparison);
+                ->addUsingAlias(GameTableMap::COL_USER_CODE, $user->getCode(), $comparison);
         } elseif ($user instanceof ObjectCollection) {
             if (null === $comparison) {
                 $comparison = Criteria::IN;
             }
 
             return $this
-                ->addUsingAlias(GameTableMap::COL_USER_ID, $user->toKeyValue('PrimaryKey', 'Id'), $comparison);
+                ->addUsingAlias(GameTableMap::COL_USER_CODE, $user->toKeyValue('PrimaryKey', 'Code'), $comparison);
         } else {
             throw new PropelException('filterByUser() only accepts arguments of type \API\Model\User or Collection');
         }
@@ -644,7 +614,7 @@ abstract class GameQuery extends ModelCriteria
      *
      * @return $this|ChildGameQuery The current query, for fluid interface
      */
-    public function joinUser($relationAlias = null, $joinType = Criteria::LEFT_JOIN)
+    public function joinUser($relationAlias = null, $joinType = Criteria::INNER_JOIN)
     {
         $tableMap = $this->getTableMap();
         $relationMap = $tableMap->getRelation('User');
@@ -679,7 +649,7 @@ abstract class GameQuery extends ModelCriteria
      *
      * @return \API\Model\UserQuery A secondary query class using the current class as primary query
      */
-    public function useUserQuery($relationAlias = null, $joinType = Criteria::LEFT_JOIN)
+    public function useUserQuery($relationAlias = null, $joinType = Criteria::INNER_JOIN)
     {
         return $this
             ->joinUser($relationAlias, $joinType)
@@ -700,14 +670,14 @@ abstract class GameQuery extends ModelCriteria
     {
         if ($room instanceof \API\Model\Room) {
             return $this
-                ->addUsingAlias(GameTableMap::COL_ROOM_ID, $room->getId(), $comparison);
+                ->addUsingAlias(GameTableMap::COL_ROOM_CODE, $room->getCode(), $comparison);
         } elseif ($room instanceof ObjectCollection) {
             if (null === $comparison) {
                 $comparison = Criteria::IN;
             }
 
             return $this
-                ->addUsingAlias(GameTableMap::COL_ROOM_ID, $room->toKeyValue('PrimaryKey', 'Id'), $comparison);
+                ->addUsingAlias(GameTableMap::COL_ROOM_CODE, $room->toKeyValue('PrimaryKey', 'Code'), $comparison);
         } else {
             throw new PropelException('filterByRoom() only accepts arguments of type \API\Model\Room or Collection');
         }
@@ -721,7 +691,7 @@ abstract class GameQuery extends ModelCriteria
      *
      * @return $this|ChildGameQuery The current query, for fluid interface
      */
-    public function joinRoom($relationAlias = null, $joinType = Criteria::LEFT_JOIN)
+    public function joinRoom($relationAlias = null, $joinType = Criteria::INNER_JOIN)
     {
         $tableMap = $this->getTableMap();
         $relationMap = $tableMap->getRelation('Room');
@@ -756,7 +726,7 @@ abstract class GameQuery extends ModelCriteria
      *
      * @return \API\Model\RoomQuery A secondary query class using the current class as primary query
      */
-    public function useRoomQuery($relationAlias = null, $joinType = Criteria::LEFT_JOIN)
+    public function useRoomQuery($relationAlias = null, $joinType = Criteria::INNER_JOIN)
     {
         return $this
             ->joinRoom($relationAlias, $joinType)
@@ -773,7 +743,7 @@ abstract class GameQuery extends ModelCriteria
     public function prune($game = null)
     {
         if ($game) {
-            $this->addUsingAlias(GameTableMap::COL_ID, $game->getId(), Criteria::NOT_EQUAL);
+            $this->addUsingAlias(GameTableMap::COL_CODE, $game->getCode(), Criteria::NOT_EQUAL);
         }
 
         return $this;

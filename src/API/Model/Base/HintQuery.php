@@ -3,7 +3,6 @@
 namespace API\Model\Base;
 
 use \Exception;
-use \PDO;
 use API\Model\Hint as ChildHint;
 use API\Model\HintQuery as ChildHintQuery;
 use API\Model\Map\HintTableMap;
@@ -13,6 +12,7 @@ use Propel\Runtime\ActiveQuery\ModelCriteria;
 use Propel\Runtime\ActiveQuery\ModelJoin;
 use Propel\Runtime\Collection\ObjectCollection;
 use Propel\Runtime\Connection\ConnectionInterface;
+use Propel\Runtime\Exception\LogicException;
 use Propel\Runtime\Exception\PropelException;
 
 /**
@@ -20,13 +20,11 @@ use Propel\Runtime\Exception\PropelException;
  *
  *
  *
- * @method     ChildHintQuery orderById($order = Criteria::ASC) Order by the id column
  * @method     ChildHintQuery orderByHint($order = Criteria::ASC) Order by the hint column
- * @method     ChildHintQuery orderByItemId($order = Criteria::ASC) Order by the item_id column
+ * @method     ChildHintQuery orderByItemCode($order = Criteria::ASC) Order by the item_code column
  *
- * @method     ChildHintQuery groupById() Group by the id column
  * @method     ChildHintQuery groupByHint() Group by the hint column
- * @method     ChildHintQuery groupByItemId() Group by the item_id column
+ * @method     ChildHintQuery groupByItemCode() Group by the item_code column
  *
  * @method     ChildHintQuery leftJoin($relation) Adds a LEFT JOIN clause to the query
  * @method     ChildHintQuery rightJoin($relation) Adds a RIGHT JOIN clause to the query
@@ -51,21 +49,18 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildHint findOne(ConnectionInterface $con = null) Return the first ChildHint matching the query
  * @method     ChildHint findOneOrCreate(ConnectionInterface $con = null) Return the first ChildHint matching the query, or a new ChildHint object populated from the query conditions when no match is found
  *
- * @method     ChildHint findOneById(int $id) Return the first ChildHint filtered by the id column
  * @method     ChildHint findOneByHint(string $hint) Return the first ChildHint filtered by the hint column
- * @method     ChildHint findOneByItemId(int $item_id) Return the first ChildHint filtered by the item_id column *
+ * @method     ChildHint findOneByItemCode(int $item_code) Return the first ChildHint filtered by the item_code column *
 
  * @method     ChildHint requirePk($key, ConnectionInterface $con = null) Return the ChildHint by primary key and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildHint requireOne(ConnectionInterface $con = null) Return the first ChildHint matching the query and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  *
- * @method     ChildHint requireOneById(int $id) Return the first ChildHint filtered by the id column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildHint requireOneByHint(string $hint) Return the first ChildHint filtered by the hint column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
- * @method     ChildHint requireOneByItemId(int $item_id) Return the first ChildHint filtered by the item_id column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
+ * @method     ChildHint requireOneByItemCode(int $item_code) Return the first ChildHint filtered by the item_code column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  *
  * @method     ChildHint[]|ObjectCollection find(ConnectionInterface $con = null) Return ChildHint objects based on current ModelCriteria
- * @method     ChildHint[]|ObjectCollection findById(int $id) Return ChildHint objects filtered by the id column
  * @method     ChildHint[]|ObjectCollection findByHint(string $hint) Return ChildHint objects filtered by the hint column
- * @method     ChildHint[]|ObjectCollection findByItemId(int $item_id) Return ChildHint objects filtered by the item_id column
+ * @method     ChildHint[]|ObjectCollection findByItemCode(int $item_code) Return ChildHint objects filtered by the item_code column
  * @method     ChildHint[]|\Propel\Runtime\Util\PropelModelPager paginate($page = 1, $maxPerPage = 10, ConnectionInterface $con = null) Issue a SELECT query based on the current ModelCriteria and uses a page and a maximum number of results per page to compute an offset and a limit
  *
  */
@@ -125,89 +120,13 @@ abstract class HintQuery extends ModelCriteria
      */
     public function findPk($key, ConnectionInterface $con = null)
     {
-        if ($key === null) {
-            return null;
-        }
-
-        if ($con === null) {
-            $con = Propel::getServiceContainer()->getReadConnection(HintTableMap::DATABASE_NAME);
-        }
-
-        $this->basePreSelect($con);
-
-        if (
-            $this->formatter || $this->modelAlias || $this->with || $this->select
-            || $this->selectColumns || $this->asColumns || $this->selectModifiers
-            || $this->map || $this->having || $this->joins
-        ) {
-            return $this->findPkComplex($key, $con);
-        }
-
-        if ((null !== ($obj = HintTableMap::getInstanceFromPool(null === $key || is_scalar($key) || is_callable([$key, '__toString']) ? (string) $key : $key)))) {
-            // the object is already in the instance pool
-            return $obj;
-        }
-
-        return $this->findPkSimple($key, $con);
-    }
-
-    /**
-     * Find object by primary key using raw SQL to go fast.
-     * Bypass doSelect() and the object formatter by using generated code.
-     *
-     * @param     mixed $key Primary key to use for the query
-     * @param     ConnectionInterface $con A connection object
-     *
-     * @throws \Propel\Runtime\Exception\PropelException
-     *
-     * @return ChildHint A model object, or null if the key is not found
-     */
-    protected function findPkSimple($key, ConnectionInterface $con)
-    {
-        $sql = 'SELECT id, hint, item_id FROM hint WHERE id = :p0';
-        try {
-            $stmt = $con->prepare($sql);
-            $stmt->bindValue(':p0', $key, PDO::PARAM_INT);
-            $stmt->execute();
-        } catch (Exception $e) {
-            Propel::log($e->getMessage(), Propel::LOG_ERR);
-            throw new PropelException(sprintf('Unable to execute SELECT statement [%s]', $sql), 0, $e);
-        }
-        $obj = null;
-        if ($row = $stmt->fetch(\PDO::FETCH_NUM)) {
-            /** @var ChildHint $obj */
-            $obj = new ChildHint();
-            $obj->hydrate($row);
-            HintTableMap::addInstanceToPool($obj, null === $key || is_scalar($key) || is_callable([$key, '__toString']) ? (string) $key : $key);
-        }
-        $stmt->closeCursor();
-
-        return $obj;
-    }
-
-    /**
-     * Find object by primary key.
-     *
-     * @param     mixed $key Primary key to use for the query
-     * @param     ConnectionInterface $con A connection object
-     *
-     * @return ChildHint|array|mixed the result, formatted by the current formatter
-     */
-    protected function findPkComplex($key, ConnectionInterface $con)
-    {
-        // As the query uses a PK condition, no limit(1) is necessary.
-        $criteria = $this->isKeepQuery() ? clone $this : $this;
-        $dataFetcher = $criteria
-            ->filterByPrimaryKey($key)
-            ->doSelect($con);
-
-        return $criteria->getFormatter()->init($criteria)->formatOne($dataFetcher);
+        throw new LogicException('The Hint object has no primary key');
     }
 
     /**
      * Find objects by primary key
      * <code>
-     * $objs = $c->findPks(array(12, 56, 832), $con);
+     * $objs = $c->findPks(array(array(12, 56), array(832, 123), array(123, 456)), $con);
      * </code>
      * @param     array $keys Primary keys to use for the query
      * @param     ConnectionInterface $con an optional connection object
@@ -216,16 +135,7 @@ abstract class HintQuery extends ModelCriteria
      */
     public function findPks($keys, ConnectionInterface $con = null)
     {
-        if (null === $con) {
-            $con = Propel::getServiceContainer()->getReadConnection($this->getDbName());
-        }
-        $this->basePreSelect($con);
-        $criteria = $this->isKeepQuery() ? clone $this : $this;
-        $dataFetcher = $criteria
-            ->filterByPrimaryKeys($keys)
-            ->doSelect($con);
-
-        return $criteria->getFormatter()->init($criteria)->format($dataFetcher);
+        throw new LogicException('The Hint object has no primary key');
     }
 
     /**
@@ -237,8 +147,7 @@ abstract class HintQuery extends ModelCriteria
      */
     public function filterByPrimaryKey($key)
     {
-
-        return $this->addUsingAlias(HintTableMap::COL_ID, $key, Criteria::EQUAL);
+        throw new LogicException('The Hint object has no primary key');
     }
 
     /**
@@ -250,49 +159,7 @@ abstract class HintQuery extends ModelCriteria
      */
     public function filterByPrimaryKeys($keys)
     {
-
-        return $this->addUsingAlias(HintTableMap::COL_ID, $keys, Criteria::IN);
-    }
-
-    /**
-     * Filter the query on the id column
-     *
-     * Example usage:
-     * <code>
-     * $query->filterById(1234); // WHERE id = 1234
-     * $query->filterById(array(12, 34)); // WHERE id IN (12, 34)
-     * $query->filterById(array('min' => 12)); // WHERE id > 12
-     * </code>
-     *
-     * @param     mixed $id The value to use as filter.
-     *              Use scalar values for equality.
-     *              Use array values for in_array() equivalent.
-     *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
-     *
-     * @return $this|ChildHintQuery The current query, for fluid interface
-     */
-    public function filterById($id = null, $comparison = null)
-    {
-        if (is_array($id)) {
-            $useMinMax = false;
-            if (isset($id['min'])) {
-                $this->addUsingAlias(HintTableMap::COL_ID, $id['min'], Criteria::GREATER_EQUAL);
-                $useMinMax = true;
-            }
-            if (isset($id['max'])) {
-                $this->addUsingAlias(HintTableMap::COL_ID, $id['max'], Criteria::LESS_EQUAL);
-                $useMinMax = true;
-            }
-            if ($useMinMax) {
-                return $this;
-            }
-            if (null === $comparison) {
-                $comparison = Criteria::IN;
-            }
-        }
-
-        return $this->addUsingAlias(HintTableMap::COL_ID, $id, $comparison);
+        throw new LogicException('The Hint object has no primary key');
     }
 
     /**
@@ -321,18 +188,18 @@ abstract class HintQuery extends ModelCriteria
     }
 
     /**
-     * Filter the query on the item_id column
+     * Filter the query on the item_code column
      *
      * Example usage:
      * <code>
-     * $query->filterByItemId(1234); // WHERE item_id = 1234
-     * $query->filterByItemId(array(12, 34)); // WHERE item_id IN (12, 34)
-     * $query->filterByItemId(array('min' => 12)); // WHERE item_id > 12
+     * $query->filterByItemCode(1234); // WHERE item_code = 1234
+     * $query->filterByItemCode(array(12, 34)); // WHERE item_code IN (12, 34)
+     * $query->filterByItemCode(array('min' => 12)); // WHERE item_code > 12
      * </code>
      *
      * @see       filterByItem()
      *
-     * @param     mixed $itemId The value to use as filter.
+     * @param     mixed $itemCode The value to use as filter.
      *              Use scalar values for equality.
      *              Use array values for in_array() equivalent.
      *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
@@ -340,16 +207,16 @@ abstract class HintQuery extends ModelCriteria
      *
      * @return $this|ChildHintQuery The current query, for fluid interface
      */
-    public function filterByItemId($itemId = null, $comparison = null)
+    public function filterByItemCode($itemCode = null, $comparison = null)
     {
-        if (is_array($itemId)) {
+        if (is_array($itemCode)) {
             $useMinMax = false;
-            if (isset($itemId['min'])) {
-                $this->addUsingAlias(HintTableMap::COL_ITEM_ID, $itemId['min'], Criteria::GREATER_EQUAL);
+            if (isset($itemCode['min'])) {
+                $this->addUsingAlias(HintTableMap::COL_ITEM_CODE, $itemCode['min'], Criteria::GREATER_EQUAL);
                 $useMinMax = true;
             }
-            if (isset($itemId['max'])) {
-                $this->addUsingAlias(HintTableMap::COL_ITEM_ID, $itemId['max'], Criteria::LESS_EQUAL);
+            if (isset($itemCode['max'])) {
+                $this->addUsingAlias(HintTableMap::COL_ITEM_CODE, $itemCode['max'], Criteria::LESS_EQUAL);
                 $useMinMax = true;
             }
             if ($useMinMax) {
@@ -360,7 +227,7 @@ abstract class HintQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(HintTableMap::COL_ITEM_ID, $itemId, $comparison);
+        return $this->addUsingAlias(HintTableMap::COL_ITEM_CODE, $itemCode, $comparison);
     }
 
     /**
@@ -377,14 +244,14 @@ abstract class HintQuery extends ModelCriteria
     {
         if ($item instanceof \API\Model\Item) {
             return $this
-                ->addUsingAlias(HintTableMap::COL_ITEM_ID, $item->getId(), $comparison);
+                ->addUsingAlias(HintTableMap::COL_ITEM_CODE, $item->getCode(), $comparison);
         } elseif ($item instanceof ObjectCollection) {
             if (null === $comparison) {
                 $comparison = Criteria::IN;
             }
 
             return $this
-                ->addUsingAlias(HintTableMap::COL_ITEM_ID, $item->toKeyValue('PrimaryKey', 'Id'), $comparison);
+                ->addUsingAlias(HintTableMap::COL_ITEM_CODE, $item->toKeyValue('PrimaryKey', 'Code'), $comparison);
         } else {
             throw new PropelException('filterByItem() only accepts arguments of type \API\Model\Item or Collection');
         }
@@ -398,7 +265,7 @@ abstract class HintQuery extends ModelCriteria
      *
      * @return $this|ChildHintQuery The current query, for fluid interface
      */
-    public function joinItem($relationAlias = null, $joinType = Criteria::LEFT_JOIN)
+    public function joinItem($relationAlias = null, $joinType = Criteria::INNER_JOIN)
     {
         $tableMap = $this->getTableMap();
         $relationMap = $tableMap->getRelation('Item');
@@ -433,7 +300,7 @@ abstract class HintQuery extends ModelCriteria
      *
      * @return \API\Model\ItemQuery A secondary query class using the current class as primary query
      */
-    public function useItemQuery($relationAlias = null, $joinType = Criteria::LEFT_JOIN)
+    public function useItemQuery($relationAlias = null, $joinType = Criteria::INNER_JOIN)
     {
         return $this
             ->joinItem($relationAlias, $joinType)
@@ -450,7 +317,8 @@ abstract class HintQuery extends ModelCriteria
     public function prune($hint = null)
     {
         if ($hint) {
-            $this->addUsingAlias(HintTableMap::COL_ID, $hint->getId(), Criteria::NOT_EQUAL);
+            throw new LogicException('Hint object has no primary key');
+
         }
 
         return $this;

@@ -59,7 +59,7 @@ class GameTableMap extends TableMap
     /**
      * The total number of columns
      */
-    const NUM_COLUMNS = 8;
+    const NUM_COLUMNS = 7;
 
     /**
      * The number of lazy-loaded columns
@@ -69,12 +69,7 @@ class GameTableMap extends TableMap
     /**
      * The number of columns to hydrate (NUM_COLUMNS - NUM_LAZY_LOAD_COLUMNS)
      */
-    const NUM_HYDRATE_COLUMNS = 8;
-
-    /**
-     * the column name for the id field
-     */
-    const COL_ID = 'game.id';
+    const NUM_HYDRATE_COLUMNS = 7;
 
     /**
      * the column name for the created field
@@ -102,14 +97,14 @@ class GameTableMap extends TableMap
     const COL_TIME = 'game.time';
 
     /**
-     * the column name for the user_id field
+     * the column name for the user_code field
      */
-    const COL_USER_ID = 'game.user_id';
+    const COL_USER_CODE = 'game.user_code';
 
     /**
-     * the column name for the room_id field
+     * the column name for the room_code field
      */
-    const COL_ROOM_ID = 'game.room_id';
+    const COL_ROOM_CODE = 'game.room_code';
 
     /**
      * The default string format for model objects of the related table
@@ -123,11 +118,11 @@ class GameTableMap extends TableMap
      * e.g. self::$fieldNames[self::TYPE_PHPNAME][0] = 'Id'
      */
     protected static $fieldNames = array (
-        self::TYPE_PHPNAME       => array('Id', 'Created', 'Deleted', 'Code', 'HintsUsed', 'Time', 'UserId', 'RoomId', ),
-        self::TYPE_CAMELNAME     => array('id', 'created', 'deleted', 'code', 'hintsUsed', 'time', 'userId', 'roomId', ),
-        self::TYPE_COLNAME       => array(GameTableMap::COL_ID, GameTableMap::COL_CREATED, GameTableMap::COL_DELETED, GameTableMap::COL_CODE, GameTableMap::COL_HINTS_USED, GameTableMap::COL_TIME, GameTableMap::COL_USER_ID, GameTableMap::COL_ROOM_ID, ),
-        self::TYPE_FIELDNAME     => array('id', 'created', 'deleted', 'code', 'hints_used', 'time', 'user_id', 'room_id', ),
-        self::TYPE_NUM           => array(0, 1, 2, 3, 4, 5, 6, 7, )
+        self::TYPE_PHPNAME       => array('Created', 'Deleted', 'Code', 'HintsUsed', 'Time', 'UserCode', 'RoomCode', ),
+        self::TYPE_CAMELNAME     => array('created', 'deleted', 'code', 'hintsUsed', 'time', 'userCode', 'roomCode', ),
+        self::TYPE_COLNAME       => array(GameTableMap::COL_CREATED, GameTableMap::COL_DELETED, GameTableMap::COL_CODE, GameTableMap::COL_HINTS_USED, GameTableMap::COL_TIME, GameTableMap::COL_USER_CODE, GameTableMap::COL_ROOM_CODE, ),
+        self::TYPE_FIELDNAME     => array('created', 'deleted', 'code', 'hints_used', 'time', 'user_code', 'room_code', ),
+        self::TYPE_NUM           => array(0, 1, 2, 3, 4, 5, 6, )
     );
 
     /**
@@ -137,11 +132,11 @@ class GameTableMap extends TableMap
      * e.g. self::$fieldKeys[self::TYPE_PHPNAME]['Id'] = 0
      */
     protected static $fieldKeys = array (
-        self::TYPE_PHPNAME       => array('Id' => 0, 'Created' => 1, 'Deleted' => 2, 'Code' => 3, 'HintsUsed' => 4, 'Time' => 5, 'UserId' => 6, 'RoomId' => 7, ),
-        self::TYPE_CAMELNAME     => array('id' => 0, 'created' => 1, 'deleted' => 2, 'code' => 3, 'hintsUsed' => 4, 'time' => 5, 'userId' => 6, 'roomId' => 7, ),
-        self::TYPE_COLNAME       => array(GameTableMap::COL_ID => 0, GameTableMap::COL_CREATED => 1, GameTableMap::COL_DELETED => 2, GameTableMap::COL_CODE => 3, GameTableMap::COL_HINTS_USED => 4, GameTableMap::COL_TIME => 5, GameTableMap::COL_USER_ID => 6, GameTableMap::COL_ROOM_ID => 7, ),
-        self::TYPE_FIELDNAME     => array('id' => 0, 'created' => 1, 'deleted' => 2, 'code' => 3, 'hints_used' => 4, 'time' => 5, 'user_id' => 6, 'room_id' => 7, ),
-        self::TYPE_NUM           => array(0, 1, 2, 3, 4, 5, 6, 7, )
+        self::TYPE_PHPNAME       => array('Created' => 0, 'Deleted' => 1, 'Code' => 2, 'HintsUsed' => 3, 'Time' => 4, 'UserCode' => 5, 'RoomCode' => 6, ),
+        self::TYPE_CAMELNAME     => array('created' => 0, 'deleted' => 1, 'code' => 2, 'hintsUsed' => 3, 'time' => 4, 'userCode' => 5, 'roomCode' => 6, ),
+        self::TYPE_COLNAME       => array(GameTableMap::COL_CREATED => 0, GameTableMap::COL_DELETED => 1, GameTableMap::COL_CODE => 2, GameTableMap::COL_HINTS_USED => 3, GameTableMap::COL_TIME => 4, GameTableMap::COL_USER_CODE => 5, GameTableMap::COL_ROOM_CODE => 6, ),
+        self::TYPE_FIELDNAME     => array('created' => 0, 'deleted' => 1, 'code' => 2, 'hints_used' => 3, 'time' => 4, 'user_code' => 5, 'room_code' => 6, ),
+        self::TYPE_NUM           => array(0, 1, 2, 3, 4, 5, 6, )
     );
 
     /**
@@ -161,14 +156,13 @@ class GameTableMap extends TableMap
         $this->setPackage('API.Model');
         $this->setUseIdGenerator(true);
         // columns
-        $this->addPrimaryKey('id', 'Id', 'INTEGER', true, null, null);
-        $this->addColumn('created', 'Created', 'TIMESTAMP', false, null, null);
+        $this->addColumn('created', 'Created', 'TIMESTAMP', true, null, null);
         $this->addColumn('deleted', 'Deleted', 'TIMESTAMP', false, null, null);
-        $this->addColumn('code', 'Code', 'VARCHAR', false, 255, null);
-        $this->addColumn('hints_used', 'HintsUsed', 'INTEGER', false, null, null);
-        $this->addColumn('time', 'Time', 'INTEGER', false, null, null);
-        $this->addForeignKey('user_id', 'UserId', 'INTEGER', 'user', 'id', false, null, null);
-        $this->addForeignKey('room_id', 'RoomId', 'INTEGER', 'room', 'id', false, null, null);
+        $this->addPrimaryKey('code', 'Code', 'INTEGER', true, null, null);
+        $this->addColumn('hints_used', 'HintsUsed', 'INTEGER', true, null, 0);
+        $this->addColumn('time', 'Time', 'INTEGER', true, null, null);
+        $this->addForeignKey('user_code', 'UserCode', 'INTEGER', 'user', 'code', true, null, null);
+        $this->addForeignKey('room_code', 'RoomCode', 'INTEGER', 'room', 'code', true, null, null);
     } // initialize()
 
     /**
@@ -179,15 +173,15 @@ class GameTableMap extends TableMap
         $this->addRelation('User', '\\API\\Model\\User', RelationMap::MANY_TO_ONE, array (
   0 =>
   array (
-    0 => ':user_id',
-    1 => ':id',
+    0 => ':user_code',
+    1 => ':code',
   ),
 ), null, null, null, false);
         $this->addRelation('Room', '\\API\\Model\\Room', RelationMap::MANY_TO_ONE, array (
   0 =>
   array (
-    0 => ':room_id',
-    1 => ':id',
+    0 => ':room_code',
+    1 => ':code',
   ),
 ), null, null, null, false);
     } // buildRelations()
@@ -208,11 +202,11 @@ class GameTableMap extends TableMap
     public static function getPrimaryKeyHashFromRow($row, $offset = 0, $indexType = TableMap::TYPE_NUM)
     {
         // If the PK cannot be derived from the row, return NULL.
-        if ($row[TableMap::TYPE_NUM == $indexType ? 0 + $offset : static::translateFieldName('Id', TableMap::TYPE_PHPNAME, $indexType)] === null) {
+        if ($row[TableMap::TYPE_NUM == $indexType ? 2 + $offset : static::translateFieldName('Code', TableMap::TYPE_PHPNAME, $indexType)] === null) {
             return null;
         }
 
-        return null === $row[TableMap::TYPE_NUM == $indexType ? 0 + $offset : static::translateFieldName('Id', TableMap::TYPE_PHPNAME, $indexType)] || is_scalar($row[TableMap::TYPE_NUM == $indexType ? 0 + $offset : static::translateFieldName('Id', TableMap::TYPE_PHPNAME, $indexType)]) || is_callable([$row[TableMap::TYPE_NUM == $indexType ? 0 + $offset : static::translateFieldName('Id', TableMap::TYPE_PHPNAME, $indexType)], '__toString']) ? (string) $row[TableMap::TYPE_NUM == $indexType ? 0 + $offset : static::translateFieldName('Id', TableMap::TYPE_PHPNAME, $indexType)] : $row[TableMap::TYPE_NUM == $indexType ? 0 + $offset : static::translateFieldName('Id', TableMap::TYPE_PHPNAME, $indexType)];
+        return null === $row[TableMap::TYPE_NUM == $indexType ? 2 + $offset : static::translateFieldName('Code', TableMap::TYPE_PHPNAME, $indexType)] || is_scalar($row[TableMap::TYPE_NUM == $indexType ? 2 + $offset : static::translateFieldName('Code', TableMap::TYPE_PHPNAME, $indexType)]) || is_callable([$row[TableMap::TYPE_NUM == $indexType ? 2 + $offset : static::translateFieldName('Code', TableMap::TYPE_PHPNAME, $indexType)], '__toString']) ? (string) $row[TableMap::TYPE_NUM == $indexType ? 2 + $offset : static::translateFieldName('Code', TableMap::TYPE_PHPNAME, $indexType)] : $row[TableMap::TYPE_NUM == $indexType ? 2 + $offset : static::translateFieldName('Code', TableMap::TYPE_PHPNAME, $indexType)];
     }
 
     /**
@@ -231,8 +225,8 @@ class GameTableMap extends TableMap
     {
         return (int) $row[
             $indexType == TableMap::TYPE_NUM
-                ? 0 + $offset
-                : self::translateFieldName('Id', TableMap::TYPE_PHPNAME, $indexType)
+                ? 2 + $offset
+                : self::translateFieldName('Code', TableMap::TYPE_PHPNAME, $indexType)
         ];
     }
 
@@ -333,23 +327,21 @@ class GameTableMap extends TableMap
     public static function addSelectColumns(Criteria $criteria, $alias = null)
     {
         if (null === $alias) {
-            $criteria->addSelectColumn(GameTableMap::COL_ID);
             $criteria->addSelectColumn(GameTableMap::COL_CREATED);
             $criteria->addSelectColumn(GameTableMap::COL_DELETED);
             $criteria->addSelectColumn(GameTableMap::COL_CODE);
             $criteria->addSelectColumn(GameTableMap::COL_HINTS_USED);
             $criteria->addSelectColumn(GameTableMap::COL_TIME);
-            $criteria->addSelectColumn(GameTableMap::COL_USER_ID);
-            $criteria->addSelectColumn(GameTableMap::COL_ROOM_ID);
+            $criteria->addSelectColumn(GameTableMap::COL_USER_CODE);
+            $criteria->addSelectColumn(GameTableMap::COL_ROOM_CODE);
         } else {
-            $criteria->addSelectColumn($alias . '.id');
             $criteria->addSelectColumn($alias . '.created');
             $criteria->addSelectColumn($alias . '.deleted');
             $criteria->addSelectColumn($alias . '.code');
             $criteria->addSelectColumn($alias . '.hints_used');
             $criteria->addSelectColumn($alias . '.time');
-            $criteria->addSelectColumn($alias . '.user_id');
-            $criteria->addSelectColumn($alias . '.room_id');
+            $criteria->addSelectColumn($alias . '.user_code');
+            $criteria->addSelectColumn($alias . '.room_code');
         }
     }
 
@@ -401,7 +393,7 @@ class GameTableMap extends TableMap
             $criteria = $values->buildPkeyCriteria();
         } else { // it's a primary key, or an array of pks
             $criteria = new Criteria(GameTableMap::DATABASE_NAME);
-            $criteria->add(GameTableMap::COL_ID, (array) $values, Criteria::IN);
+            $criteria->add(GameTableMap::COL_CODE, (array) $values, Criteria::IN);
         }
 
         $query = GameQuery::create()->mergeWith($criteria);
@@ -449,8 +441,8 @@ class GameTableMap extends TableMap
             $criteria = $criteria->buildCriteria(); // build Criteria from Game object
         }
 
-        if ($criteria->containsKey(GameTableMap::COL_ID) && $criteria->keyContainsValue(GameTableMap::COL_ID) ) {
-            throw new PropelException('Cannot insert a value for auto-increment primary key ('.GameTableMap::COL_ID.')');
+        if ($criteria->containsKey(GameTableMap::COL_CODE) && $criteria->keyContainsValue(GameTableMap::COL_CODE) ) {
+            throw new PropelException('Cannot insert a value for auto-increment primary key ('.GameTableMap::COL_CODE.')');
         }
 
 

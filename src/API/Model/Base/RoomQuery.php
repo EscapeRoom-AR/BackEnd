@@ -20,12 +20,10 @@ use Propel\Runtime\Exception\PropelException;
  *
  *
  *
- * @method     ChildRoomQuery orderById($order = Criteria::ASC) Order by the id column
  * @method     ChildRoomQuery orderByCode($order = Criteria::ASC) Order by the code column
  * @method     ChildRoomQuery orderByName($order = Criteria::ASC) Order by the name column
  * @method     ChildRoomQuery orderByPremium($order = Criteria::ASC) Order by the premium column
  *
- * @method     ChildRoomQuery groupById() Group by the id column
  * @method     ChildRoomQuery groupByCode() Group by the code column
  * @method     ChildRoomQuery groupByName() Group by the name column
  * @method     ChildRoomQuery groupByPremium() Group by the premium column
@@ -63,22 +61,19 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildRoom findOne(ConnectionInterface $con = null) Return the first ChildRoom matching the query
  * @method     ChildRoom findOneOrCreate(ConnectionInterface $con = null) Return the first ChildRoom matching the query, or a new ChildRoom object populated from the query conditions when no match is found
  *
- * @method     ChildRoom findOneById(int $id) Return the first ChildRoom filtered by the id column
- * @method     ChildRoom findOneByCode(string $code) Return the first ChildRoom filtered by the code column
+ * @method     ChildRoom findOneByCode(int $code) Return the first ChildRoom filtered by the code column
  * @method     ChildRoom findOneByName(string $name) Return the first ChildRoom filtered by the name column
  * @method     ChildRoom findOneByPremium(boolean $premium) Return the first ChildRoom filtered by the premium column *
 
  * @method     ChildRoom requirePk($key, ConnectionInterface $con = null) Return the ChildRoom by primary key and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildRoom requireOne(ConnectionInterface $con = null) Return the first ChildRoom matching the query and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  *
- * @method     ChildRoom requireOneById(int $id) Return the first ChildRoom filtered by the id column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
- * @method     ChildRoom requireOneByCode(string $code) Return the first ChildRoom filtered by the code column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
+ * @method     ChildRoom requireOneByCode(int $code) Return the first ChildRoom filtered by the code column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildRoom requireOneByName(string $name) Return the first ChildRoom filtered by the name column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildRoom requireOneByPremium(boolean $premium) Return the first ChildRoom filtered by the premium column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  *
  * @method     ChildRoom[]|ObjectCollection find(ConnectionInterface $con = null) Return ChildRoom objects based on current ModelCriteria
- * @method     ChildRoom[]|ObjectCollection findById(int $id) Return ChildRoom objects filtered by the id column
- * @method     ChildRoom[]|ObjectCollection findByCode(string $code) Return ChildRoom objects filtered by the code column
+ * @method     ChildRoom[]|ObjectCollection findByCode(int $code) Return ChildRoom objects filtered by the code column
  * @method     ChildRoom[]|ObjectCollection findByName(string $name) Return ChildRoom objects filtered by the name column
  * @method     ChildRoom[]|ObjectCollection findByPremium(boolean $premium) Return ChildRoom objects filtered by the premium column
  * @method     ChildRoom[]|\Propel\Runtime\Util\PropelModelPager paginate($page = 1, $maxPerPage = 10, ConnectionInterface $con = null) Issue a SELECT query based on the current ModelCriteria and uses a page and a maximum number of results per page to compute an offset and a limit
@@ -179,7 +174,7 @@ abstract class RoomQuery extends ModelCriteria
      */
     protected function findPkSimple($key, ConnectionInterface $con)
     {
-        $sql = 'SELECT id, code, name, premium FROM room WHERE id = :p0';
+        $sql = 'SELECT code, name, premium FROM room WHERE code = :p0';
         try {
             $stmt = $con->prepare($sql);
             $stmt->bindValue(':p0', $key, PDO::PARAM_INT);
@@ -253,7 +248,7 @@ abstract class RoomQuery extends ModelCriteria
     public function filterByPrimaryKey($key)
     {
 
-        return $this->addUsingAlias(RoomTableMap::COL_ID, $key, Criteria::EQUAL);
+        return $this->addUsingAlias(RoomTableMap::COL_CODE, $key, Criteria::EQUAL);
     }
 
     /**
@@ -266,48 +261,7 @@ abstract class RoomQuery extends ModelCriteria
     public function filterByPrimaryKeys($keys)
     {
 
-        return $this->addUsingAlias(RoomTableMap::COL_ID, $keys, Criteria::IN);
-    }
-
-    /**
-     * Filter the query on the id column
-     *
-     * Example usage:
-     * <code>
-     * $query->filterById(1234); // WHERE id = 1234
-     * $query->filterById(array(12, 34)); // WHERE id IN (12, 34)
-     * $query->filterById(array('min' => 12)); // WHERE id > 12
-     * </code>
-     *
-     * @param     mixed $id The value to use as filter.
-     *              Use scalar values for equality.
-     *              Use array values for in_array() equivalent.
-     *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
-     *
-     * @return $this|ChildRoomQuery The current query, for fluid interface
-     */
-    public function filterById($id = null, $comparison = null)
-    {
-        if (is_array($id)) {
-            $useMinMax = false;
-            if (isset($id['min'])) {
-                $this->addUsingAlias(RoomTableMap::COL_ID, $id['min'], Criteria::GREATER_EQUAL);
-                $useMinMax = true;
-            }
-            if (isset($id['max'])) {
-                $this->addUsingAlias(RoomTableMap::COL_ID, $id['max'], Criteria::LESS_EQUAL);
-                $useMinMax = true;
-            }
-            if ($useMinMax) {
-                return $this;
-            }
-            if (null === $comparison) {
-                $comparison = Criteria::IN;
-            }
-        }
-
-        return $this->addUsingAlias(RoomTableMap::COL_ID, $id, $comparison);
+        return $this->addUsingAlias(RoomTableMap::COL_CODE, $keys, Criteria::IN);
     }
 
     /**
@@ -315,19 +269,35 @@ abstract class RoomQuery extends ModelCriteria
      *
      * Example usage:
      * <code>
-     * $query->filterByCode('fooValue');   // WHERE code = 'fooValue'
-     * $query->filterByCode('%fooValue%', Criteria::LIKE); // WHERE code LIKE '%fooValue%'
+     * $query->filterByCode(1234); // WHERE code = 1234
+     * $query->filterByCode(array(12, 34)); // WHERE code IN (12, 34)
+     * $query->filterByCode(array('min' => 12)); // WHERE code > 12
      * </code>
      *
-     * @param     string $code The value to use as filter.
+     * @param     mixed $code The value to use as filter.
+     *              Use scalar values for equality.
+     *              Use array values for in_array() equivalent.
+     *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
      * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
      * @return $this|ChildRoomQuery The current query, for fluid interface
      */
     public function filterByCode($code = null, $comparison = null)
     {
-        if (null === $comparison) {
-            if (is_array($code)) {
+        if (is_array($code)) {
+            $useMinMax = false;
+            if (isset($code['min'])) {
+                $this->addUsingAlias(RoomTableMap::COL_CODE, $code['min'], Criteria::GREATER_EQUAL);
+                $useMinMax = true;
+            }
+            if (isset($code['max'])) {
+                $this->addUsingAlias(RoomTableMap::COL_CODE, $code['max'], Criteria::LESS_EQUAL);
+                $useMinMax = true;
+            }
+            if ($useMinMax) {
+                return $this;
+            }
+            if (null === $comparison) {
                 $comparison = Criteria::IN;
             }
         }
@@ -399,7 +369,7 @@ abstract class RoomQuery extends ModelCriteria
     {
         if ($game instanceof \API\Model\Game) {
             return $this
-                ->addUsingAlias(RoomTableMap::COL_ID, $game->getRoomId(), $comparison);
+                ->addUsingAlias(RoomTableMap::COL_CODE, $game->getRoomCode(), $comparison);
         } elseif ($game instanceof ObjectCollection) {
             return $this
                 ->useGameQuery()
@@ -418,7 +388,7 @@ abstract class RoomQuery extends ModelCriteria
      *
      * @return $this|ChildRoomQuery The current query, for fluid interface
      */
-    public function joinGame($relationAlias = null, $joinType = Criteria::LEFT_JOIN)
+    public function joinGame($relationAlias = null, $joinType = Criteria::INNER_JOIN)
     {
         $tableMap = $this->getTableMap();
         $relationMap = $tableMap->getRelation('Game');
@@ -453,7 +423,7 @@ abstract class RoomQuery extends ModelCriteria
      *
      * @return \API\Model\GameQuery A secondary query class using the current class as primary query
      */
-    public function useGameQuery($relationAlias = null, $joinType = Criteria::LEFT_JOIN)
+    public function useGameQuery($relationAlias = null, $joinType = Criteria::INNER_JOIN)
     {
         return $this
             ->joinGame($relationAlias, $joinType)
@@ -472,7 +442,7 @@ abstract class RoomQuery extends ModelCriteria
     {
         if ($item instanceof \API\Model\Item) {
             return $this
-                ->addUsingAlias(RoomTableMap::COL_ID, $item->getRoomId(), $comparison);
+                ->addUsingAlias(RoomTableMap::COL_CODE, $item->getRoomCode(), $comparison);
         } elseif ($item instanceof ObjectCollection) {
             return $this
                 ->useItemQuery()
@@ -491,7 +461,7 @@ abstract class RoomQuery extends ModelCriteria
      *
      * @return $this|ChildRoomQuery The current query, for fluid interface
      */
-    public function joinItem($relationAlias = null, $joinType = Criteria::LEFT_JOIN)
+    public function joinItem($relationAlias = null, $joinType = Criteria::INNER_JOIN)
     {
         $tableMap = $this->getTableMap();
         $relationMap = $tableMap->getRelation('Item');
@@ -526,7 +496,7 @@ abstract class RoomQuery extends ModelCriteria
      *
      * @return \API\Model\ItemQuery A secondary query class using the current class as primary query
      */
-    public function useItemQuery($relationAlias = null, $joinType = Criteria::LEFT_JOIN)
+    public function useItemQuery($relationAlias = null, $joinType = Criteria::INNER_JOIN)
     {
         return $this
             ->joinItem($relationAlias, $joinType)
@@ -543,7 +513,7 @@ abstract class RoomQuery extends ModelCriteria
     public function prune($room = null)
     {
         if ($room) {
-            $this->addUsingAlias(RoomTableMap::COL_ID, $room->getId(), Criteria::NOT_EQUAL);
+            $this->addUsingAlias(RoomTableMap::COL_CODE, $room->getCode(), Criteria::NOT_EQUAL);
         }
 
         return $this;

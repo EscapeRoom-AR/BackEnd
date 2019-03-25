@@ -9,6 +9,7 @@ use Propel\Runtime\ActiveQuery\Criteria;
 use Propel\Runtime\ActiveQuery\InstancePoolTrait;
 use Propel\Runtime\Connection\ConnectionInterface;
 use Propel\Runtime\DataFetcher\DataFetcherInterface;
+use Propel\Runtime\Exception\LogicException;
 use Propel\Runtime\Exception\PropelException;
 use Propel\Runtime\Map\RelationMap;
 use Propel\Runtime\Map\TableMap;
@@ -59,7 +60,7 @@ class HintTableMap extends TableMap
     /**
      * The total number of columns
      */
-    const NUM_COLUMNS = 3;
+    const NUM_COLUMNS = 2;
 
     /**
      * The number of lazy-loaded columns
@@ -69,12 +70,7 @@ class HintTableMap extends TableMap
     /**
      * The number of columns to hydrate (NUM_COLUMNS - NUM_LAZY_LOAD_COLUMNS)
      */
-    const NUM_HYDRATE_COLUMNS = 3;
-
-    /**
-     * the column name for the id field
-     */
-    const COL_ID = 'hint.id';
+    const NUM_HYDRATE_COLUMNS = 2;
 
     /**
      * the column name for the hint field
@@ -82,9 +78,9 @@ class HintTableMap extends TableMap
     const COL_HINT = 'hint.hint';
 
     /**
-     * the column name for the item_id field
+     * the column name for the item_code field
      */
-    const COL_ITEM_ID = 'hint.item_id';
+    const COL_ITEM_CODE = 'hint.item_code';
 
     /**
      * The default string format for model objects of the related table
@@ -98,11 +94,11 @@ class HintTableMap extends TableMap
      * e.g. self::$fieldNames[self::TYPE_PHPNAME][0] = 'Id'
      */
     protected static $fieldNames = array (
-        self::TYPE_PHPNAME       => array('Id', 'Hint', 'ItemId', ),
-        self::TYPE_CAMELNAME     => array('id', 'hint', 'itemId', ),
-        self::TYPE_COLNAME       => array(HintTableMap::COL_ID, HintTableMap::COL_HINT, HintTableMap::COL_ITEM_ID, ),
-        self::TYPE_FIELDNAME     => array('id', 'hint', 'item_id', ),
-        self::TYPE_NUM           => array(0, 1, 2, )
+        self::TYPE_PHPNAME       => array('Hint', 'ItemCode', ),
+        self::TYPE_CAMELNAME     => array('hint', 'itemCode', ),
+        self::TYPE_COLNAME       => array(HintTableMap::COL_HINT, HintTableMap::COL_ITEM_CODE, ),
+        self::TYPE_FIELDNAME     => array('hint', 'item_code', ),
+        self::TYPE_NUM           => array(0, 1, )
     );
 
     /**
@@ -112,11 +108,11 @@ class HintTableMap extends TableMap
      * e.g. self::$fieldKeys[self::TYPE_PHPNAME]['Id'] = 0
      */
     protected static $fieldKeys = array (
-        self::TYPE_PHPNAME       => array('Id' => 0, 'Hint' => 1, 'ItemId' => 2, ),
-        self::TYPE_CAMELNAME     => array('id' => 0, 'hint' => 1, 'itemId' => 2, ),
-        self::TYPE_COLNAME       => array(HintTableMap::COL_ID => 0, HintTableMap::COL_HINT => 1, HintTableMap::COL_ITEM_ID => 2, ),
-        self::TYPE_FIELDNAME     => array('id' => 0, 'hint' => 1, 'item_id' => 2, ),
-        self::TYPE_NUM           => array(0, 1, 2, )
+        self::TYPE_PHPNAME       => array('Hint' => 0, 'ItemCode' => 1, ),
+        self::TYPE_CAMELNAME     => array('hint' => 0, 'itemCode' => 1, ),
+        self::TYPE_COLNAME       => array(HintTableMap::COL_HINT => 0, HintTableMap::COL_ITEM_CODE => 1, ),
+        self::TYPE_FIELDNAME     => array('hint' => 0, 'item_code' => 1, ),
+        self::TYPE_NUM           => array(0, 1, )
     );
 
     /**
@@ -134,11 +130,10 @@ class HintTableMap extends TableMap
         $this->setIdentifierQuoting(false);
         $this->setClassName('\\API\\Model\\Hint');
         $this->setPackage('API.Model');
-        $this->setUseIdGenerator(true);
+        $this->setUseIdGenerator(false);
         // columns
-        $this->addPrimaryKey('id', 'Id', 'INTEGER', true, null, null);
-        $this->addColumn('hint', 'Hint', 'VARCHAR', false, 255, null);
-        $this->addForeignKey('item_id', 'ItemId', 'INTEGER', 'item', 'id', false, null, null);
+        $this->addColumn('hint', 'Hint', 'VARCHAR', true, 255, null);
+        $this->addForeignKey('item_code', 'ItemCode', 'INTEGER', 'item', 'code', true, null, null);
     } // initialize()
 
     /**
@@ -149,8 +144,8 @@ class HintTableMap extends TableMap
         $this->addRelation('Item', '\\API\\Model\\Item', RelationMap::MANY_TO_ONE, array (
   0 =>
   array (
-    0 => ':item_id',
-    1 => ':id',
+    0 => ':item_code',
+    1 => ':code',
   ),
 ), null, null, null, false);
     } // buildRelations()
@@ -170,12 +165,7 @@ class HintTableMap extends TableMap
      */
     public static function getPrimaryKeyHashFromRow($row, $offset = 0, $indexType = TableMap::TYPE_NUM)
     {
-        // If the PK cannot be derived from the row, return NULL.
-        if ($row[TableMap::TYPE_NUM == $indexType ? 0 + $offset : static::translateFieldName('Id', TableMap::TYPE_PHPNAME, $indexType)] === null) {
-            return null;
-        }
-
-        return null === $row[TableMap::TYPE_NUM == $indexType ? 0 + $offset : static::translateFieldName('Id', TableMap::TYPE_PHPNAME, $indexType)] || is_scalar($row[TableMap::TYPE_NUM == $indexType ? 0 + $offset : static::translateFieldName('Id', TableMap::TYPE_PHPNAME, $indexType)]) || is_callable([$row[TableMap::TYPE_NUM == $indexType ? 0 + $offset : static::translateFieldName('Id', TableMap::TYPE_PHPNAME, $indexType)], '__toString']) ? (string) $row[TableMap::TYPE_NUM == $indexType ? 0 + $offset : static::translateFieldName('Id', TableMap::TYPE_PHPNAME, $indexType)] : $row[TableMap::TYPE_NUM == $indexType ? 0 + $offset : static::translateFieldName('Id', TableMap::TYPE_PHPNAME, $indexType)];
+        return null;
     }
 
     /**
@@ -192,11 +182,7 @@ class HintTableMap extends TableMap
      */
     public static function getPrimaryKeyFromRow($row, $offset = 0, $indexType = TableMap::TYPE_NUM)
     {
-        return (int) $row[
-            $indexType == TableMap::TYPE_NUM
-                ? 0 + $offset
-                : self::translateFieldName('Id', TableMap::TYPE_PHPNAME, $indexType)
-        ];
+        return '';
     }
 
     /**
@@ -296,13 +282,11 @@ class HintTableMap extends TableMap
     public static function addSelectColumns(Criteria $criteria, $alias = null)
     {
         if (null === $alias) {
-            $criteria->addSelectColumn(HintTableMap::COL_ID);
             $criteria->addSelectColumn(HintTableMap::COL_HINT);
-            $criteria->addSelectColumn(HintTableMap::COL_ITEM_ID);
+            $criteria->addSelectColumn(HintTableMap::COL_ITEM_CODE);
         } else {
-            $criteria->addSelectColumn($alias . '.id');
             $criteria->addSelectColumn($alias . '.hint');
-            $criteria->addSelectColumn($alias . '.item_id');
+            $criteria->addSelectColumn($alias . '.item_code');
         }
     }
 
@@ -350,11 +334,10 @@ class HintTableMap extends TableMap
             // rename for clarity
             $criteria = $values;
         } elseif ($values instanceof \API\Model\Hint) { // it's a model object
-            // create criteria based on pk values
-            $criteria = $values->buildPkeyCriteria();
+            // create criteria based on pk value
+            $criteria = $values->buildCriteria();
         } else { // it's a primary key, or an array of pks
-            $criteria = new Criteria(HintTableMap::DATABASE_NAME);
-            $criteria->add(HintTableMap::COL_ID, (array) $values, Criteria::IN);
+            throw new LogicException('The Hint object has no primary key');
         }
 
         $query = HintQuery::create()->mergeWith($criteria);
@@ -400,10 +383,6 @@ class HintTableMap extends TableMap
             $criteria = clone $criteria; // rename for clarity
         } else {
             $criteria = $criteria->buildCriteria(); // build Criteria from Hint object
-        }
-
-        if ($criteria->containsKey(HintTableMap::COL_ID) && $criteria->keyContainsValue(HintTableMap::COL_ID) ) {
-            throw new PropelException('Cannot insert a value for auto-increment primary key ('.HintTableMap::COL_ID.')');
         }
 
 
