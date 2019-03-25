@@ -4,14 +4,14 @@
           namespace="API\Model">
 
   <table name="user">
-    <column name="created" type="TIMESTAMP" />
+    <column name="created" type="TIMESTAMP" required="true"/>
     <column name="deleted" type="TIMESTAMP" />
     <column name="code" type="integer" primaryKey="true" autoIncrement="true" required="true"/>
-    <column name="username" type="varchar" size="255" unique="true"/>
-    <column name="email" type="varchar" size="255" />
-    <column name="premium" type="boolean" />
+    <column name="username" type="varchar" size="255" unique="true" required="true"/>
+    <column name="email" type="varchar" size="255" required="true"/>
+    <column name="premium" type="boolean" required="true" defaultValue="false" />
     <column name="image" type="varchar" size="255" />
-    <column name="description" type="varchar" size="255" />  
+    <column name="description" type="varchar" size="255" defaultValue="Hi there! I'm playing Scape Room AR!" />  
     <unique>
       <unique-column name="username" />
       <unique-column name="email" />
@@ -20,18 +20,18 @@
 
   <table name="room">
     <column name="code" type="integer" primaryKey="true" autoIncrement="true" required="true"/>
-    <column name="name" type="varchar" size="255" />
-    <column name="premium" type="boolean" />
+    <column name="name" type="varchar" size="255" required="true"/>
+    <column name="premium" type="boolean" required="true" defaultValue="false" />
   </table>
 
   <table name="game">
-    <column name="created" type="TIMESTAMP" />
+    <column name="created" type="TIMESTAMP" required="true"/>
     <column name="deleted" type="TIMESTAMP" />
     <column name="code" type="integer"  primaryKey="true" autoIncrement="true" required="true"/>
-    <column name="hints_used" type="integer" />
-    <column name="time" type="integer" />
-    <column name="user_code" type="integer" />
-    <column name="room_code" type="integer" />
+    <column name="hints_used" type="integer" required="true" defaultValue="0"/>
+    <column name="time" type="integer" required="true" />
+    <column name="user_code" type="integer" required="true"/>
+    <column name="room_code" type="integer" required="true"/>
     <foreign-key foreignTable="user">
       <reference local="user_code" foreign="code"/>
     </foreign-key>
@@ -42,17 +42,17 @@
 
   <table name="item">
     <column name="code" type="integer" primaryKey="true" autoIncrement="true" required="true"/>
-    <column name="name" type="varchar" size="255" />
+    <column name="name" type="varchar" size="255" required="true"/>
     <column name="qr_code" type="varchar" size="255" />
-    <column name="room_code" type="integer" />
+    <column name="room_code" type="integer" required="true"/>
     <foreign-key foreignTable="room">
       <reference local="room_code" foreign="code" />
     </foreign-key>
   </table>
 
   <table name="hint">
-    <column name="hint" type="varchar" size="255" />
-    <column name="item_code" type="integer" />
+    <column name="hint" type="varchar" size="255" required="true" />
+    <column name="item_code" type="integer" required="true" />
     <foreign-key foreignTable="item">
       <reference local="item_code" foreign="code" />
     </foreign-key>
