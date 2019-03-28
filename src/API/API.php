@@ -49,7 +49,7 @@ class API extends \Slim\App {
     $user->setUsername($paramMap['username']);
     $user->setPassword($paramMap['password']);
     $user->setEmail($paramMap['email']);
-    $user->setCreated(DateTime::getTimestamp());
+    $user->setCreated(new DateTime()->getTimestamp());
     $user->save();
     return $response->withJson($user,200);
     }
