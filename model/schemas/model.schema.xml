@@ -4,8 +4,8 @@
           namespace="API\Model">
 
   <table name="user">
-    <column name="created" type="TIMESTAMP" required="true"/>
-    <column name="is_deleted" type="TIMESTAMP" />
+    <column name="createdAt" type="TIMESTAMP" required="true"/>
+    <column name="deletedAt" type="TIMESTAMP" />
     <column name="code" type="integer" primaryKey="true" autoIncrement="true" required="true"/>
     <column name="username" type="varchar" size="255" required="true"/>
     <column name="email" type="varchar" size="255" required="true" />
