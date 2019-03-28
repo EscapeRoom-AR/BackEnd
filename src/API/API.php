@@ -35,8 +35,12 @@ class API extends \Slim\App {
 
   public static function register(Request $request, Response $response, array $args) {
     $paramMap = $request->getParsedBody();
+    if ($paramMap['email'] == null || $paramMap['username'] == null || $paramMap['password'] == null) {
+      return $response->withJson([], 404);
+    }
     $email = $paramMap['email']; 
     $username = $paramMap['username'];
+    $password = $paramMap['password'];
     $response->getBody()->write("Email: ".$email);
     return $response;
     }
@@ -47,7 +51,7 @@ class API extends \Slim\App {
 	$room = \API\Model\RoomQuery::create()->filterByCode($code)->find();
 	if (is_null($room) || empty($room)) {
       return $response->withJson([], 404);
-    } 
+  } 
 	return $response->withJson($room->toArray()[0]);
   }
 
@@ -55,7 +59,7 @@ class API extends \Slim\App {
 	$rooms = \API\Model\RoomQuery::create()->find();
 	if (is_null($rooms) || empty($rooms)) {
       return $response->withJson([], 404);
-    } 
+  } 
 	return $response->withJson($rooms->toArray());
   }
 
