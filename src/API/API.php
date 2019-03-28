@@ -53,7 +53,9 @@ class API extends \Slim\App {
     $user->setCreated($dateTime->getTimestamp());
     $user->save();
     return $response->withJson($user,200);
-    }
+  }
+
+
 
 
   public static function getRoom(Request $request, Response $response, array $args) {
