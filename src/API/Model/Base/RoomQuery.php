@@ -22,10 +22,12 @@ use Propel\Runtime\Exception\PropelException;
  *
  * @method     ChildRoomQuery orderByCode($order = Criteria::ASC) Order by the code column
  * @method     ChildRoomQuery orderByName($order = Criteria::ASC) Order by the name column
+ * @method     ChildRoomQuery orderByImage($order = Criteria::ASC) Order by the image column
  * @method     ChildRoomQuery orderByPremium($order = Criteria::ASC) Order by the premium column
  *
  * @method     ChildRoomQuery groupByCode() Group by the code column
  * @method     ChildRoomQuery groupByName() Group by the name column
+ * @method     ChildRoomQuery groupByImage() Group by the image column
  * @method     ChildRoomQuery groupByPremium() Group by the premium column
  *
  * @method     ChildRoomQuery leftJoin($relation) Adds a LEFT JOIN clause to the query
@@ -63,6 +65,7 @@ use Propel\Runtime\Exception\PropelException;
  *
  * @method     ChildRoom findOneByCode(int $code) Return the first ChildRoom filtered by the code column
  * @method     ChildRoom findOneByName(string $name) Return the first ChildRoom filtered by the name column
+ * @method     ChildRoom findOneByImage(string $image) Return the first ChildRoom filtered by the image column
  * @method     ChildRoom findOneByPremium(boolean $premium) Return the first ChildRoom filtered by the premium column *
 
  * @method     ChildRoom requirePk($key, ConnectionInterface $con = null) Return the ChildRoom by primary key and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
@@ -70,11 +73,13 @@ use Propel\Runtime\Exception\PropelException;
  *
  * @method     ChildRoom requireOneByCode(int $code) Return the first ChildRoom filtered by the code column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildRoom requireOneByName(string $name) Return the first ChildRoom filtered by the name column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
+ * @method     ChildRoom requireOneByImage(string $image) Return the first ChildRoom filtered by the image column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildRoom requireOneByPremium(boolean $premium) Return the first ChildRoom filtered by the premium column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  *
  * @method     ChildRoom[]|ObjectCollection find(ConnectionInterface $con = null) Return ChildRoom objects based on current ModelCriteria
  * @method     ChildRoom[]|ObjectCollection findByCode(int $code) Return ChildRoom objects filtered by the code column
  * @method     ChildRoom[]|ObjectCollection findByName(string $name) Return ChildRoom objects filtered by the name column
+ * @method     ChildRoom[]|ObjectCollection findByImage(string $image) Return ChildRoom objects filtered by the image column
  * @method     ChildRoom[]|ObjectCollection findByPremium(boolean $premium) Return ChildRoom objects filtered by the premium column
  * @method     ChildRoom[]|\Propel\Runtime\Util\PropelModelPager paginate($page = 1, $maxPerPage = 10, ConnectionInterface $con = null) Issue a SELECT query based on the current ModelCriteria and uses a page and a maximum number of results per page to compute an offset and a limit
  *
@@ -174,7 +179,7 @@ abstract class RoomQuery extends ModelCriteria
      */
     protected function findPkSimple($key, ConnectionInterface $con)
     {
-        $sql = 'SELECT code, name, premium FROM room WHERE code = :p0';
+        $sql = 'SELECT code, name, image, premium FROM room WHERE code = :p0';
         try {
             $stmt = $con->prepare($sql);
             $stmt->bindValue(':p0', $key, PDO::PARAM_INT);
@@ -328,6 +333,31 @@ abstract class RoomQuery extends ModelCriteria
         }
 
         return $this->addUsingAlias(RoomTableMap::COL_NAME, $name, $comparison);
+    }
+
+    /**
+     * Filter the query on the image column
+     *
+     * Example usage:
+     * <code>
+     * $query->filterByImage('fooValue');   // WHERE image = 'fooValue'
+     * $query->filterByImage('%fooValue%', Criteria::LIKE); // WHERE image LIKE '%fooValue%'
+     * </code>
+     *
+     * @param     string $image The value to use as filter.
+     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return $this|ChildRoomQuery The current query, for fluid interface
+     */
+    public function filterByImage($image = null, $comparison = null)
+    {
+        if (null === $comparison) {
+            if (is_array($image)) {
+                $comparison = Criteria::IN;
+            }
+        }
+
+        return $this->addUsingAlias(RoomTableMap::COL_IMAGE, $image, $comparison);
     }
 
     /**

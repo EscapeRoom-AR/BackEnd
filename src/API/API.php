@@ -5,6 +5,7 @@ namespace API;
 use \Psr\Http\Message\ServerRequestInterface as Request;
 use \Psr\Http\Message\ResponseInterface as Response;
 use \Propel\Runtime\ActiveQuery\Criteria as Criteria;
+use \DateTime as DateTime;
 
 class API extends \Slim\App {
 
@@ -15,7 +16,9 @@ class API extends \Slim\App {
     // Define the ROUTES
 	$this->get('/room/{code}/{name}',				        '\API\API:tmpAddRoom');
 	$this->get('/item/{code}/{room}/{name}/{qr}',   '\API\API:tmpAddItem');
-	$this->get('/hint/{hint}/{item}',				        '\API\API:tmpAddHint');
+  $this->get('/hint/{hint}/{item}',				        '\API\API:tmpAddHint');
+  
+  $this->post('/register',                        '\Api\API:register');
 
 	$this->get('/room/{code}',						'\API\API:getRoom');
 	$this->get('/rooms',							    '\API\API:getRooms');
@@ -31,12 +34,36 @@ class API extends \Slim\App {
   }
 
 
+  public static function register(Request $request, Response $response, array $args) {
+    $paramMap = $request->getParsedBody();
+    if ($paramMap['email'] == null || 
+        $paramMap['username'] == null || 
+        $paramMap['password'] == null) 
+    {
+      return $response->withJson([], 404);
+    }
+    $email = $paramMap['email']; 
+    $username = $paramMap['username'];
+    $password = $paramMap['password'];
+    $user = new \API\Model\User();
+    $user->setUsername($paramMap['username']);
+    $user->setPassword($paramMap['password']);
+    $user->setEmail($paramMap['email']);
+    $dateTime = new DateTime();
+    $user->setCreated($dateTime->getTimestamp());
+    $user->save();
+    return $response->withJson($user,200);
+  }
+
+
+
+
   public static function getRoom(Request $request, Response $response, array $args) {
 	$code = $args['code'];
 	$room = \API\Model\RoomQuery::create()->filterByCode($code)->find();
 	if (is_null($room) || empty($room)) {
       return $response->withJson([], 404);
-    } 
+  } 
 	return $response->withJson($room->toArray()[0]);
   }
 
@@ -44,7 +71,7 @@ class API extends \Slim\App {
 	$rooms = \API\Model\RoomQuery::create()->find();
 	if (is_null($rooms) || empty($rooms)) {
       return $response->withJson([], 404);
-    } 
+  } 
 	return $response->withJson($rooms->toArray());
   }
 

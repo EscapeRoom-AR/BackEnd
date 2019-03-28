@@ -74,11 +74,11 @@ abstract class User implements ActiveRecordInterface
     protected $created;
 
     /**
-     * The value for the deleted field.
+     * The value for the is_deleted field.
      *
      * @var        DateTime
      */
-    protected $deleted;
+    protected $is_deleted;
 
     /**
      * The value for the code field.
@@ -411,7 +411,7 @@ abstract class User implements ActiveRecordInterface
     }
 
     /**
-     * Get the [optionally formatted] temporal [deleted] column value.
+     * Get the [optionally formatted] temporal [is_deleted] column value.
      *
      *
      * @param      string|null $format The date/time format string (either date()-style or strftime()-style).
@@ -421,12 +421,12 @@ abstract class User implements ActiveRecordInterface
      *
      * @throws PropelException - if unable to parse/validate the date/time value.
      */
-    public function getDeleted($format = NULL)
+    public function getIsDeleted($format = NULL)
     {
         if ($format === null) {
-            return $this->deleted;
+            return $this->is_deleted;
         } else {
-            return $this->deleted instanceof \DateTimeInterface ? $this->deleted->format($format) : null;
+            return $this->is_deleted instanceof \DateTimeInterface ? $this->is_deleted->format($format) : null;
         }
     }
 
@@ -531,24 +531,24 @@ abstract class User implements ActiveRecordInterface
     } // setCreated()
 
     /**
-     * Sets the value of [deleted] column to a normalized version of the date/time value specified.
+     * Sets the value of [is_deleted] column to a normalized version of the date/time value specified.
      *
      * @param  mixed $v string, integer (timestamp), or \DateTimeInterface value.
      *               Empty strings are treated as NULL.
      * @return $this|\API\Model\User The current object (for fluent API support)
      */
-    public function setDeleted($v)
+    public function setIsDeleted($v)
     {
         $dt = PropelDateTime::newInstance($v, null, 'DateTime');
-        if ($this->deleted !== null || $dt !== null) {
-            if ($this->deleted === null || $dt === null || $dt->format("Y-m-d H:i:s.u") !== $this->deleted->format("Y-m-d H:i:s.u")) {
-                $this->deleted = $dt === null ? null : clone $dt;
-                $this->modifiedColumns[UserTableMap::COL_DELETED] = true;
+        if ($this->is_deleted !== null || $dt !== null) {
+            if ($this->is_deleted === null || $dt === null || $dt->format("Y-m-d H:i:s.u") !== $this->is_deleted->format("Y-m-d H:i:s.u")) {
+                $this->is_deleted = $dt === null ? null : clone $dt;
+                $this->modifiedColumns[UserTableMap::COL_IS_DELETED] = true;
             }
         } // if either are not null
 
         return $this;
-    } // setDeleted()
+    } // setIsDeleted()
 
     /**
      * Set the value of [code] column.
@@ -748,11 +748,11 @@ abstract class User implements ActiveRecordInterface
             }
             $this->created = (null !== $col) ? PropelDateTime::newInstance($col, null, 'DateTime') : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 1 + $startcol : UserTableMap::translateFieldName('Deleted', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 1 + $startcol : UserTableMap::translateFieldName('IsDeleted', TableMap::TYPE_PHPNAME, $indexType)];
             if ($col === '0000-00-00 00:00:00') {
                 $col = null;
             }
-            $this->deleted = (null !== $col) ? PropelDateTime::newInstance($col, null, 'DateTime') : null;
+            $this->is_deleted = (null !== $col) ? PropelDateTime::newInstance($col, null, 'DateTime') : null;
 
             $col = $row[TableMap::TYPE_NUM == $indexType ? 2 + $startcol : UserTableMap::translateFieldName('Code', TableMap::TYPE_PHPNAME, $indexType)];
             $this->code = (null !== $col) ? (int) $col : null;
@@ -1005,8 +1005,8 @@ abstract class User implements ActiveRecordInterface
         if ($this->isColumnModified(UserTableMap::COL_CREATED)) {
             $modifiedColumns[':p' . $index++]  = 'created';
         }
-        if ($this->isColumnModified(UserTableMap::COL_DELETED)) {
-            $modifiedColumns[':p' . $index++]  = 'deleted';
+        if ($this->isColumnModified(UserTableMap::COL_IS_DELETED)) {
+            $modifiedColumns[':p' . $index++]  = 'is_deleted';
         }
         if ($this->isColumnModified(UserTableMap::COL_CODE)) {
             $modifiedColumns[':p' . $index++]  = 'code';
@@ -1043,8 +1043,8 @@ abstract class User implements ActiveRecordInterface
                     case 'created':
                         $stmt->bindValue($identifier, $this->created ? $this->created->format("Y-m-d H:i:s.u") : null, PDO::PARAM_STR);
                         break;
-                    case 'deleted':
-                        $stmt->bindValue($identifier, $this->deleted ? $this->deleted->format("Y-m-d H:i:s.u") : null, PDO::PARAM_STR);
+                    case 'is_deleted':
+                        $stmt->bindValue($identifier, $this->is_deleted ? $this->is_deleted->format("Y-m-d H:i:s.u") : null, PDO::PARAM_STR);
                         break;
                     case 'code':
                         $stmt->bindValue($identifier, $this->code, PDO::PARAM_INT);
@@ -1133,7 +1133,7 @@ abstract class User implements ActiveRecordInterface
                 return $this->getCreated();
                 break;
             case 1:
-                return $this->getDeleted();
+                return $this->getIsDeleted();
                 break;
             case 2:
                 return $this->getCode();
@@ -1187,7 +1187,7 @@ abstract class User implements ActiveRecordInterface
         $keys = UserTableMap::getFieldNames($keyType);
         $result = array(
             $keys[0] => $this->getCreated(),
-            $keys[1] => $this->getDeleted(),
+            $keys[1] => $this->getIsDeleted(),
             $keys[2] => $this->getCode(),
             $keys[3] => $this->getUsername(),
             $keys[4] => $this->getEmail(),
@@ -1263,7 +1263,7 @@ abstract class User implements ActiveRecordInterface
                 $this->setCreated($value);
                 break;
             case 1:
-                $this->setDeleted($value);
+                $this->setIsDeleted($value);
                 break;
             case 2:
                 $this->setCode($value);
@@ -1316,7 +1316,7 @@ abstract class User implements ActiveRecordInterface
             $this->setCreated($arr[$keys[0]]);
         }
         if (array_key_exists($keys[1], $arr)) {
-            $this->setDeleted($arr[$keys[1]]);
+            $this->setIsDeleted($arr[$keys[1]]);
         }
         if (array_key_exists($keys[2], $arr)) {
             $this->setCode($arr[$keys[2]]);
@@ -1383,8 +1383,8 @@ abstract class User implements ActiveRecordInterface
         if ($this->isColumnModified(UserTableMap::COL_CREATED)) {
             $criteria->add(UserTableMap::COL_CREATED, $this->created);
         }
-        if ($this->isColumnModified(UserTableMap::COL_DELETED)) {
-            $criteria->add(UserTableMap::COL_DELETED, $this->deleted);
+        if ($this->isColumnModified(UserTableMap::COL_IS_DELETED)) {
+            $criteria->add(UserTableMap::COL_IS_DELETED, $this->is_deleted);
         }
         if ($this->isColumnModified(UserTableMap::COL_CODE)) {
             $criteria->add(UserTableMap::COL_CODE, $this->code);
@@ -1494,7 +1494,7 @@ abstract class User implements ActiveRecordInterface
     public function copyInto($copyObj, $deepCopy = false, $makeNew = true)
     {
         $copyObj->setCreated($this->getCreated());
-        $copyObj->setDeleted($this->getDeleted());
+        $copyObj->setIsDeleted($this->getIsDeleted());
         $copyObj->setUsername($this->getUsername());
         $copyObj->setEmail($this->getEmail());
         $copyObj->setPremium($this->getPremium());
@@ -1818,7 +1818,7 @@ abstract class User implements ActiveRecordInterface
     public function clear()
     {
         $this->created = null;
-        $this->deleted = null;
+        $this->is_deleted = null;
         $this->code = null;
         $this->username = null;
         $this->email = null;

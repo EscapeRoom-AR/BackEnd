@@ -82,6 +82,13 @@ abstract class Room implements ActiveRecordInterface
     protected $name;
 
     /**
+     * The value for the image field.
+     *
+     * @var        string
+     */
+    protected $image;
+
+    /**
      * The value for the premium field.
      *
      * Note: this column has a database default value of: false
@@ -380,6 +387,16 @@ abstract class Room implements ActiveRecordInterface
     }
 
     /**
+     * Get the [image] column value.
+     *
+     * @return string
+     */
+    public function getImage()
+    {
+        return $this->image;
+    }
+
+    /**
      * Get the [premium] column value.
      *
      * @return boolean
@@ -438,6 +455,26 @@ abstract class Room implements ActiveRecordInterface
 
         return $this;
     } // setName()
+
+    /**
+     * Set the value of [image] column.
+     *
+     * @param string $v new value
+     * @return $this|\API\Model\Room The current object (for fluent API support)
+     */
+    public function setImage($v)
+    {
+        if ($v !== null) {
+            $v = (string) $v;
+        }
+
+        if ($this->image !== $v) {
+            $this->image = $v;
+            $this->modifiedColumns[RoomTableMap::COL_IMAGE] = true;
+        }
+
+        return $this;
+    } // setImage()
 
     /**
      * Sets the value of the [premium] column.
@@ -513,7 +550,10 @@ abstract class Room implements ActiveRecordInterface
             $col = $row[TableMap::TYPE_NUM == $indexType ? 1 + $startcol : RoomTableMap::translateFieldName('Name', TableMap::TYPE_PHPNAME, $indexType)];
             $this->name = (null !== $col) ? (string) $col : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 2 + $startcol : RoomTableMap::translateFieldName('Premium', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 2 + $startcol : RoomTableMap::translateFieldName('Image', TableMap::TYPE_PHPNAME, $indexType)];
+            $this->image = (null !== $col) ? (string) $col : null;
+
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 3 + $startcol : RoomTableMap::translateFieldName('Premium', TableMap::TYPE_PHPNAME, $indexType)];
             $this->premium = (null !== $col) ? (boolean) $col : null;
             $this->resetModified();
 
@@ -523,7 +563,7 @@ abstract class Room implements ActiveRecordInterface
                 $this->ensureConsistency();
             }
 
-            return $startcol + 3; // 3 = RoomTableMap::NUM_HYDRATE_COLUMNS.
+            return $startcol + 4; // 4 = RoomTableMap::NUM_HYDRATE_COLUMNS.
 
         } catch (Exception $e) {
             throw new PropelException(sprintf('Error populating %s object', '\\API\\Model\\Room'), 0, $e);
@@ -768,6 +808,9 @@ abstract class Room implements ActiveRecordInterface
         if ($this->isColumnModified(RoomTableMap::COL_NAME)) {
             $modifiedColumns[':p' . $index++]  = 'name';
         }
+        if ($this->isColumnModified(RoomTableMap::COL_IMAGE)) {
+            $modifiedColumns[':p' . $index++]  = 'image';
+        }
         if ($this->isColumnModified(RoomTableMap::COL_PREMIUM)) {
             $modifiedColumns[':p' . $index++]  = 'premium';
         }
@@ -787,6 +830,9 @@ abstract class Room implements ActiveRecordInterface
                         break;
                     case 'name':
                         $stmt->bindValue($identifier, $this->name, PDO::PARAM_STR);
+                        break;
+                    case 'image':
+                        $stmt->bindValue($identifier, $this->image, PDO::PARAM_STR);
                         break;
                     case 'premium':
                         $stmt->bindValue($identifier, (int) $this->premium, PDO::PARAM_INT);
@@ -860,6 +906,9 @@ abstract class Room implements ActiveRecordInterface
                 return $this->getName();
                 break;
             case 2:
+                return $this->getImage();
+                break;
+            case 3:
                 return $this->getPremium();
                 break;
             default:
@@ -894,7 +943,8 @@ abstract class Room implements ActiveRecordInterface
         $result = array(
             $keys[0] => $this->getCode(),
             $keys[1] => $this->getName(),
-            $keys[2] => $this->getPremium(),
+            $keys[2] => $this->getImage(),
+            $keys[3] => $this->getPremium(),
         );
         $virtualColumns = $this->virtualColumns;
         foreach ($virtualColumns as $key => $virtualColumn) {
@@ -973,6 +1023,9 @@ abstract class Room implements ActiveRecordInterface
                 $this->setName($value);
                 break;
             case 2:
+                $this->setImage($value);
+                break;
+            case 3:
                 $this->setPremium($value);
                 break;
         } // switch()
@@ -1008,7 +1061,10 @@ abstract class Room implements ActiveRecordInterface
             $this->setName($arr[$keys[1]]);
         }
         if (array_key_exists($keys[2], $arr)) {
-            $this->setPremium($arr[$keys[2]]);
+            $this->setImage($arr[$keys[2]]);
+        }
+        if (array_key_exists($keys[3], $arr)) {
+            $this->setPremium($arr[$keys[3]]);
         }
     }
 
@@ -1056,6 +1112,9 @@ abstract class Room implements ActiveRecordInterface
         }
         if ($this->isColumnModified(RoomTableMap::COL_NAME)) {
             $criteria->add(RoomTableMap::COL_NAME, $this->name);
+        }
+        if ($this->isColumnModified(RoomTableMap::COL_IMAGE)) {
+            $criteria->add(RoomTableMap::COL_IMAGE, $this->image);
         }
         if ($this->isColumnModified(RoomTableMap::COL_PREMIUM)) {
             $criteria->add(RoomTableMap::COL_PREMIUM, $this->premium);
@@ -1147,6 +1206,7 @@ abstract class Room implements ActiveRecordInterface
     public function copyInto($copyObj, $deepCopy = false, $makeNew = true)
     {
         $copyObj->setName($this->getName());
+        $copyObj->setImage($this->getImage());
         $copyObj->setPremium($this->getPremium());
 
         if ($deepCopy) {
@@ -1701,6 +1761,7 @@ abstract class Room implements ActiveRecordInterface
     {
         $this->code = null;
         $this->name = null;
+        $this->image = null;
         $this->premium = null;
         $this->alreadyInSave = false;
         $this->clearAllReferences();
