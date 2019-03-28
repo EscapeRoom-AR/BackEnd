@@ -17,7 +17,7 @@ class API extends \Slim\App {
 	$this->get('/item/{code}/{room}/{name}/{qr}',   '\API\API:tmpAddItem');
   $this->get('/hint/{hint}/{item}',				        '\API\API:tmpAddHint');
   
-  $this->post('/register',                        '\Api\API:register')
+  $this->post('/register',                        '\Api\API:register');
 
 	$this->get('/room/{code}',						'\API\API:getRoom');
 	$this->get('/rooms',							    '\API\API:getRooms');
