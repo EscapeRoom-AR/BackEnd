@@ -35,14 +35,21 @@ class API extends \Slim\App {
 
   public static function register(Request $request, Response $response, array $args) {
     $paramMap = $request->getParsedBody();
-    if ($paramMap['email'] == null || $paramMap['username'] == null || $paramMap['password'] == null) {
+    if ($paramMap['email'] == null || 
+        $paramMap['username'] == null || 
+        $paramMap['password'] == null) 
+    {
       return $response->withJson([], 404);
     }
     $email = $paramMap['email']; 
     $username = $paramMap['username'];
     $password = $paramMap['password'];
-    $response->getBody()->write("Email: ".$email);
-    return $response;
+    $user = new \API\Model\User();
+    $user->setUsername($paramMap['username']);
+    $user->setPassword($paramMap['password']);
+    $user->setEmail($paramMap['email']);
+    $user->save();
+    return $response->withJson($user,200);
     }
 
 
