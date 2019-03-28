@@ -72,14 +72,14 @@ class UserTableMap extends TableMap
     const NUM_HYDRATE_COLUMNS = 9;
 
     /**
-     * the column name for the created field
+     * the column name for the createdAt field
      */
-    const COL_CREATED = 'user.created';
+    const COL_CREATEDAT = 'user.createdAt';
 
     /**
-     * the column name for the is_deleted field
+     * the column name for the deletedAt field
      */
-    const COL_IS_DELETED = 'user.is_deleted';
+    const COL_DELETEDAT = 'user.deletedAt';
 
     /**
      * the column name for the code field
@@ -128,10 +128,10 @@ class UserTableMap extends TableMap
      * e.g. self::$fieldNames[self::TYPE_PHPNAME][0] = 'Id'
      */
     protected static $fieldNames = array (
-        self::TYPE_PHPNAME       => array('Created', 'IsDeleted', 'Code', 'Username', 'Email', 'Premium', 'Image', 'Password', 'Description', ),
-        self::TYPE_CAMELNAME     => array('created', 'isDeleted', 'code', 'username', 'email', 'premium', 'image', 'password', 'description', ),
-        self::TYPE_COLNAME       => array(UserTableMap::COL_CREATED, UserTableMap::COL_IS_DELETED, UserTableMap::COL_CODE, UserTableMap::COL_USERNAME, UserTableMap::COL_EMAIL, UserTableMap::COL_PREMIUM, UserTableMap::COL_IMAGE, UserTableMap::COL_PASSWORD, UserTableMap::COL_DESCRIPTION, ),
-        self::TYPE_FIELDNAME     => array('created', 'is_deleted', 'code', 'username', 'email', 'premium', 'image', 'password', 'description', ),
+        self::TYPE_PHPNAME       => array('Createdat', 'Deletedat', 'Code', 'Username', 'Email', 'Premium', 'Image', 'Password', 'Description', ),
+        self::TYPE_CAMELNAME     => array('createdat', 'deletedat', 'code', 'username', 'email', 'premium', 'image', 'password', 'description', ),
+        self::TYPE_COLNAME       => array(UserTableMap::COL_CREATEDAT, UserTableMap::COL_DELETEDAT, UserTableMap::COL_CODE, UserTableMap::COL_USERNAME, UserTableMap::COL_EMAIL, UserTableMap::COL_PREMIUM, UserTableMap::COL_IMAGE, UserTableMap::COL_PASSWORD, UserTableMap::COL_DESCRIPTION, ),
+        self::TYPE_FIELDNAME     => array('createdAt', 'deletedAt', 'code', 'username', 'email', 'premium', 'image', 'password', 'description', ),
         self::TYPE_NUM           => array(0, 1, 2, 3, 4, 5, 6, 7, 8, )
     );
 
@@ -142,10 +142,10 @@ class UserTableMap extends TableMap
      * e.g. self::$fieldKeys[self::TYPE_PHPNAME]['Id'] = 0
      */
     protected static $fieldKeys = array (
-        self::TYPE_PHPNAME       => array('Created' => 0, 'IsDeleted' => 1, 'Code' => 2, 'Username' => 3, 'Email' => 4, 'Premium' => 5, 'Image' => 6, 'Password' => 7, 'Description' => 8, ),
-        self::TYPE_CAMELNAME     => array('created' => 0, 'isDeleted' => 1, 'code' => 2, 'username' => 3, 'email' => 4, 'premium' => 5, 'image' => 6, 'password' => 7, 'description' => 8, ),
-        self::TYPE_COLNAME       => array(UserTableMap::COL_CREATED => 0, UserTableMap::COL_IS_DELETED => 1, UserTableMap::COL_CODE => 2, UserTableMap::COL_USERNAME => 3, UserTableMap::COL_EMAIL => 4, UserTableMap::COL_PREMIUM => 5, UserTableMap::COL_IMAGE => 6, UserTableMap::COL_PASSWORD => 7, UserTableMap::COL_DESCRIPTION => 8, ),
-        self::TYPE_FIELDNAME     => array('created' => 0, 'is_deleted' => 1, 'code' => 2, 'username' => 3, 'email' => 4, 'premium' => 5, 'image' => 6, 'password' => 7, 'description' => 8, ),
+        self::TYPE_PHPNAME       => array('Createdat' => 0, 'Deletedat' => 1, 'Code' => 2, 'Username' => 3, 'Email' => 4, 'Premium' => 5, 'Image' => 6, 'Password' => 7, 'Description' => 8, ),
+        self::TYPE_CAMELNAME     => array('createdat' => 0, 'deletedat' => 1, 'code' => 2, 'username' => 3, 'email' => 4, 'premium' => 5, 'image' => 6, 'password' => 7, 'description' => 8, ),
+        self::TYPE_COLNAME       => array(UserTableMap::COL_CREATEDAT => 0, UserTableMap::COL_DELETEDAT => 1, UserTableMap::COL_CODE => 2, UserTableMap::COL_USERNAME => 3, UserTableMap::COL_EMAIL => 4, UserTableMap::COL_PREMIUM => 5, UserTableMap::COL_IMAGE => 6, UserTableMap::COL_PASSWORD => 7, UserTableMap::COL_DESCRIPTION => 8, ),
+        self::TYPE_FIELDNAME     => array('createdAt' => 0, 'deletedAt' => 1, 'code' => 2, 'username' => 3, 'email' => 4, 'premium' => 5, 'image' => 6, 'password' => 7, 'description' => 8, ),
         self::TYPE_NUM           => array(0, 1, 2, 3, 4, 5, 6, 7, 8, )
     );
 
@@ -166,8 +166,8 @@ class UserTableMap extends TableMap
         $this->setPackage('API.Model');
         $this->setUseIdGenerator(true);
         // columns
-        $this->addColumn('created', 'Created', 'TIMESTAMP', true, null, null);
-        $this->addColumn('is_deleted', 'IsDeleted', 'TIMESTAMP', false, null, null);
+        $this->addColumn('createdAt', 'Createdat', 'TIMESTAMP', true, null, null);
+        $this->addColumn('deletedAt', 'Deletedat', 'TIMESTAMP', false, null, null);
         $this->addPrimaryKey('code', 'Code', 'INTEGER', true, null, null);
         $this->addColumn('username', 'Username', 'VARCHAR', true, 255, null);
         $this->addColumn('email', 'Email', 'VARCHAR', true, 255, null);
@@ -332,8 +332,8 @@ class UserTableMap extends TableMap
     public static function addSelectColumns(Criteria $criteria, $alias = null)
     {
         if (null === $alias) {
-            $criteria->addSelectColumn(UserTableMap::COL_CREATED);
-            $criteria->addSelectColumn(UserTableMap::COL_IS_DELETED);
+            $criteria->addSelectColumn(UserTableMap::COL_CREATEDAT);
+            $criteria->addSelectColumn(UserTableMap::COL_DELETEDAT);
             $criteria->addSelectColumn(UserTableMap::COL_CODE);
             $criteria->addSelectColumn(UserTableMap::COL_USERNAME);
             $criteria->addSelectColumn(UserTableMap::COL_EMAIL);
@@ -342,8 +342,8 @@ class UserTableMap extends TableMap
             $criteria->addSelectColumn(UserTableMap::COL_PASSWORD);
             $criteria->addSelectColumn(UserTableMap::COL_DESCRIPTION);
         } else {
-            $criteria->addSelectColumn($alias . '.created');
-            $criteria->addSelectColumn($alias . '.is_deleted');
+            $criteria->addSelectColumn($alias . '.createdAt');
+            $criteria->addSelectColumn($alias . '.deletedAt');
             $criteria->addSelectColumn($alias . '.code');
             $criteria->addSelectColumn($alias . '.username');
             $criteria->addSelectColumn($alias . '.email');

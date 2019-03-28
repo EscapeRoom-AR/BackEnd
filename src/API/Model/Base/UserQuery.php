@@ -20,8 +20,8 @@ use Propel\Runtime\Exception\PropelException;
  *
  *
  *
- * @method     ChildUserQuery orderByCreated($order = Criteria::ASC) Order by the created column
- * @method     ChildUserQuery orderByIsDeleted($order = Criteria::ASC) Order by the is_deleted column
+ * @method     ChildUserQuery orderByCreatedat($order = Criteria::ASC) Order by the createdAt column
+ * @method     ChildUserQuery orderByDeletedat($order = Criteria::ASC) Order by the deletedAt column
  * @method     ChildUserQuery orderByCode($order = Criteria::ASC) Order by the code column
  * @method     ChildUserQuery orderByUsername($order = Criteria::ASC) Order by the username column
  * @method     ChildUserQuery orderByEmail($order = Criteria::ASC) Order by the email column
@@ -30,8 +30,8 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildUserQuery orderByPassword($order = Criteria::ASC) Order by the password column
  * @method     ChildUserQuery orderByDescription($order = Criteria::ASC) Order by the description column
  *
- * @method     ChildUserQuery groupByCreated() Group by the created column
- * @method     ChildUserQuery groupByIsDeleted() Group by the is_deleted column
+ * @method     ChildUserQuery groupByCreatedat() Group by the createdAt column
+ * @method     ChildUserQuery groupByDeletedat() Group by the deletedAt column
  * @method     ChildUserQuery groupByCode() Group by the code column
  * @method     ChildUserQuery groupByUsername() Group by the username column
  * @method     ChildUserQuery groupByEmail() Group by the email column
@@ -63,8 +63,8 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildUser findOne(ConnectionInterface $con = null) Return the first ChildUser matching the query
  * @method     ChildUser findOneOrCreate(ConnectionInterface $con = null) Return the first ChildUser matching the query, or a new ChildUser object populated from the query conditions when no match is found
  *
- * @method     ChildUser findOneByCreated(string $created) Return the first ChildUser filtered by the created column
- * @method     ChildUser findOneByIsDeleted(string $is_deleted) Return the first ChildUser filtered by the is_deleted column
+ * @method     ChildUser findOneByCreatedat(string $createdAt) Return the first ChildUser filtered by the createdAt column
+ * @method     ChildUser findOneByDeletedat(string $deletedAt) Return the first ChildUser filtered by the deletedAt column
  * @method     ChildUser findOneByCode(int $code) Return the first ChildUser filtered by the code column
  * @method     ChildUser findOneByUsername(string $username) Return the first ChildUser filtered by the username column
  * @method     ChildUser findOneByEmail(string $email) Return the first ChildUser filtered by the email column
@@ -76,8 +76,8 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildUser requirePk($key, ConnectionInterface $con = null) Return the ChildUser by primary key and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildUser requireOne(ConnectionInterface $con = null) Return the first ChildUser matching the query and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  *
- * @method     ChildUser requireOneByCreated(string $created) Return the first ChildUser filtered by the created column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
- * @method     ChildUser requireOneByIsDeleted(string $is_deleted) Return the first ChildUser filtered by the is_deleted column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
+ * @method     ChildUser requireOneByCreatedat(string $createdAt) Return the first ChildUser filtered by the createdAt column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
+ * @method     ChildUser requireOneByDeletedat(string $deletedAt) Return the first ChildUser filtered by the deletedAt column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildUser requireOneByCode(int $code) Return the first ChildUser filtered by the code column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildUser requireOneByUsername(string $username) Return the first ChildUser filtered by the username column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildUser requireOneByEmail(string $email) Return the first ChildUser filtered by the email column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
@@ -87,8 +87,8 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildUser requireOneByDescription(string $description) Return the first ChildUser filtered by the description column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  *
  * @method     ChildUser[]|ObjectCollection find(ConnectionInterface $con = null) Return ChildUser objects based on current ModelCriteria
- * @method     ChildUser[]|ObjectCollection findByCreated(string $created) Return ChildUser objects filtered by the created column
- * @method     ChildUser[]|ObjectCollection findByIsDeleted(string $is_deleted) Return ChildUser objects filtered by the is_deleted column
+ * @method     ChildUser[]|ObjectCollection findByCreatedat(string $createdAt) Return ChildUser objects filtered by the createdAt column
+ * @method     ChildUser[]|ObjectCollection findByDeletedat(string $deletedAt) Return ChildUser objects filtered by the deletedAt column
  * @method     ChildUser[]|ObjectCollection findByCode(int $code) Return ChildUser objects filtered by the code column
  * @method     ChildUser[]|ObjectCollection findByUsername(string $username) Return ChildUser objects filtered by the username column
  * @method     ChildUser[]|ObjectCollection findByEmail(string $email) Return ChildUser objects filtered by the email column
@@ -194,7 +194,7 @@ abstract class UserQuery extends ModelCriteria
      */
     protected function findPkSimple($key, ConnectionInterface $con)
     {
-        $sql = 'SELECT created, is_deleted, code, username, email, premium, image, password, description FROM user WHERE code = :p0';
+        $sql = 'SELECT createdAt, deletedAt, code, username, email, premium, image, password, description FROM user WHERE code = :p0';
         try {
             $stmt = $con->prepare($sql);
             $stmt->bindValue(':p0', $key, PDO::PARAM_INT);
@@ -285,16 +285,16 @@ abstract class UserQuery extends ModelCriteria
     }
 
     /**
-     * Filter the query on the created column
+     * Filter the query on the createdAt column
      *
      * Example usage:
      * <code>
-     * $query->filterByCreated('2011-03-14'); // WHERE created = '2011-03-14'
-     * $query->filterByCreated('now'); // WHERE created = '2011-03-14'
-     * $query->filterByCreated(array('max' => 'yesterday')); // WHERE created > '2011-03-13'
+     * $query->filterByCreatedat('2011-03-14'); // WHERE createdAt = '2011-03-14'
+     * $query->filterByCreatedat('now'); // WHERE createdAt = '2011-03-14'
+     * $query->filterByCreatedat(array('max' => 'yesterday')); // WHERE createdAt > '2011-03-13'
      * </code>
      *
-     * @param     mixed $created The value to use as filter.
+     * @param     mixed $createdat The value to use as filter.
      *              Values can be integers (unix timestamps), DateTime objects, or strings.
      *              Empty strings are treated as NULL.
      *              Use scalar values for equality.
@@ -304,16 +304,16 @@ abstract class UserQuery extends ModelCriteria
      *
      * @return $this|ChildUserQuery The current query, for fluid interface
      */
-    public function filterByCreated($created = null, $comparison = null)
+    public function filterByCreatedat($createdat = null, $comparison = null)
     {
-        if (is_array($created)) {
+        if (is_array($createdat)) {
             $useMinMax = false;
-            if (isset($created['min'])) {
-                $this->addUsingAlias(UserTableMap::COL_CREATED, $created['min'], Criteria::GREATER_EQUAL);
+            if (isset($createdat['min'])) {
+                $this->addUsingAlias(UserTableMap::COL_CREATEDAT, $createdat['min'], Criteria::GREATER_EQUAL);
                 $useMinMax = true;
             }
-            if (isset($created['max'])) {
-                $this->addUsingAlias(UserTableMap::COL_CREATED, $created['max'], Criteria::LESS_EQUAL);
+            if (isset($createdat['max'])) {
+                $this->addUsingAlias(UserTableMap::COL_CREATEDAT, $createdat['max'], Criteria::LESS_EQUAL);
                 $useMinMax = true;
             }
             if ($useMinMax) {
@@ -324,20 +324,20 @@ abstract class UserQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(UserTableMap::COL_CREATED, $created, $comparison);
+        return $this->addUsingAlias(UserTableMap::COL_CREATEDAT, $createdat, $comparison);
     }
 
     /**
-     * Filter the query on the is_deleted column
+     * Filter the query on the deletedAt column
      *
      * Example usage:
      * <code>
-     * $query->filterByIsDeleted('2011-03-14'); // WHERE is_deleted = '2011-03-14'
-     * $query->filterByIsDeleted('now'); // WHERE is_deleted = '2011-03-14'
-     * $query->filterByIsDeleted(array('max' => 'yesterday')); // WHERE is_deleted > '2011-03-13'
+     * $query->filterByDeletedat('2011-03-14'); // WHERE deletedAt = '2011-03-14'
+     * $query->filterByDeletedat('now'); // WHERE deletedAt = '2011-03-14'
+     * $query->filterByDeletedat(array('max' => 'yesterday')); // WHERE deletedAt > '2011-03-13'
      * </code>
      *
-     * @param     mixed $isDeleted The value to use as filter.
+     * @param     mixed $deletedat The value to use as filter.
      *              Values can be integers (unix timestamps), DateTime objects, or strings.
      *              Empty strings are treated as NULL.
      *              Use scalar values for equality.
@@ -347,16 +347,16 @@ abstract class UserQuery extends ModelCriteria
      *
      * @return $this|ChildUserQuery The current query, for fluid interface
      */
-    public function filterByIsDeleted($isDeleted = null, $comparison = null)
+    public function filterByDeletedat($deletedat = null, $comparison = null)
     {
-        if (is_array($isDeleted)) {
+        if (is_array($deletedat)) {
             $useMinMax = false;
-            if (isset($isDeleted['min'])) {
-                $this->addUsingAlias(UserTableMap::COL_IS_DELETED, $isDeleted['min'], Criteria::GREATER_EQUAL);
+            if (isset($deletedat['min'])) {
+                $this->addUsingAlias(UserTableMap::COL_DELETEDAT, $deletedat['min'], Criteria::GREATER_EQUAL);
                 $useMinMax = true;
             }
-            if (isset($isDeleted['max'])) {
-                $this->addUsingAlias(UserTableMap::COL_IS_DELETED, $isDeleted['max'], Criteria::LESS_EQUAL);
+            if (isset($deletedat['max'])) {
+                $this->addUsingAlias(UserTableMap::COL_DELETEDAT, $deletedat['max'], Criteria::LESS_EQUAL);
                 $useMinMax = true;
             }
             if ($useMinMax) {
@@ -367,7 +367,7 @@ abstract class UserQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(UserTableMap::COL_IS_DELETED, $isDeleted, $comparison);
+        return $this->addUsingAlias(UserTableMap::COL_DELETEDAT, $deletedat, $comparison);
     }
 
     /**
