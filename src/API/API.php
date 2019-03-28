@@ -5,6 +5,7 @@ namespace API;
 use \Psr\Http\Message\ServerRequestInterface as Request;
 use \Psr\Http\Message\ResponseInterface as Response;
 use \Propel\Runtime\ActiveQuery\Criteria as Criteria;
+use \DateTime as DateTime;
 
 class API extends \Slim\App {
 
