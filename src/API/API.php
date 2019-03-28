@@ -15,7 +15,9 @@ class API extends \Slim\App {
     // Define the ROUTES
 	$this->get('/room/{code}/{name}',				        '\API\API:tmpAddRoom');
 	$this->get('/item/{code}/{room}/{name}/{qr}',   '\API\API:tmpAddItem');
-	$this->get('/hint/{hint}/{item}',				        '\API\API:tmpAddHint');
+  $this->get('/hint/{hint}/{item}',				        '\API\API:tmpAddHint');
+  
+  $this->post('/register',                        '\Api\API:register')
 
 	$this->get('/room/{code}',						'\API\API:getRoom');
 	$this->get('/rooms',							    '\API\API:getRooms');
@@ -29,6 +31,15 @@ class API extends \Slim\App {
     $this->get('/assignment[/{id}]',        [$this,'assignmentGET']);
     $this->get('/table',                    [$this,'tableGET']); */
   }
+
+
+  public static function register(Request $request, Response $response, array $args) {
+    $paramMap = $request->getParsedBody();
+    $email = $paramMap['email']; 
+    $username = $paramMap['username'];
+    $response->getBody()->write("Email: ".$email);
+    return $response;
+    }
 
 
   public static function getRoom(Request $request, Response $response, array $args) {
