@@ -57,7 +57,8 @@ class API extends \Slim\App {
 	}
 
 	public static function login(Request $request, Response $response, array $args) {
-		$response->getBody()->write($args['username'].",".$args['password']);
+	
+		$response->getBody()->write($request->params('username').",".$request->params('password'));
 	    return $response;
 		/*if ($args['username'] == null || $args['password'] == null) { return $response->withJson([], 404); }
 		$user = \API\Model\UserQuery::create()
