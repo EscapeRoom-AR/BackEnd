@@ -65,10 +65,10 @@ class API extends \Slim\App {
 			->filterByUsername("admin")
 			//->filterByPassword($args['password'])
 			->find()->getFirst();
-		if (!$user) { return $response->withJson([], 404); }
+		/*if (!$user) { return $response->withJson([], 404); }
 		$response->getBody()->write(json_encode($user->toArray()));
-		return $response;
-		//return $response->withJson(Array("token" => \API\API::generateToken($user)),200);
+		return $response;*/
+		return $response->withJson(Array("token" => \API\API::generateToken($user)),200);
 	}
 
 	public static function generateToken(User $user) {
