@@ -65,11 +65,8 @@ class API extends \Slim\App {
 			->filterByUsername("admin")
 			//->filterByPassword($args['password'])
 			->find()->getFirst();
-		//var_dump($user);
-		if (!$user) {
-			return $response->withJson([], 404);
-		}
-		$response->getBody()->write($user->getCode());
+		if (!$user) { return $response->withJson([], 404); }
+		$response->getBody()->write(json_encode($user->toArray()));
 		return $response;
 		//return $response->withJson(Array("token" => \API\API::generateToken($user)),200);
 	}
