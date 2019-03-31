@@ -54,7 +54,7 @@ class API extends \Slim\App {
 		$dateTime = new DateTime();
 		$user->setCreatedat($dateTime->getTimestamp());
 		$user->save();
-		return Api::getOkResp("Registered successfully", Array("token" => Api::generateToken($user));
+		return Api::getOkResp("Registered successfully", Array("token" => Api::generateToken($user)));
 		//return $response->withJson(Array("token" => Api::generateToken($user)),200);
 	}
 
@@ -66,7 +66,7 @@ class API extends \Slim\App {
 			->filterByPassword($paramMap['password'])
 			->find()->getFirst();
 		if (!$user) { return $response->withJson([], 404); }
-		return Api::getOkResp("Valid credentials", Array("token" => Api::generateToken($user));
+		return Api::getOkResp("Valid credentials", Array("token" => Api::generateToken($user)));
 		//return $response->withJson(Array("token" => Api::generateToken($user)),200);
 	}
 
