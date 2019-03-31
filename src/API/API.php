@@ -11,7 +11,7 @@ use \API\API as Api;
 
 class API extends \Slim\App {
 
-	private static const $secret_key = '^cbV&Q@DeA4#pHuGaaVx';
+	private static $secret_key = '^cbV&Q@DeA4#pHuGaaVx';
 
 	public function __construct() {
 		$settings = [ 'displayErrorDetails' => true ];
