@@ -87,7 +87,7 @@ class API extends \Slim\App {
 	}
 
 	public static function checkAuthentication($token){
-		if (isset($token) && $token != "" && \API\API::checkToken($token))
+		if (\API\API::checkToken($token))
 		{
 			$jwt_values = explode('.', $token);
 			$payload = base64_decode($jwt_values[1]);
