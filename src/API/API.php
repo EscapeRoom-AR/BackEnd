@@ -70,10 +70,11 @@ class API extends \Slim\App {
 		$paramMap = $request->getParsedBody();
 		$token = $paramMap['token'];
 		$user = \API\API::checkAuthentication($token);
-		if (!$user) { return $response->withJson([], 404); }
-		$user->delete();
-		$response->getBody()->write($user->getCode());
-		return $response;
+		if (!$user) { return $response->withJson(["code" => 0], 404); }
+		$dateTime = new DateTime();
+		$user->setDeletedat($dateTime);
+		$user->save();
+		return return $response->withJson(["code" => 1, "message" => "User deleted successfully"], 200);
 	}
 
 	public static function generateToken(User $user) {
