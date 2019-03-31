@@ -65,7 +65,7 @@ class API extends \Slim\App {
 			->filterByPassword($paramMap['password'])
 			->find()->getFirst();
 		if (!$user) { 
-			return return Api::getErrorResp($response, "Invalid credentials."); 
+			return Api::getErrorResp($response, "Invalid credentials."); 
 		}
 		return Api::getOkResp($response, "Valid credentials", Array("token" => Api::generateToken($user)));
 	}
@@ -78,7 +78,7 @@ class API extends \Slim\App {
 		}
 		$user = \API\Model\UserQuery::create()->findPK($user->getCode());
 		if (!$user) { 
-			return return Api::getErrorResp($response, "Token is incorrect."); 
+			return Api::getErrorResp($response, "Token is incorrect."); 
 		}
 		$dateTime = new DateTime();
 		$user->setDeletedat($dateTime);
