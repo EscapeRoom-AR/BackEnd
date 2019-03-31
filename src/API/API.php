@@ -71,8 +71,9 @@ class API extends \Slim\App {
 		$token = $paramMap['token'];
 		$user = \API\API::checkAuthentication($token);
 		if (!$user) { return $response->withJson(["code" => 0], 404); }
-		$dateTime = new DateTime();
 		$user = \API\Model\UserQuery::create()->findPK($user->getCode());
+		if (!$user) { return $response->withJson(["code" => 0], 404); }
+		$dateTime = new DateTime();
 		$user->setDeletedat($dateTime);
 		$user->save();
 		return $response->withJson(["code" => 1, "message" => "User deleted successfully"], 200);
