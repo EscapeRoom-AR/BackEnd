@@ -86,6 +86,9 @@ class API extends \Slim\App {
 			return Api::getErrorResp($response, "Token is incorrect."); 
 		}
 		$user = \API\Model\UserQuery::create()->findPK($user->getCode());
+		if ($user->getDeletedat() != null) {
+			return Api::getErrorResp($response, "User already deleted."); 
+		}
 		if (!$user) { 
 			return Api::getErrorResp($response, "Token is incorrect."); 
 		}
