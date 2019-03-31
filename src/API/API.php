@@ -7,6 +7,7 @@ use \Psr\Http\Message\ResponseInterface as Response;
 use \Propel\Runtime\ActiveQuery\Criteria as Criteria;
 use \DateTime as DateTime;
 use \API\Model\User as User;
+use \API\API as Api;
 
 class API extends \Slim\App {
 
@@ -43,7 +44,8 @@ class API extends \Slim\App {
 			$paramMap['username'] == null || 
 			$paramMap['password'] == null) 
 		{
-			return $response->withJson([], 404);
+			return Api::getErrorResp("Email, username, and password were not provided.");
+			//return $response->withJson([], 404);
 		}
 		$user = new User();
 		$user->setUsername($paramMap['username']);
@@ -52,27 +54,29 @@ class API extends \Slim\App {
 		$dateTime = new DateTime();
 		$user->setCreatedat($dateTime->getTimestamp());
 		$user->save();
-		return $response->withJson(Array("token" => \API\API::generateToken($user)),200);
+		return Api::getOkResp("Registered successfully", Array("token" => Api::generateToken($user));
+		//return $response->withJson(Array("token" => Api::generateToken($user)),200);
 	}
 
 	public static function login(Request $request, Response $response, array $args) {
 		$paramMap = $request->getQueryParams();
-		if ($paramMap['username'] == null || $paramMap['password'] == null) { return $response->withJson([], 404); }
+		if ($paramMap['username'] == null || $paramMap['password'] == null) { /*return $response->withJson([], 404);*/ return Api::getErrorResp("Username, and password were not provided.");}
 		$user = \API\Model\UserQuery::create()
 			->filterByUsername($paramMap['username'])
 			->filterByPassword($paramMap['password'])
 			->find()->getFirst();
 		if (!$user) { return $response->withJson([], 404); }
-		return $response->withJson(Array("token" => \API\API::generateToken($user)),200);
+		return Api::getOkResp("Valid credentials", Array("token" => Api::generateToken($user));
+		//return $response->withJson(Array("token" => Api::generateToken($user)),200);
 	}
 
 	public static function deleteUser(Request $request, Response $response, array $args) {
 		$paramMap = $request->getParsedBody();
 		$token = $paramMap['token'];
-		$user = \API\API::checkAuthentication($token);
-		if (!$user) { return $response->withJson(["code" => 0], 404); }
+		$user = Api::checkAuthentication($token);
+		if (!$user) { return $response->withJson(["code" => 0, "message" => "Token is incorrect"], 404); }
 		$user = \API\Model\UserQuery::create()->findPK($user->getCode());
-		if (!$user) { return $response->withJson(["code" => 0], 404); }
+		if (!$user) { return $response->withJson(["code" => 0, "message" => "Token is incorrect"], 404); }
 		$dateTime = new DateTime();
 		$user->setDeletedat($dateTime);
 		$user->save();
@@ -99,7 +103,7 @@ class API extends \Slim\App {
 	}
 
 	public static function checkAuthentication($token){
-		if (isset($token) && $token != "" && \API\API::checkToken($token))
+		if (isset($token) && $token != "" && Api::checkToken($token))
 		{
 			$jwt_values = explode('.', $token);
 			$payload = base64_decode($jwt_values[1]);
@@ -110,8 +114,12 @@ class API extends \Slim\App {
 		return false;
 	}
 
-	public static function payloadToUser($payload) {
-		
+	public static function getOkResp(string $message, array $data = []) {
+		return $response->withJson(["code" => 1, "message" => $message, "data" => $data], 200);
+	}
+
+	public static function getErrorResp(string $message) {
+		return $response->withJson(["code" => 0, "message" => $message], 404);
 	}
 
 	/*
