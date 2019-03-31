@@ -74,7 +74,7 @@ class API extends \Slim\App {
 		$dateTime = new DateTime();
 		$user->setDeletedat($dateTime);
 		$user->save();
-		return return $response->withJson(["code" => 1, "message" => "User deleted successfully"], 200);
+		return $response->withJson(["code" => 1, "message" => "User deleted successfully"], 200);
 	}
 
 	public static function generateToken(User $user) {
