@@ -136,7 +136,9 @@ class API extends \Slim\App {
 		if (is_null($room) || empty($room)) {
 			return $response->withJson([], 404);
 		} 
-		return $response->withJson($room->toArray());
+		$room = $room->toArray();
+		$room['items'] = \API\Model\RoomQueryItemQuery::create()->filterByRoomCode($args['code'])->find()->toArray();
+		return $response->withJson($room);
 	}
 	
 	public static function generateToken(User $user) {
