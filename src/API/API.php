@@ -11,6 +11,8 @@ use \API\API as Api;
 
 class API extends \Slim\App {
 
+	private static const $secret_key = '^cbV&Q@DeA4#pHuGaaVx';
+
 	public function __construct() {
 		$settings = [ 'displayErrorDetails' => true ];
 		parent::__construct(['settings' => $settings]);
@@ -40,12 +42,8 @@ class API extends \Slim\App {
 
 	public static function register(Request $request, Response $response, array $args) {
 		$paramMap = $request->getParsedBody();
-		if ($paramMap['email'] == null || 
-			$paramMap['username'] == null || 
-			$paramMap['password'] == null) 
-		{
-			return Api::getErrorResp("Email, username, and password were not provided.");
-			//return $response->withJson([], 404);
+		if ($paramMap['email'] == null || $paramMap['username'] == null || $paramMap['password'] == null) {
+			return Api::getErrorResp($response, "Email, username, or password were not provided.");
 		}
 		$user = new User();
 		$user->setUsername($paramMap['username']);
@@ -54,57 +52,62 @@ class API extends \Slim\App {
 		$dateTime = new DateTime();
 		$user->setCreatedat($dateTime->getTimestamp());
 		$user->save();
-		return Api::getOkResp("Registered successfully", Array("token" => Api::generateToken($user)));
-		//return $response->withJson(Array("token" => Api::generateToken($user)),200);
+		return Api::getOkResp($response, "Registered successfully", Array("token" => Api::generateToken($user)));
 	}
 
 	public static function login(Request $request, Response $response, array $args) {
 		$paramMap = $request->getQueryParams();
-		if ($paramMap['username'] == null || $paramMap['password'] == null) { /*return $response->withJson([], 404);*/ return Api::getErrorResp("Username, and password were not provided.");}
+		if ($paramMap['username'] == null || $paramMap['password'] == null) { 
+			return Api::getErrorResp($response, "Username or password were not provided.");
+		}
 		$user = \API\Model\UserQuery::create()
 			->filterByUsername($paramMap['username'])
 			->filterByPassword($paramMap['password'])
 			->find()->getFirst();
-		if (!$user) { return $response->withJson([], 404); }
+		if (!$user) { 
+			return return Api::getErrorResp($response, "Invalid credentials."); 
+		}
 		return Api::getOkResp($response, "Valid credentials", Array("token" => Api::generateToken($user)));
-		//return $response->withJson(Array("token" => Api::generateToken($user)),200);
 	}
 
 	public static function deleteUser(Request $request, Response $response, array $args) {
-		$paramMap = $request->getParsedBody();
-		$token = $paramMap['token'];
+		$token = $request->getParsedBody()['token'];
 		$user = Api::checkAuthentication($token);
-		if (!$user) { return $response->withJson(["code" => 0, "message" => "Token is incorrect"], 404); }
+		if (!$user) { 
+			return Api::getErrorResp($response, "Token is incorrect."); 
+		}
 		$user = \API\Model\UserQuery::create()->findPK($user->getCode());
-		if (!$user) { return $response->withJson(["code" => 0, "message" => "Token is incorrect"], 404); }
+		if (!$user) { 
+			return return Api::getErrorResp($response, "Token is incorrect."); 
+		}
 		$dateTime = new DateTime();
 		$user->setDeletedat($dateTime);
 		$user->save();
 		return $response->withJson(["code" => 1, "message" => "User deleted successfully"], 200);
+		return Api::getOkResp($response, "User deleted successfully.")
 	}
 
 	public static function generateToken(User $user) {
 		$header= base64_encode(json_encode(array('alg'=> 'HS256', 'typ'=> 'JWT')) );
 		$payload= base64_encode(json_encode($user->toArray()));
-		$secret_key= '^cbV&Q@DeA4#pHuGaaVx';
-		$signature= base64_encode(hash_hmac('sha256', $header. '.'. $payload, $secret_key, true));
+		//$secret_key= '^cbV&Q@DeA4#pHuGaaVx';
+		$signature= base64_encode(hash_hmac('sha256', $header. '.'. $payload, Api::$secret_key, true));
 		$jwt_token= $header. '.'. $payload. '.'. $signature;
 		return $jwt_token;
 	}
 
 	public static function checkToken($token) {
-		$secret_key= '^cbV&Q@DeA4#pHuGaaVx';
+		//$secret_key= '^cbV&Q@DeA4#pHuGaaVx';
 		$jwt_values= explode('.', $token);
 		$header=$jwt_values[0];
 		$payload= $jwt_values[1];
 		$signature= $jwt_values[2];
-		$resultedsignature= base64_encode(hash_hmac('sha256', $header. '.'. $payload, $secret_key, true));
+		$resultedsignature= base64_encode(hash_hmac('sha256', $header. '.'. $payload, Api::$secret_key, true));
 		return $resultedsignature == $signature;
 	}
 
 	public static function checkAuthentication($token){
-		if (isset($token) && $token != "" && Api::checkToken($token))
-		{
+		if (isset($token) && $token != "" && Api::checkToken($token)) {
 			$jwt_values = explode('.', $token);
 			$payload = base64_decode($jwt_values[1]);
 			$user = new User();
