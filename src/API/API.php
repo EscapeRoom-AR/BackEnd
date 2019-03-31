@@ -205,6 +205,7 @@ class API extends \Slim\App {
   	  $room = new \API\Model\Room();
 	  $room->setName($args['name']);
 	  $room->setPremium(true);
+	  $room->setImage("asdasd");
 	  $room->save();
 	  $response->getBody()->write("Room: ".$args['code'].",".$args['name']);
 	  return $response;
