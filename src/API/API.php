@@ -84,7 +84,7 @@ class API extends \Slim\App {
 
 	public static function checkToken($token) {
 		$secret_key= '^cbV&Q@DeA4#pHuGaaVx';
-		$jwt_values= explode('.', $jwt_token);
+		$jwt_values= explode('.', $token);
 		$header=$jwt_values[0];
 		$payload= $jwt_values[1];
 		$signature= $jwt_values[2];
