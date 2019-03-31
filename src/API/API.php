@@ -70,13 +70,13 @@ class API extends \Slim\App {
 		$paramMap = $request->getParsedBody();
 		$token = $paramMap['token'];
 		$user = \API\API::checkAuthentication($token);
-		$response->getBody()->write(json_encode($user));
+		$response->getBody()->write($user);
 		return $response;
 	}
 
 	public static function generateToken(User $user) {
 		$header= base64_encode(json_encode(array('alg'=> 'HS256', 'typ'=> 'JWT')) );
-		$payload= base64_encode(json_encode($user));
+		$payload= base64_encode(json_encode($user->toArray()));
 		$secret_key= '^cbV&Q@DeA4#pHuGaaVx';
 		$signature= base64_encode(hash_hmac('sha256', $header. '.'. $payload, $secret_key, true));
 		$jwt_token= $header. '.'. $payload. '.'. $signature;
