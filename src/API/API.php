@@ -57,17 +57,12 @@ class API extends \Slim\App {
 	}
 
 	public static function login(Request $request, Response $response, array $args) {
-		var_dump($args);
-		/*if ($args['username'] == null || $args['password'] == null) {
-			return $response->withJson([], 404);
-		}*/
+		if ($args['username'] == null || $args['password'] == null) { return $response->withJson([], 404); }
 		$user = \API\Model\UserQuery::create()
 			->filterByUsername("admin")
 			//->filterByPassword($args['password'])
 			->find()->getFirst();
-		/*if (!$user) { return $response->withJson([], 404); }
-		$response->getBody()->write(json_encode($user->toArray()));
-		return $response;*/
+		if (!$user) { return $response->withJson([], 404); }
 		return $response->withJson(Array("token" => \API\API::generateToken($user)),200);
 	}
 
