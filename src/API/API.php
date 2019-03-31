@@ -22,7 +22,7 @@ class API extends \Slim\App {
 		$this->delete('/user',					'\Api\API:deleteUser');
 		$this->get('/user',						'\Api\API:getUser');
 		$this->get('/rooms',					'\API\API:getRooms');
-		$this->get('/room/{name}',				'\API\API:tmpAddRoom');
+		$this->get('/room/{code}',				'\API\API:getRoom');
 
 		/*
 		$this->get('/room/{code}/{name}',				        '\API\API:tmpAddRoom');
@@ -129,6 +129,15 @@ class API extends \Slim\App {
 		} 
 		return Api::getOkResp($response, "Ok", $rooms->toArray());
 	}
+
+	public static function getRoom(Request $request, Response $response, array $args) {
+		$code = $args['code'];
+		$room = \API\Model\RoomQuery::create()->findPK($code);
+		if (is_null($room) || empty($room)) {
+			return $response->withJson([], 404);
+		} 
+		return $response->withJson($room->toArray());
+	}
 	
 	public static function generateToken(User $user) {
 		$header= base64_encode(json_encode(array('alg'=> 'HS256', 'typ'=> 'JWT')) );
@@ -200,7 +209,7 @@ class API extends \Slim\App {
 	return $response->withJson($hints->toArray());
   }
   
-  */
+  
   public static function tmpAddRoom(Request $requuest, Response $response, array $args) {
   	  $room = new \API\Model\Room();
 	  $room->setName($args['name']);
@@ -209,7 +218,7 @@ class API extends \Slim\App {
 	  $room->save();
 	  return $response;
   }
-  /*
+  
   public static function tmpAddItem(Request $requuest, Response $response, array $args) {
   	  $item = new \API\Model\Item();
 	  $item->setCode($args['code']);
