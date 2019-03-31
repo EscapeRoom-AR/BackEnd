@@ -145,7 +145,8 @@ class API extends \Slim\App {
 		$items = \API\Model\ItemQuery::create()->filterByRoomCode($args['code'])->find()->toArray();
 
 		foreach ($items as $item) {
-			$item['hints'] = \API\Model\HintQuery::create()->filterByItemCode($item['Code'])->find()->toArray();
+			$item['hints'] = "im a hint";
+			//\API\Model\HintQuery::create()->filterByItemCode($item['Code'])->find()->toArray();
 		}
 		$room['items'] = $items;
 		return $response->withJson($items);
