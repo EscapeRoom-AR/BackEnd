@@ -145,10 +145,11 @@ class API extends \Slim\App {
 		$items = \API\Model\ItemQuery::create()->filterByRoomCode($args['code'])->find()->toArray();
 
 		foreach ($items as $item) {
+			return $response->withJson(["code" => $item['code'], "hints" => \API\Model\HintQuery::create()->filterByItemCode($item['code'])->find());
 			$item['hints'] = \API\Model\HintQuery::create()->filterByItemCode($item['code'])->find();
 		}
 		$room['items'] = $items;
-		return $response->withJson($room);
+		return $response->withJson($items);
 	}
 	
 	public static function generateToken(User $user) {
