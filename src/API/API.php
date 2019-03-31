@@ -127,7 +127,7 @@ class API extends \Slim\App {
 		if (!$rooms) {
 			return Api::getErrorResp($response, "Server error."); 
 		} 
-		return $response->withJson($rooms->toArray());
+		return Api::getOkResp($response, "Ok", $rooms->toArray());
 	}
 	
 	public static function generateToken(User $user) {
