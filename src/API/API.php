@@ -45,6 +45,14 @@ class API extends \Slim\App {
 		if ($paramMap['email'] == null || $paramMap['username'] == null || $paramMap['password'] == null) {
 			return Api::getErrorResp($response, "Email, username, or password were not provided.");
 		}
+		$user = \API\Model\UserQuery::create()->filterByUsername($paramMap['username'])->find()->getFirst();
+		if ($user != null) {
+			return Api::getErrorResp($response, "Username in use.");
+		}
+		$user = \API\Model\UserQuery::create()->filterByEmail($paramMap['email'])->find()->getFirst();
+		if ($user != null) {
+			return Api::getErrorResp($response, "Email in use.");
+		}
 		$user = new User();
 		$user->setUsername($paramMap['username']);
 		$user->setPassword($paramMap['password']);
@@ -63,6 +71,7 @@ class API extends \Slim\App {
 		$user = \API\Model\UserQuery::create()
 			->filterByUsername($paramMap['username'])
 			->filterByPassword($paramMap['password'])
+			->filterByDeletedat(null)
 			->find()->getFirst();
 		if (!$user) { 
 			return Api::getErrorResp($response, "Invalid credentials."); 
@@ -83,21 +92,18 @@ class API extends \Slim\App {
 		$dateTime = new DateTime();
 		$user->setDeletedat($dateTime);
 		$user->save();
-		return $response->withJson(["code" => 1, "message" => "User deleted successfully"], 200);
 		return Api::getOkResp($response, "User deleted successfully.");
 	}
 
 	public static function generateToken(User $user) {
 		$header= base64_encode(json_encode(array('alg'=> 'HS256', 'typ'=> 'JWT')) );
 		$payload= base64_encode(json_encode($user->toArray()));
-		//$secret_key= '^cbV&Q@DeA4#pHuGaaVx';
 		$signature= base64_encode(hash_hmac('sha256', $header. '.'. $payload, Api::$secret_key, true));
 		$jwt_token= $header. '.'. $payload. '.'. $signature;
 		return $jwt_token;
 	}
 
 	public static function checkToken($token) {
-		//$secret_key= '^cbV&Q@DeA4#pHuGaaVx';
 		$jwt_values= explode('.', $token);
 		$header=$jwt_values[0];
 		$payload= $jwt_values[1];
