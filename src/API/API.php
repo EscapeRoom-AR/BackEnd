@@ -82,7 +82,7 @@ class API extends \Slim\App {
 
 	public static function checkToken($token) {
 		$values = explode('.', $token);
-		$resultedsignature = base64_encode(hash_hmac('sha256', $values[0] . '.'. $values[1], "^cbV&Q@DeA4#pHuGaaVx", true));
+		$resultedsignature = base64_encode(hash_hmac('sha256', base64_decode($values[0]) . '.'. base64_decode($values[1]), "^cbV&Q@DeA4#pHuGaaVx", true));
 		return $resultedsignature == $values[2];
 	}
 
