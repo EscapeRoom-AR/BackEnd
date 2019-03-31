@@ -53,7 +53,7 @@ class API extends \Slim\App {
     $dateTime = new DateTime();
     $user->setCreatedat($dateTime->getTimestamp());
     $user->save();
-    return $response->withJson(generateToken($user),200);
+    return $response->withJson(\API\API::generateToken($user),200);
   }
 
 
