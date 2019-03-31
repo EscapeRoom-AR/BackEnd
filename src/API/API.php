@@ -148,7 +148,7 @@ class API extends \Slim\App {
 		}
 
 		$room['items'] = $items;
-		return $response->withJson($items);
+		return $response->withJson($room);
 	}
 	
 	public static function generateToken(User $user) {
