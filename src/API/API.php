@@ -34,6 +34,7 @@ class API extends \Slim\App {
     $this->get('/table',                    [$this,'tableGET']); */
   }
 
+  $key = "^cbV&Q@DeA4#pHuGaaVx";
 
   public static function register(Request $request, Response $response, array $args) {
     $paramMap = $request->getParsedBody();
@@ -127,7 +128,7 @@ class API extends \Slim\App {
 
   public static function generateToken(User $user) {
 	$header = base64_encode(json_encode(array('alg'=> 'HS256', 'typ'=> 'JWT')));
-    $payload = base64_encode($contenido);
+    $payload = base64_encode($user);
     global $key;
     $signature = base64_encode(hash_hmac('sha256', $header. '.'. $payload, $key, true));
     return $header. '.'. $payload. '.'. $signature;
