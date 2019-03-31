@@ -20,7 +20,7 @@ class API extends \Slim\App {
 		$this->post('/register',				'\Api\API:register');
 		$this->get('/login',					'\Api\API:login');
 		$this->delete('/user',					'\Api\API:deleteUser');
-
+		$this->get('/user'),					'\Api\API:getUser');	
 
 		/*
 		$this->get('/room/{code}/{name}',				        '\API\API:tmpAddRoom');
@@ -86,17 +86,32 @@ class API extends \Slim\App {
 			return Api::getErrorResp($response, "Token is incorrect."); 
 		}
 		$user = \API\Model\UserQuery::create()->findPK($user->getCode());
-		if ($user->getDeletedat() != null) {
-			return Api::getErrorResp($response, "User already deleted."); 
-		}
 		if (!$user) { 
 			return Api::getErrorResp($response, "Token is incorrect."); 
+		}
+		if ($user->getDeletedat() != null) {
+			return Api::getErrorResp($response, "User already deleted."); 
 		}
 		$dateTime = new DateTime();
 		$user->setDeletedat($dateTime);
 		$user->save();
 		return Api::getOkResp($response, "User deleted successfully.");
 	}
+
+	public static function getUser(Request $request, Response $response, array $args) {
+		$token = $request->getParsedBody()['token'];
+		$user = Api::checkAuthentication($token);
+		if (!$user) { 
+			return Api::getErrorResp($response, "Token is incorrect."); 
+		}
+		$user = \API\Model\UserQuery::create()->findPK($user->getCode());
+		if (!$user || $user->getDeletedat() != null) {
+			return Api::getErrorResp($response, "Token is incorrect."); 
+		}
+		return Api::getOkResp($response, "Ok", $user->toArray());
+	}
+
+
 
 	public static function generateToken(User $user) {
 		$header= base64_encode(json_encode(array('alg'=> 'HS256', 'typ'=> 'JWT')) );
