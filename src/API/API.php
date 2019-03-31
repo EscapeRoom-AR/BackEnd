@@ -61,7 +61,7 @@ class API extends \Slim\App {
 		if ($paramMap['username'] == null || $paramMap['password'] == null) { return $response->withJson([], 404); }
 		$user = \API\Model\UserQuery::create()
 			->filterByUsername($paramMap['username'])
-			//->filterByPassword($args['password'])
+			->filterByPassword($paramMap['password'])
 			->find()->getFirst();
 		if (!$user) { return $response->withJson([], 404); }
 		return $response->withJson(Array("token" => \API\API::generateToken($user)),200);
