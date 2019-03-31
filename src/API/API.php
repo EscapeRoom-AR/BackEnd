@@ -20,7 +20,8 @@ class API extends \Slim\App {
 		$this->post('/register',				'\Api\API:register');
 		$this->get('/login',					'\Api\API:login');
 		$this->delete('/user',					'\Api\API:deleteUser');
-		$this->get('/user',						'\Api\API:getUser');	
+		$this->get('/user',						'\Api\API:getUser');
+		$this->get('/rooms',					'\API\API:getRooms');
 
 		/*
 		$this->get('/room/{code}/{name}',				        '\API\API:tmpAddRoom');
@@ -111,8 +112,23 @@ class API extends \Slim\App {
 		return Api::getOkResp($response, "Ok", $user->toArray());
 	}
 
-
-
+	public static function getRooms(Request $request, Response $response, array $args) {
+		$token = $request->getQueryParams()['token'];
+		$user = Api::checkAuthentication($token);
+		if (!$user) { 
+			return Api::getErrorResp($response, "Token is incorrect."); 
+		}
+		$user = \API\Model\UserQuery::create()->findPK($user->getCode());
+		if (!$user || $user->getDeletedat() != null) {
+			return Api::getErrorResp($response, "Token is incorrect."); 
+		}
+		$rooms = \API\Model\RoomQuery::create()->find();
+		if (!$rooms) {
+			return Api::getErrorResp($response, "Server error."); 
+		} 
+		return $response->withJson($rooms->toArray());
+	}
+	
 	public static function generateToken(User $user) {
 		$header= base64_encode(json_encode(array('alg'=> 'HS256', 'typ'=> 'JWT')) );
 		$payload= base64_encode(json_encode($user->toArray()));
