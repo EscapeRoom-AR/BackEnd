@@ -61,7 +61,7 @@ class API extends \Slim\App {
 		/*if ($args['username'] == null || $args['password'] == null) {
 			return $response->withJson([], 404);
 		}*/
-		User $user = \API\Model\UserQuery::create()
+		$user = \API\Model\UserQuery::create()
 			->filterByUsername($args['username'])
 			//->filterByPassword($args['password'])
 			->find()->getFirst();
