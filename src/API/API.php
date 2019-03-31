@@ -24,12 +24,15 @@ class API extends \Slim\App {
 		$this->get('/rooms',					'\API\API:getRooms');
 		$this->get('/room/{code}',				'\API\API:getRoom');
 
-		$this->get('/item/{room}/{name}/{qr}',			'\API\API:tmpAddItem');
+
+		$this->get('/hint/{hint}/{item}',							'\API\API:tmpAddHint');
+		
 
 		/*
+		$this->get('/item/{room}/{name}/{qr}',			'\API\API:tmpAddItem');
 		$this->get('/room/{code}/{name}',				        '\API\API:tmpAddRoom');
 		$this->get('/item/{code}/{room}/{name}/{qr}',			'\API\API:tmpAddItem');
-		$this->get('/hint/{hint}/{item}',							'\API\API:tmpAddHint');
+		
 		$this->get('/room/{code}',								'\API\API:getRoom');
 		$this->get('/rooms',									'\API\API:getRooms');
 		$this->get('/items/{room}',								'\API\API:getItems');
@@ -223,7 +226,7 @@ class API extends \Slim\App {
 	  $room->save();
 	  return $response;
   }
-  */
+  
   public static function tmpAddItem(Request $requuest, Response $response, array $args) {
   	  $item = new \API\Model\Item();
 	  $item->setRoomCode($args['room']);
@@ -233,17 +236,16 @@ class API extends \Slim\App {
 	  $response->getBody()->write("Item: ".$args['name']);
 	  return $response;
   }
-  /*
+  */
     public static function tmpAddHint(Request $requuest, Response $response, array $args) {
-  	  $room = new \API\Model\Room();
-	  $room->setCode($args['code']);
-	  $room->setName($args['name']);
-	  $room->setPremium(true);
+  	  $room = new \API\Model\Hint();
+	  $room->setHint($args['hint']);
+	  $room->setItemCode($args['item']);
 	  $room->save();
-	  $response->getBody()->write("Room: ".$args['code'].",".$args['name']);
+	  $response->getBody()->write("Hint: ".$args['hint']);
 	  return $response;
   }
-
+  /*
   public static function helloGET(Request $request, Response $response, array $args) {
     $name = $args['name'];
     $response->getBody()->write("Hello, $name");
