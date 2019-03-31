@@ -66,7 +66,7 @@ class API extends \Slim\App {
 			->filterByPassword($paramMap['password'])
 			->find()->getFirst();
 		if (!$user) { return $response->withJson([], 404); }
-		return Api::getOkResp("Valid credentials", Array("token" => Api::generateToken($user)));
+		return Api::getOkResp($response, "Valid credentials", Array("token" => Api::generateToken($user)));
 		//return $response->withJson(Array("token" => Api::generateToken($user)),200);
 	}
 
@@ -114,11 +114,11 @@ class API extends \Slim\App {
 		return false;
 	}
 
-	public static function getOkResp(string $message, array $data = []) {
+	public static function getOkResp(Response $response, string $message, array $data = []) {
 		return $response->withJson(["code" => 1, "message" => $message, "data" => $data], 200);
 	}
 
-	public static function getErrorResp(string $message) {
+	public static function getErrorResp(Response $response, string $message) {
 		return $response->withJson(["code" => 0, "message" => $message], 404);
 	}
 
