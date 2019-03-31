@@ -64,12 +64,14 @@ class API extends \Slim\App {
 		$user = \API\Model\UserQuery::create()
 			->filterByUsername($args['username'])
 			->filterByPassword($args['password'])
-			->find()[0];
-		var_dump($user);
+			->find()->getFirst();
+		//var_dump($user);
 		if (!$user) {
 			return $response->withJson([], 404);
 		}
-		return $response->withJson(Array("token" => \API\API::generateToken($user)),200);
+		$response->getBody()->write(json_encode($user));
+		return $response;
+		//return $response->withJson(Array("token" => \API\API::generateToken($user)),200);
 	}
 
 	public static function generateToken(User $user) {
