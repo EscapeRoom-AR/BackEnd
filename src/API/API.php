@@ -69,7 +69,7 @@ class API extends \Slim\App {
 	public static function deleteUser(Request $request, Response $response, array $args) {
 		$paramMap = $request->getParsedBody();
 		$token = $paramMap['token'];
-		$user = \API\API::checkToken($token);
+		$user = \API\API::checkAuthentication($token);
 		$response->getBody()->write(json_encode($user));
 		return $response;
 	}
