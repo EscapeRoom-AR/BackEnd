@@ -51,7 +51,7 @@ class API extends \Slim\App {
     $user->setPassword($paramMap['password']);
     $user->setEmail($paramMap['email']);
     $dateTime = new DateTime();
-    $user->setCreated($dateTime->getTimestamp());
+    $user->setCreatedat($dateTime->getTimestamp());
     $user->save();
     return $response->withJson(generateToken($user),200);
   }
