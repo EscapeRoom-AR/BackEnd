@@ -70,7 +70,7 @@ class API extends \Slim\App {
 		$paramMap = $request->getParsedBody();
 		$token = $paramMap['token'];
 		$user = \API\API::checkAuthentication($token);
-		$response->getBody()->write(json_encode($user));
+		$response->getBody()->write($user);
 		return $response;
 	}
 
