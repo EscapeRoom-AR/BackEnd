@@ -6,6 +6,7 @@ use \Psr\Http\Message\ServerRequestInterface as Request;
 use \Psr\Http\Message\ResponseInterface as Response;
 use \Propel\Runtime\ActiveQuery\Criteria as Criteria;
 use \DateTime as DateTime;
+use \API\Model\User as User;
 
 class API extends \Slim\App {
 
@@ -45,14 +46,14 @@ class API extends \Slim\App {
     $email = $paramMap['email']; 
     $username = $paramMap['username'];
     $password = $paramMap['password'];
-    $user = new \API\Model\User();
+    $user = new User();
     $user->setUsername($paramMap['username']);
     $user->setPassword($paramMap['password']);
     $user->setEmail($paramMap['email']);
     $dateTime = new DateTime();
     $user->setCreated($dateTime->getTimestamp());
     $user->save();
-    return $response->withJson($user,200);
+    return $response->withJson(generateToken($user),200);
   }
 
 
@@ -122,6 +123,36 @@ class API extends \Slim\App {
 	  $response->getBody()->write("Room: ".$args['code'].",".$args['name']);
 	  return $response;
   }
+
+
+  public static function generateToken(User $user) {
+	$header = base64_encode(json_encode(array('alg'=> 'HS256', 'typ'=> 'JWT')));
+    $payload = base64_encode($contenido);
+    global $key;
+    $signature = base64_encode(hash_hmac('sha256', $header. '.'. $payload, $key, true));
+    return $header. '.'. $payload. '.'. $signature;
+
+  }
+
+  function checkToken($token) {
+    $values = explode('.', $token);
+    global $key;
+    $resultedsignature = base64_encode(hash_hmac('sha256', $values[0] . '.'. $values[1], $key, true));
+    return $resultedsignature == $values[2];
+}
+
+function checkAuthentication($headers){
+    if (isset($headers["Authorization"]) &&
+        $headers["Authorization"] != "" &&
+        jwtCheckCodeJSON($headers["Authorization"]))
+    {
+        $jwt_values = explode('.', $headers["Authorization"]);
+        $payload = base64_decode($jwt_values[1]);
+        return $payload;
+    }
+    return false;
+}
+
 
   /*public static function helloGET(Request $request, Response $response, array $args) {
     $name = $args['name'];
@@ -205,4 +236,5 @@ class API extends \Slim\App {
     $response->getBody()->write($html);
     return $response;
   }*/
+
 };
