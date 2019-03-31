@@ -20,7 +20,7 @@ class API extends \Slim\App {
 		$this->post('/register',				'\Api\API:register');
 		$this->get('/login',					'\Api\API:login');
 		$this->delete('/user',					'\Api\API:deleteUser');
-		$this->get('/user'),					'\Api\API:getUser');	
+		$this->get('/user',						'\Api\API:getUser');	
 
 		/*
 		$this->get('/room/{code}/{name}',				        '\API\API:tmpAddRoom');
@@ -99,7 +99,7 @@ class API extends \Slim\App {
 	}
 
 	public static function getUser(Request $request, Response $response, array $args) {
-		$token = $request->getParsedBody()['token'];
+		$token = $request->getQueryParams()['token'];
 		$user = Api::checkAuthentication($token);
 		if (!$user) { 
 			return Api::getErrorResp($response, "Token is incorrect."); 
