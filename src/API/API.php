@@ -63,8 +63,8 @@ class API extends \Slim\App {
 		}
 		$user = \API\Model\UserQuery::create()
 			->filterByUsername($paramMap['username'])
-			->filterByPassword($paramMap['password'])
 			->find();
+		var_dump($user);
 		if (!$user) {
 			return $response->withJson([], 404);
 		}
