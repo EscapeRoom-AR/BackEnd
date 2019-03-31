@@ -69,24 +69,25 @@ class API extends \Slim\App {
 	public static function deleteUser(Request $request, Response $response, array $args) {
 		$token = $request->getQueryParam('token');
 		$user = \API\API::checkAuthentication($token);
-		$response->getBody()->write(json_encode($user));
+		$response->getBody()->write($token);
 		return $response;
 	}
 
 	public static function generateToken(User $user) {
-		$header = json_encode(array('alg'=> 'HS256', 'typ'=> 'JWT'));
-		$signature = base64_encode(hash_hmac('sha256', $header. '.'. $user, "^cbV&Q@DeA4#pHuGaaVx", true));
-		return base64_encode($header). '.'. base64_encode($user). '.'. $signature;
+		$header = base64_encode(json_encode(array('alg'=> 'HS256', 'typ'=> 'JWT')));
+		$payload = base64_encode($user);
+		$signature = base64_encode(hash_hmac('sha256', $header. '.'. $payload, "^cbV&Q@DeA4#pHuGaaVx", true));
+		return $header. '.'. $payload. '.'. $signature;
 	}
 
 	public static function checkToken($token) {
 		$values = explode('.', $token);
-		$resultedsignature = base64_encode(hash_hmac('sha256', base64_decode($values[0]) . '.'. base64_decode($values[1]), "^cbV&Q@DeA4#pHuGaaVx", true));
+		$resultedsignature = base64_encode(hash_hmac('sha256', $values[0] . '.'. $values[1], "^cbV&Q@DeA4#pHuGaaVx", true));
 		return $resultedsignature == $values[2];
 	}
 
 	public static function checkAuthentication($token){
-		if (\API\API::checkToken($token))
+		if (isset($token) && $token != "" && \API\API::checkToken($token))
 		{
 			$jwt_values = explode('.', $token);
 			$payload = base64_decode($jwt_values[1]);
