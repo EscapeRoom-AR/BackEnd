@@ -10,29 +10,30 @@ use \API\Model\User as User;
 
 class API extends \Slim\App {
 
-  public function __construct() {
-    $settings = [ 'displayErrorDetails' => true ];
-    parent::__construct(['settings' => $settings]);
+	public function __construct() {
+		$settings = [ 'displayErrorDetails' => true ];
+		parent::__construct(['settings' => $settings]);
+		
+		$this->post('/register',									'\Api\API:register');
+		$this->get('/login',										'\Api\API:login');
 
-    // Define the ROUTES
-	$this->get('/room/{code}/{name}',				        '\API\API:tmpAddRoom');
-	$this->get('/item/{code}/{room}/{name}/{qr}',   '\API\API:tmpAddItem');
-  $this->get('/hint/{hint}/{item}',				        '\API\API:tmpAddHint');
-  
-  $this->post('/register',                        '\Api\API:register');
-
-	$this->get('/room/{code}',						'\API\API:getRoom');
-	$this->get('/rooms',							    '\API\API:getRooms');
-	$this->get('/items/{room}',						'\API\API:getItems');
-	$this->get('/hints/{item}',						'\API\API:getHints');
-	/*$this->get('/hello/{name}',             '\API\API:helloGET');
-    $this->get('/json',                     [$this,'jsonGET']);
-    $this->get('/teacher',                  [$this,'teachersGET']);
-    $this->get('/teacher/{id}',             [$this,'teacherGET']);
-    $this->get('/teacher/search/{search}',  [$this,'teacherSearchGET']);
-    $this->get('/assignment[/{id}]',        [$this,'assignmentGET']);
-    $this->get('/table',                    [$this,'tableGET']); */
-  }
+		/*
+		$this->get('/room/{code}/{name}',				        '\API\API:tmpAddRoom');
+		$this->get('/item/{code}/{room}/{name}/{qr}',			'\API\API:tmpAddItem');
+		$this->get('/hint/{hint}/{item}',							'\API\API:tmpAddHint');
+		$this->get('/room/{code}',								'\API\API:getRoom');
+		$this->get('/rooms',									'\API\API:getRooms');
+		$this->get('/items/{room}',								'\API\API:getItems');
+		$this->get('/hints/{item}',								'\API\API:getHints');
+		$this->get('/hello/{name}',								'\API\API:helloGET');
+		$this->get('/json',										[$this,'jsonGET']);
+		$this->get('/teacher',									[$this,'teachersGET']);
+		$this->get('/teacher/{id}',								[$this,'teacherGET']);
+		$this->get('/teacher/search/{search}',					[$this,'teacherSearchGET']);
+		$this->get('/assignment[/{id}]',						[$this,'assignmentGET']);
+		$this->get('/table',									[$this,'tableGET']);
+		*/
+	}
 
 	public static function register(Request $request, Response $response, array $args) {
 		$paramMap = $request->getParsedBody();
@@ -70,9 +71,32 @@ class API extends \Slim\App {
 		return $response->withJson(Array("token" => \API\API::generateToken($user)),200);
 	}
 
+	public static function generateToken(User $user) {
+		$header = base64_encode(json_encode(array('alg'=> 'HS256', 'typ'=> 'JWT')));
+		$payload = base64_encode($user);
+		$signature = base64_encode(hash_hmac('sha256', $header. '.'. $payload, "^cbV&Q@DeA4#pHuGaaVx", true));
+		return $header. '.'. $payload. '.'. $signature;
+	}
 
+	public static function checkToken($token) {
+		$values = explode('.', $token);
+		$resultedsignature = base64_encode(hash_hmac('sha256', $values[0] . '.'. $values[1], "^cbV&Q@DeA4#pHuGaaVx", true));
+		return $resultedsignature == $values[2];
+	}
 
+	public static function checkAuthentication($headers){
+		if (isset($headers["Authorization"]) &&
+			$headers["Authorization"] != "" &&
+			jwtCheckCodeJSON($headers["Authorization"]))
+		{
+			$jwt_values = explode('.', $headers["Authorization"]);
+			$payload = base64_decode($jwt_values[1]);
+			return $payload;
+		}
+		return false;
+	}
 
+	/*
   public static function getRoom(Request $request, Response $response, array $args) {
 	$code = $args['code'];
 	$room = \API\Model\RoomQuery::create()->filterByCode($code)->find();
@@ -138,34 +162,7 @@ class API extends \Slim\App {
 	  return $response;
   }
 
-
-  public static function generateToken(User $user) {
-	$header = base64_encode(json_encode(array('alg'=> 'HS256', 'typ'=> 'JWT')));
-	$payload = base64_encode($user);
-	$signature = base64_encode(hash_hmac('sha256', $header. '.'. $payload, "^cbV&Q@DeA4#pHuGaaVx", true));
-	return $header. '.'. $payload. '.'. $signature;
-   }
-
-	function checkToken($token) {
-		$values = explode('.', $token);
-		$resultedsignature = base64_encode(hash_hmac('sha256', $values[0] . '.'. $values[1], "^cbV&Q@DeA4#pHuGaaVx", true));
-		return $resultedsignature == $values[2];
-	}
-
-	function checkAuthentication($headers){
-		if (isset($headers["Authorization"]) &&
-			$headers["Authorization"] != "" &&
-			jwtCheckCodeJSON($headers["Authorization"]))
-		{
-			$jwt_values = explode('.', $headers["Authorization"]);
-			$payload = base64_decode($jwt_values[1]);
-			return $payload;
-		}
-		return false;
-	}
-
-
-  /*public static function helloGET(Request $request, Response $response, array $args) {
+  public static function helloGET(Request $request, Response $response, array $args) {
     $name = $args['name'];
     $response->getBody()->write("Hello, $name");
     return $response;
