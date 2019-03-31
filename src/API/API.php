@@ -74,10 +74,9 @@ class API extends \Slim\App {
 	}
 
 	public static function generateToken(User $user) {
-		$header = base64_encode(json_encode(array('alg'=> 'HS256', 'typ'=> 'JWT')));
-		$payload = base64_encode($user);
-		$signature = base64_encode(hash_hmac('sha256', $header. '.'. $payload, "^cbV&Q@DeA4#pHuGaaVx", true));
-		return $header. '.'. $payload. '.'. $signature;
+		$header = json_encode(array('alg'=> 'HS256', 'typ'=> 'JWT'));
+		$signature = base64_encode(hash_hmac('sha256', $header. '.'. $user, "^cbV&Q@DeA4#pHuGaaVx", true));
+		return base64_encode($header). '.'. base64_encode($user). '.'. $signature;
 	}
 
 	public static function checkToken($token) {
