@@ -14,8 +14,10 @@ class API extends \Slim\App {
 		$settings = [ 'displayErrorDetails' => true ];
 		parent::__construct(['settings' => $settings]);
 		
-		$this->post('/register',									'\Api\API:register');
-		$this->get('/login',										'\Api\API:login');
+		$this->post('/register',				'\Api\API:register');
+		$this->get('/login',					'\Api\API:login');
+		$this->delete('/user',					'\Api\API:deleteUser');
+
 
 		/*
 		$this->get('/room/{code}/{name}',				        '\API\API:tmpAddRoom');
@@ -43,9 +45,6 @@ class API extends \Slim\App {
 		{
 			return $response->withJson([], 404);
 		}
-		$email = $paramMap['email']; 
-		$username = $paramMap['username'];
-		$password = $paramMap['password'];
 		$user = new User();
 		$user->setUsername($paramMap['username']);
 		$user->setPassword($paramMap['password']);
@@ -67,6 +66,13 @@ class API extends \Slim\App {
 		return $response->withJson(Array("token" => \API\API::generateToken($user)),200);
 	}
 
+	public static function deleteUser(Request $request, Response $response, array $args) {
+		$token = $request->getQueryParam('token');
+		$user = checkAuthentication($token);
+		$response->getBody()->write(json_encode($user));
+		return $response;
+	}
+
 	public static function generateToken(User $user) {
 		$header = base64_encode(json_encode(array('alg'=> 'HS256', 'typ'=> 'JWT')));
 		$payload = base64_encode($user);
@@ -80,12 +86,10 @@ class API extends \Slim\App {
 		return $resultedsignature == $values[2];
 	}
 
-	public static function checkAuthentication($headers){
-		if (isset($headers["Authorization"]) &&
-			$headers["Authorization"] != "" &&
-			jwtCheckCodeJSON($headers["Authorization"]))
+	public static function checkAuthentication($token){
+		if (isset($token) && $token != "" && jwtCheckCodeJSON($token))
 		{
-			$jwt_values = explode('.', $headers["Authorization"]);
+			$jwt_values = explode('.', $token);
 			$payload = base64_decode($jwt_values[1]);
 			return $payload;
 		}
