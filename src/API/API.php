@@ -52,7 +52,7 @@ class API extends \Slim\App {
     $dateTime = new DateTime();
     $user->setCreatedat($dateTime->getTimestamp());
     $user->save();
-    return $response->withJson(\API\API::generateToken($user),200);
+    return $response->withJson(Array("token" => \API\API::generateToken($user)),200);
   }
 
 
@@ -126,31 +126,28 @@ class API extends \Slim\App {
 
   public static function generateToken(User $user) {
 	$header = base64_encode(json_encode(array('alg'=> 'HS256', 'typ'=> 'JWT')));
-    $payload = base64_encode($user);
-    global $key;
-    $signature = base64_encode(hash_hmac('sha256', $header. '.'. $payload, $key, true));
-    return $header. '.'. $payload. '.'. $signature;
+	$payload = base64_encode($user);
+	$signature = base64_encode(hash_hmac('sha256', $header. '.'. $payload, "^cbV&Q@DeA4#pHuGaaVx", true));
+	return $header. '.'. $payload. '.'. $signature;
+   }
 
-  }
+	function checkToken($token) {
+		$values = explode('.', $token);
+		$resultedsignature = base64_encode(hash_hmac('sha256', $values[0] . '.'. $values[1], "^cbV&Q@DeA4#pHuGaaVx", true));
+		return $resultedsignature == $values[2];
+	}
 
-  function checkToken($token) {
-    $values = explode('.', $token);
-    global $key;
-    $resultedsignature = base64_encode(hash_hmac('sha256', $values[0] . '.'. $values[1], $key, true));
-    return $resultedsignature == $values[2];
-}
-
-function checkAuthentication($headers){
-    if (isset($headers["Authorization"]) &&
-        $headers["Authorization"] != "" &&
-        jwtCheckCodeJSON($headers["Authorization"]))
-    {
-        $jwt_values = explode('.', $headers["Authorization"]);
-        $payload = base64_decode($jwt_values[1]);
-        return $payload;
-    }
-    return false;
-}
+	function checkAuthentication($headers){
+		if (isset($headers["Authorization"]) &&
+			$headers["Authorization"] != "" &&
+			jwtCheckCodeJSON($headers["Authorization"]))
+		{
+			$jwt_values = explode('.', $headers["Authorization"]);
+			$payload = base64_decode($jwt_values[1]);
+			return $payload;
+		}
+		return false;
+	}
 
 
   /*public static function helloGET(Request $request, Response $response, array $args) {
