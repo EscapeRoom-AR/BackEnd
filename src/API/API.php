@@ -34,8 +34,6 @@ class API extends \Slim\App {
     $this->get('/table',                    [$this,'tableGET']); */
   }
 
-  $key = "^cbV&Q@DeA4#pHuGaaVx";
-
   public static function register(Request $request, Response $response, array $args) {
     $paramMap = $request->getParsedBody();
     if ($paramMap['email'] == null || 
