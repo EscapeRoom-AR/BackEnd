@@ -70,7 +70,8 @@ class API extends \Slim\App {
 		$paramMap = $request->getParsedBody();
 		$token = $paramMap['token'];
 		$user = \API\API::checkAuthentication($token);
-		$response->getBody()->write($user);
+		if (!$user) { return $response->withJson([], 404); }
+		$response->getBody()->write($user->getCode());
 		return $response;
 	}
 
@@ -98,7 +99,7 @@ class API extends \Slim\App {
 		{
 			$jwt_values = explode('.', $token);
 			$payload = base64_decode($jwt_values[1]);
-			return $payload;
+			return new User()->fromArray(json_decode($payload,true));
 		}
 		return false;
 	}
