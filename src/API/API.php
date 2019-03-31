@@ -100,7 +100,8 @@ class API extends \Slim\App {
 			$jwt_values = explode('.', $token);
 			$payload = base64_decode($jwt_values[1]);
 			$user = new User();
-			return $user->fromArray(json_decode($payload,true));
+			$user->fromArray(json_decode($payload,true));
+			return $user;
 		}
 		return false;
 	}
