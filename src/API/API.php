@@ -76,7 +76,7 @@ class API extends \Slim\App {
 
 	public static function generateToken(User $user) {
 		$header= base64_encode(json_encode(array('alg'=> 'HS256', 'typ'=> 'JWT')) );
-		$payload= base64_encode($user);
+		$payload= base64_encode(json_encode($user));
 		$secret_key= '^cbV&Q@DeA4#pHuGaaVx';
 		$signature= base64_encode(hash_hmac('sha256', $header. '.'. $payload, $secret_key, true));
 		$jwt_token= $header. '.'. $payload. '.'. $signature;
@@ -101,6 +101,10 @@ class API extends \Slim\App {
 			return $payload;
 		}
 		return false;
+	}
+
+	public static function payloadToUser($payload) {
+		
 	}
 
 	/*
