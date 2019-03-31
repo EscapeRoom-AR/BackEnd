@@ -137,7 +137,7 @@ class API extends \Slim\App {
 			return $response->withJson([], 404);
 		} 
 		$room = $room->toArray();
-		$room['items'] = \API\Model\RoomQueryItemQuery::create()->filterByRoomCode($args['code'])->find()->toArray();
+		$room['items'] = \API\Model\ItemQuery::create()->filterByRoomCode($args['code'])->find()->toArray();
 		return $response->withJson($room);
 	}
 	
