@@ -68,22 +68,28 @@ class API extends \Slim\App {
 
 	public static function deleteUser(Request $request, Response $response, array $args) {
 		$token = $request->getParsedBody()['token'];
-		$user = \API\API::checkAuthentication($token);
+		$user = \API\API::checkToken($token);
 		$response->getBody()->write(json_encode($user));
 		return $response;
 	}
 
 	public static function generateToken(User $user) {
-		$header = base64_encode(json_encode(array('alg'=> 'HS256', 'typ'=> 'JWT')));
-		$payload = base64_encode($user);
-		$signature = base64_encode(hash_hmac('sha256', $header. '.'. $payload, "^cbV&Q@DeA4#pHuGaaVx", true));
-		return $header. '.'. $payload. '.'. $signature;
+		$header= base64_encode(json_encode(array('alg'=> 'HS256', 'typ'=> 'JWT')) );
+		$payload= base64_encode($user);
+		$secret_key= '^cbV&Q@DeA4#pHuGaaVx';
+		$signature= base64_encode(hash_hmac('sha256', $header. '.'. $payload, $secret_key, true));
+		$jwt_token= $header. '.'. $payload. '.'. $signature;
+		return $jwt_token;
 	}
 
 	public static function checkToken($token) {
-		$values = explode('.', $token);
-		$resultedsignature = base64_encode(hash_hmac('sha256', $values[0] . '.'. $values[1], "^cbV&Q@DeA4#pHuGaaVx", true));
-		return $resultedsignature == $values[2];
+		$secret_key= '^cbV&Q@DeA4#pHuGaaVx';
+		$jwt_values= explode('.', $jwt_token);
+		$header=$jwt_values[0];
+		$payload= $jwt_values[1];
+		$signature= $jwt_values[2];
+		$resultedsignature= base64_encode(hash_hmac('sha256', $header. '.'. $payload, $secret_key, true));
+		return $resultedsignature == $signature;
 	}
 
 	public static function checkAuthentication($token){
