@@ -24,6 +24,8 @@ class API extends \Slim\App {
 		$this->get('/rooms',					'\API\API:getRooms');
 		$this->get('/room/{code}',				'\API\API:getRoom');
 
+		$this->get('/item/{room}/{name}/{qr}',			'\API\API:tmpAddItem');
+
 		/*
 		$this->get('/room/{code}/{name}',				        '\API\API:tmpAddRoom');
 		$this->get('/item/{code}/{room}/{name}/{qr}',			'\API\API:tmpAddItem');
@@ -138,6 +140,7 @@ class API extends \Slim\App {
 		} 
 		$room = $room->toArray();
 		$room['items'] = \API\Model\ItemQuery::create()->filterByRoomCode($args['code'])->find()->toArray();
+
 		return $response->withJson($room);
 	}
 	
@@ -220,18 +223,17 @@ class API extends \Slim\App {
 	  $room->save();
 	  return $response;
   }
-  
+  */
   public static function tmpAddItem(Request $requuest, Response $response, array $args) {
   	  $item = new \API\Model\Item();
-	  $item->setCode($args['code']);
-	  $item->setRoomId($args['room']);
+	  $item->setRoomCode($args['room']);
 	  $item->setName($args['name']);
 	  $item->setQrCode($args['qr']);
 	  $item->save();
-	  $response->getBody()->write("Item: ".$args['code'].",".$args['name']);
+	  $response->getBody()->write("Item: ".$args['name']);
 	  return $response;
   }
-
+  /*
     public static function tmpAddHint(Request $requuest, Response $response, array $args) {
   	  $room = new \API\Model\Room();
 	  $room->setCode($args['code']);
