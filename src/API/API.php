@@ -34,26 +34,41 @@ class API extends \Slim\App {
     $this->get('/table',                    [$this,'tableGET']); */
   }
 
-  public static function register(Request $request, Response $response, array $args) {
-    $paramMap = $request->getParsedBody();
-    if ($paramMap['email'] == null || 
-        $paramMap['username'] == null || 
-        $paramMap['password'] == null) 
-    {
-      return $response->withJson([], 404);
-    }
-    $email = $paramMap['email']; 
-    $username = $paramMap['username'];
-    $password = $paramMap['password'];
-    $user = new User();
-    $user->setUsername($paramMap['username']);
-    $user->setPassword($paramMap['password']);
-    $user->setEmail($paramMap['email']);
-    $dateTime = new DateTime();
-    $user->setCreatedat($dateTime->getTimestamp());
-    $user->save();
-    return $response->withJson(Array("token" => \API\API::generateToken($user)),200);
-  }
+	public static function register(Request $request, Response $response, array $args) {
+		$paramMap = $request->getParsedBody();
+		if ($paramMap['email'] == null || 
+			$paramMap['username'] == null || 
+			$paramMap['password'] == null) 
+		{
+			return $response->withJson([], 404);
+		}
+		$email = $paramMap['email']; 
+		$username = $paramMap['username'];
+		$password = $paramMap['password'];
+		$user = new User();
+		$user->setUsername($paramMap['username']);
+		$user->setPassword($paramMap['password']);
+		$user->setEmail($paramMap['email']);
+		$dateTime = new DateTime();
+		$user->setCreatedat($dateTime->getTimestamp());
+		$user->save();
+		return $response->withJson(Array("token" => \API\API::generateToken($user)),200);
+	}
+
+	public static function login(Request $request, Response $response, array $args) {
+		$paramMap = $request->getParsedBody();
+		if ($paramMap['username'] == null || $paramMap['password'] == null) {
+			return $response->withJson([], 404);
+		}
+		$user = \API\Model\UserQuery::create()
+			->filterByUsername($paramMap['username'])
+			->filterByPassword($paramMap['password'])
+			->find();
+		if (!$user) {
+			return $response->withJson([], 404);
+		}
+		return $response->withJson(Array("token" => \API\API::generateToken($user)),200);
+	}
 
 
 
