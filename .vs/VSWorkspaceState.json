@@ -6,6 +6,6 @@
     "\\src\\API\\Model",
     "\\src\\API\\Model\\Base"
   ],
-  "SelectedNode": "\\src\\API\\Model\\Base\\Item.php",
+  "SelectedNode": "\\src\\API\\Model\\Base\\HintQuery.php",
   "PreviewInSolutionExplorer": false
 }
