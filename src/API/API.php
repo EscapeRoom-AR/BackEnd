@@ -117,7 +117,7 @@ class API extends \Slim\App {
         $user->setImage($user->getImage());
         $user->setDescription($user->getDescription());
         $user->save();
-        return Api::getOkResp($response, "User updated successfully", Array("user" => $user));
+        return Api::getOkResp($response, "User updated successfully", Array("user" => $user->toArray()));
     }
 
 	public static function deleteUser(Request $request, Response $response, array $args) {
@@ -184,7 +184,7 @@ class API extends \Slim\App {
         $room = $request->getParsedBody()['room'];
 
         $user = Api::auth($token);
-        if (!$user.getUsername() == 'master'); {
+        if (!$user.getCode() == '0'); {
             return Api::getErrorResp($response, "Invalid user");
         }
         $room->save();
