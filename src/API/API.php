@@ -181,17 +181,34 @@ class API extends \Slim\App {
 		return Api::getOkResp($response, "Ok", $room);
 	}
 
-	public static function createRoom(Request $request, Response $response, array $args){
-        $token = $request->getQueryParams()['token'];
-        $room = $request->getParsedBody()['room'];
-
-        $user = Api::auth($token);
-        if (!$user.getCode() == '0'); {
-            return Api::getErrorResp($response, "Invalid user");
-        }
-        $room->save();
-        return Api::getOkResp($response, "Room created successfully");
-    }
+//	public static function createRoom(Request $request, Response $response, array $args){
+//        $token = $request->getQueryParams()['token'];
+//        $room = $request->getParsedBody()['room'];
+//
+//        $user = Api::auth($token);
+//        if (!$user.getCode() == '0'); {
+//            return Api::getErrorResp($response, "Invalid user");
+//        }
+//        $room->save();
+//        return Api::getOkResp($response, "Room created successfully");
+//    }
+//
+//    public static function updateRoom(Request $request, Response $response, array $args) {
+//        $token = $request->getParsedBody()['token'];
+//        $newRoom = $request->getParsedBody()['room'];
+//        $user = Api::auth($token);
+//        if (!$user) {
+//            return Api::getErrorResp($response, "Token is incorrect.");
+//        }
+//        $newRoom->(->getUsername());
+//        $newRoom->setEmail($user->getEmail());
+//        $user->setPassword($user->getPassword());
+//        $user->setPremium($user->getPremium());
+//        $user->setImage($user->getImage());
+//        $user->setDescription($user->getDescription());
+//        $user->save();
+//        return Api::getOkResp($response, "User updated successfully", Array("user" => $user->toArray()));
+//    }
 	
 	// Generates a token from a User object.
 	public static function generateToken(User $user) {
