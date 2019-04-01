@@ -92,13 +92,6 @@ class API extends \Slim\App {
 		if (!$user) { 
 			return Api::getErrorResp($response, "Token is incorrect."); 
 		}
-		$user = \API\Model\UserQuery::create()->findPK($user->getCode());
-		if (!$user) { 
-			return Api::getErrorResp($response, "Token is incorrect."); 
-		}
-		if ($user->getDeletedat() != null) {
-			return Api::getErrorResp($response, "User already deleted."); 
-		}
 		$dateTime = new DateTime();
 		$user->setDeletedat($dateTime);
 		$user->save();
@@ -111,10 +104,6 @@ class API extends \Slim\App {
 		if (!$user) { 
 			return Api::getErrorResp($response, "Token is incorrect."); 
 		}
-		$user = \API\Model\UserQuery::create()->findPK($user->getCode());
-		if (!$user || $user->getDeletedat() != null) {
-			return Api::getErrorResp($response, "Token is incorrect."); 
-		}
 		return Api::getOkResp($response, "Ok", $user->toArray());
 	}
 
@@ -122,10 +111,6 @@ class API extends \Slim\App {
 		$token = $request->getQueryParams()['token'];
 		$user = Api::checkAuthentication($token);
 		if (!$user) { 
-			return Api::getErrorResp($response, "Token is incorrect."); 
-		}
-		$user = \API\Model\UserQuery::create()->findPK($user->getCode());
-		if (!$user || $user->getDeletedat() != null) {
 			return Api::getErrorResp($response, "Token is incorrect."); 
 		}
 		$rooms = \API\Model\RoomQuery::create()->find();
@@ -139,7 +124,7 @@ class API extends \Slim\App {
 		$code = $args['code'];
 		$room = \API\Model\RoomQuery::create()->findPK($code);
 		if (is_null($room) || empty($room)) {
-			return $response->withJson([], 404);
+			return Api::getErrorResp($response, "Invalid room code.");
 		} 
 		$room = $room->toArray();
 		$items = \API\Model\ItemQuery::create()->filterByRoomCode($args['code'])->find()->toArray();
@@ -147,41 +132,38 @@ class API extends \Slim\App {
 			$items[$i]['hints'] = \API\Model\HintQuery::create()->filterByItemCode($items[$i]['Code'])->find()->toArray();
 		}
 		$room['items'] = $items;
-		return $response->withJson($room);
+		return Api::getOkResp($response, "Ok", $room);
 	}
 	
+	// Generates a token from a User object.
 	public static function generateToken(User $user) {
 		$header= base64_encode(json_encode(array('alg'=> 'HS256', 'typ'=> 'JWT')) );
-		$payload= base64_encode(json_encode($user->toArray()));
+		//$payload= base64_encode(json_encode($user->toArray()));
+		$payload = base64_encode($user->getCode());
 		$signature= base64_encode(hash_hmac('sha256', $header. '.'. $payload, Api::$secret_key, true));
 		$jwt_token= $header. '.'. $payload. '.'. $signature;
 		return $jwt_token;
 	}
 
-	public static function checkToken($token) {
-		$jwt_values= explode('.', $token);
-		$header=$jwt_values[0];
-		$payload= $jwt_values[1];
-		$signature= $jwt_values[2];
-		$resultedsignature= base64_encode(hash_hmac('sha256', $header. '.'. $payload, Api::$secret_key, true));
-		return $resultedsignature == $signature;
+	// Returns false if token is incorrect, a User object otherwise.
+	public static function auth($token){
+		if (!isset($token) || $token == "") { return false }
+		$jwt_values = explode('.', $token);
+		$signature = base64_encode(hash_hmac('sha256', $jwt_values[0]. '.'. $jwt_values[1], Api::$secret_key, true));
+		if ($jwt_values[2] != $signature) { return false }
+		/*$user = new User();
+		$user->fromArray(json_decode(base64_decode($jwt_values[1]),true));*/
+		$user = \API\Model\UserQuery::create()->findPK(base64_decode($jwt_values[1]),true));
+		if ($user->getDeletedat() != null) { return false; }
+		return $user;
 	}
 
-	public static function checkAuthentication($token){
-		if (isset($token) && $token != "" && Api::checkToken($token)) {
-			$jwt_values = explode('.', $token);
-			$payload = base64_decode($jwt_values[1]);
-			$user = new User();
-			$user->fromArray(json_decode($payload,true));
-			return $user;
-		}
-		return false;
-	}
-
+	// Generates success response, to always have the same format.
 	public static function getOkResp(Response $response, string $message, array $data = []) {
 		return $response->withJson(["code" => 1, "message" => $message, "data" => $data], 200);
 	}
 
+	// Generates error response, to always have the same format.
 	public static function getErrorResp(Response $response, string $message) {
 		return $response->withJson(["code" => 0, "message" => $message], 404);
 	}
