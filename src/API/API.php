@@ -65,7 +65,7 @@ class API extends \Slim\App {
 
 	public static function register(Request $request, Response $response, array $args) {
 		$paramMap = $request->getParsedBody();
-		if ($paramMap['email'] == null || $paramMap['username'] == null || !$paramMap['password'] == null) {
+		if ($paramMap['email'] == null || $paramMap['username'] == null || $paramMap['password'] == null) {
 			return Api::getErrorResp($response, "Email, username, or password were not provided.");
 		}
 		$user = \API\Model\UserQuery::create()->filterByUsername($paramMap['username'])->find()->getFirst();
