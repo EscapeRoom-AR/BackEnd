@@ -153,7 +153,7 @@ class API extends \Slim\App {
 		if ($jwt_values[2] != $signature) { return false; }
 		/*$user = new User();
 		$user->fromArray(json_decode(base64_decode($jwt_values[1]),true));*/
-		$user = \API\Model\UserQuery::create()->findPK(base64_decode($jwt_values[1]),true));
+		$user = \API\Model\UserQuery::create()->findPK(base64_decode($jwt_values[1]));
 		if ($user->getDeletedat() != null) { return false; }
 		return $user;
 	}
