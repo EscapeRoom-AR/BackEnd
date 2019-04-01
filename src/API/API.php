@@ -210,11 +210,10 @@ class API extends \Slim\App {
 	
 	// Generates a token from a User object.
 	public static function generateToken(User $user) {
-		$header= base64_encode(json_encode(array('alg'=> 'HS256', 'typ'=> 'JWT')) );
-		$payload = base64_encode($user->getCode());
-		$signature= base64_encode(hash_hmac('sha256', $header. '.'. $payload, Api::$secret_key, true));
-		$jwt_token= $header. '.'. $payload. '.'. $signature;
-		return urlencode($jwt_token);
+		$header= Api::base64url_encode(json_encode(array('alg'=> 'HS256', 'typ'=> 'JWT')) );
+		$payload = Api::base64url_encode($user->getCode());
+		$signature= Api::base64url_encode(hash_hmac('sha256', $header. '.'. $payload, Api::$secret_key, true));
+		return $header. '.'. $payload. '.'. $signature;
 	}
 
 	// Returns false if token is incorrect, a User object otherwise.
@@ -222,12 +221,12 @@ class API extends \Slim\App {
 		if (!isset($token) || $token == "") { 
 			return false; 
 		}
-		$jwt_values = explode('.', urldecode($token));
-		$signature = base64_encode(hash_hmac('sha256', $jwt_values[0]. '.'. $jwt_values[1], Api::$secret_key, true));
+		$jwt_values = explode('.', $token);
+		$signature = Api::base64url_encode(hash_hmac('sha256', $jwt_values[0]. '.'. $jwt_values[1], Api::$secret_key, true));
 		if ($jwt_values[2] != $signature) { 
 			return false; 
 		}
-		$user = \API\Model\UserQuery::create()->findPK(base64_decode($jwt_values[1]));
+		$user = \API\Model\UserQuery::create()->findPK(Api::base64url_decode($jwt_values[1]));
 		if ($user->getDeletedat() != null) { 
 			return false; 
 		}
@@ -243,6 +242,14 @@ class API extends \Slim\App {
 	public static function getErrorResp(Response $response, string $message) {
 		return $response->withJson(["code" => 0, "message" => $message], 404);
 	}
+
+	public static function base64url_encode($data) {
+	  return rtrim( strtr( base64_encode( $data ), '+/', '-_'), '=');
+	}
+
+	public static function base64url_decode($data) {
+	  return base64_decode( strtr( $data, '-_', '+/') . str_repeat('=', 3 - ( 3 + strlen( $data )) % 4 ));
+	} 
 
 	/*
   public static function getRoom(Request $request, Response $response, array $args) {
