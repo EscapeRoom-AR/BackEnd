@@ -89,6 +89,7 @@ class API extends \Slim\App {
 	public static function deleteUser(Request $request, Response $response, array $args) {
 		$token = $request->getParsedBody()['token'];
 		$user = Api::auth($token);
+		return Api::getErrorResp($response, "User code: ".$user);
 		if (!$user) { 
 			return Api::getErrorResp($response, "Token is incorrect."); 
 		}
@@ -138,7 +139,7 @@ class API extends \Slim\App {
 	// Generates a token from a User object.
 	public static function generateToken(User $user) {
 		$header= base64_encode(json_encode(array('alg'=> 'HS256', 'typ'=> 'JWT')) );
-		$payload= base64_encode($user->getCode());
+		$payload = base64_encode($user->getCode());
 		$signature= base64_encode(hash_hmac('sha256', $header. '.'. $payload, Api::$secret_key, true));
 		$jwt_token= $header. '.'. $payload. '.'. $signature;
 		return $jwt_token;
@@ -146,6 +147,7 @@ class API extends \Slim\App {
 
 	// Returns false if token is incorrect, a User object otherwise.
 	public static function auth($token) {
+		return base64_decode($jwt_values[1]);
 		if (!isset($token) || $token == "") { 
 			return false; 
 		}
