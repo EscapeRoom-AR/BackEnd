@@ -62,6 +62,13 @@ abstract class Hint implements ActiveRecordInterface
     protected $virtualColumns = array();
 
     /**
+     * The value for the id field.
+     *
+     * @var        int
+     */
+    protected $id;
+
+    /**
      * The value for the hint field.
      *
      * @var        string
@@ -314,6 +321,16 @@ abstract class Hint implements ActiveRecordInterface
     }
 
     /**
+     * Get the [id] column value.
+     *
+     * @return int
+     */
+    public function getId()
+    {
+        return $this->id;
+    }
+
+    /**
      * Get the [hint] column value.
      *
      * @return string
@@ -332,6 +349,26 @@ abstract class Hint implements ActiveRecordInterface
     {
         return $this->item_code;
     }
+
+    /**
+     * Set the value of [id] column.
+     *
+     * @param int $v new value
+     * @return $this|\API\Model\Hint The current object (for fluent API support)
+     */
+    public function setId($v)
+    {
+        if ($v !== null) {
+            $v = (int) $v;
+        }
+
+        if ($this->id !== $v) {
+            $this->id = $v;
+            $this->modifiedColumns[HintTableMap::COL_ID] = true;
+        }
+
+        return $this;
+    } // setId()
 
     /**
      * Set the value of [hint] column.
@@ -413,10 +450,13 @@ abstract class Hint implements ActiveRecordInterface
     {
         try {
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 0 + $startcol : HintTableMap::translateFieldName('Hint', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 0 + $startcol : HintTableMap::translateFieldName('Id', TableMap::TYPE_PHPNAME, $indexType)];
+            $this->id = (null !== $col) ? (int) $col : null;
+
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 1 + $startcol : HintTableMap::translateFieldName('Hint', TableMap::TYPE_PHPNAME, $indexType)];
             $this->hint = (null !== $col) ? (string) $col : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 1 + $startcol : HintTableMap::translateFieldName('ItemCode', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 2 + $startcol : HintTableMap::translateFieldName('ItemCode', TableMap::TYPE_PHPNAME, $indexType)];
             $this->item_code = (null !== $col) ? (int) $col : null;
             $this->resetModified();
 
@@ -426,7 +466,7 @@ abstract class Hint implements ActiveRecordInterface
                 $this->ensureConsistency();
             }
 
-            return $startcol + 2; // 2 = HintTableMap::NUM_HYDRATE_COLUMNS.
+            return $startcol + 3; // 3 = HintTableMap::NUM_HYDRATE_COLUMNS.
 
         } catch (Exception $e) {
             throw new PropelException(sprintf('Error populating %s object', '\\API\\Model\\Hint'), 0, $e);
@@ -637,8 +677,15 @@ abstract class Hint implements ActiveRecordInterface
         $modifiedColumns = array();
         $index = 0;
 
+        $this->modifiedColumns[HintTableMap::COL_ID] = true;
+        if (null !== $this->id) {
+            throw new PropelException('Cannot insert a value for auto-increment primary key (' . HintTableMap::COL_ID . ')');
+        }
 
          // check the columns in natural order for more readable SQL queries
+        if ($this->isColumnModified(HintTableMap::COL_ID)) {
+            $modifiedColumns[':p' . $index++]  = 'id';
+        }
         if ($this->isColumnModified(HintTableMap::COL_HINT)) {
             $modifiedColumns[':p' . $index++]  = 'hint';
         }
@@ -656,6 +703,9 @@ abstract class Hint implements ActiveRecordInterface
             $stmt = $con->prepare($sql);
             foreach ($modifiedColumns as $identifier => $columnName) {
                 switch ($columnName) {
+                    case 'id':
+                        $stmt->bindValue($identifier, $this->id, PDO::PARAM_INT);
+                        break;
                     case 'hint':
                         $stmt->bindValue($identifier, $this->hint, PDO::PARAM_STR);
                         break;
@@ -669,6 +719,13 @@ abstract class Hint implements ActiveRecordInterface
             Propel::log($e->getMessage(), Propel::LOG_ERR);
             throw new PropelException(sprintf('Unable to execute INSERT statement [%s]', $sql), 0, $e);
         }
+
+        try {
+            $pk = $con->lastInsertId();
+        } catch (Exception $e) {
+            throw new PropelException('Unable to get autoincrement id.', 0, $e);
+        }
+        $this->setId($pk);
 
         $this->setNew(false);
     }
@@ -718,9 +775,12 @@ abstract class Hint implements ActiveRecordInterface
     {
         switch ($pos) {
             case 0:
-                return $this->getHint();
+                return $this->getId();
                 break;
             case 1:
+                return $this->getHint();
+                break;
+            case 2:
                 return $this->getItemCode();
                 break;
             default:
@@ -753,8 +813,9 @@ abstract class Hint implements ActiveRecordInterface
         $alreadyDumpedObjects['Hint'][$this->hashCode()] = true;
         $keys = HintTableMap::getFieldNames($keyType);
         $result = array(
-            $keys[0] => $this->getHint(),
-            $keys[1] => $this->getItemCode(),
+            $keys[0] => $this->getId(),
+            $keys[1] => $this->getHint(),
+            $keys[2] => $this->getItemCode(),
         );
         $virtualColumns = $this->virtualColumns;
         foreach ($virtualColumns as $key => $virtualColumn) {
@@ -812,9 +873,12 @@ abstract class Hint implements ActiveRecordInterface
     {
         switch ($pos) {
             case 0:
-                $this->setHint($value);
+                $this->setId($value);
                 break;
             case 1:
+                $this->setHint($value);
+                break;
+            case 2:
                 $this->setItemCode($value);
                 break;
         } // switch()
@@ -844,10 +908,13 @@ abstract class Hint implements ActiveRecordInterface
         $keys = HintTableMap::getFieldNames($keyType);
 
         if (array_key_exists($keys[0], $arr)) {
-            $this->setHint($arr[$keys[0]]);
+            $this->setId($arr[$keys[0]]);
         }
         if (array_key_exists($keys[1], $arr)) {
-            $this->setItemCode($arr[$keys[1]]);
+            $this->setHint($arr[$keys[1]]);
+        }
+        if (array_key_exists($keys[2], $arr)) {
+            $this->setItemCode($arr[$keys[2]]);
         }
     }
 
@@ -890,6 +957,9 @@ abstract class Hint implements ActiveRecordInterface
     {
         $criteria = new Criteria(HintTableMap::DATABASE_NAME);
 
+        if ($this->isColumnModified(HintTableMap::COL_ID)) {
+            $criteria->add(HintTableMap::COL_ID, $this->id);
+        }
         if ($this->isColumnModified(HintTableMap::COL_HINT)) {
             $criteria->add(HintTableMap::COL_HINT, $this->hint);
         }
@@ -912,7 +982,8 @@ abstract class Hint implements ActiveRecordInterface
      */
     public function buildPkeyCriteria()
     {
-        throw new LogicException('The Hint object has no primary key');
+        $criteria = ChildHintQuery::create();
+        $criteria->add(HintTableMap::COL_ID, $this->id);
 
         return $criteria;
     }
@@ -925,7 +996,7 @@ abstract class Hint implements ActiveRecordInterface
      */
     public function hashCode()
     {
-        $validPk = false;
+        $validPk = null !== $this->getId();
 
         $validPrimaryKeyFKs = 0;
         $primaryKeyFKs = [];
@@ -940,27 +1011,23 @@ abstract class Hint implements ActiveRecordInterface
     }
 
     /**
-     * Returns NULL since this table doesn't have a primary key.
-     * This method exists only for BC and is deprecated!
-     * @return null
+     * Returns the primary key for this object (row).
+     * @return int
      */
     public function getPrimaryKey()
     {
-        return null;
+        return $this->getId();
     }
 
     /**
-     * Dummy primary key setter.
+     * Generic method to set the primary key (id column).
      *
-     * This function only exists to preserve backwards compatibility.  It is no longer
-     * needed or required by the Persistent interface.  It will be removed in next BC-breaking
-     * release of Propel.
-     *
-     * @deprecated
+     * @param       int $key Primary key.
+     * @return void
      */
-    public function setPrimaryKey($pk)
+    public function setPrimaryKey($key)
     {
-        // do nothing, because this object doesn't have any primary keys
+        $this->setId($key);
     }
 
     /**
@@ -969,7 +1036,7 @@ abstract class Hint implements ActiveRecordInterface
      */
     public function isPrimaryKeyNull()
     {
-        return ;
+        return null === $this->getId();
     }
 
     /**
@@ -989,6 +1056,7 @@ abstract class Hint implements ActiveRecordInterface
         $copyObj->setItemCode($this->getItemCode());
         if ($makeNew) {
             $copyObj->setNew(true);
+            $copyObj->setId(NULL); // this is a auto-increment column, so set to default value
         }
     }
 
@@ -1075,6 +1143,7 @@ abstract class Hint implements ActiveRecordInterface
         if (null !== $this->aItem) {
             $this->aItem->removeHint($this);
         }
+        $this->id = null;
         $this->hint = null;
         $this->item_code = null;
         $this->alreadyInSave = false;
