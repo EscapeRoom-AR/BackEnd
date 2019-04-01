@@ -154,7 +154,7 @@ class API extends \Slim\App {
 	}
 
 	public static function getRoom(Request $request, Response $response, array $args) {
-		$token = $request->getParsedBody()['token'];
+		$token = $request->getQueryParams()['token'];
 		$code = $args['code'];
 		if (!$code) {
 			Api::getErrorResp($response, "Codigo de room es necesario."); 
