@@ -176,7 +176,7 @@ class API extends \Slim\App {
 		// for ($i = 0; $i < count($items); $i++) {
 		// 	$items[$i]['hints'] = \API\Model\HintQuery::create()->filterByItemCode($items[$i]['Code'])->find()->toArray();
 		// }
-		return Api::getOkResp($response, "Ok", $room);
+		return Api::getOkResp($response, "Ok", $room->toArray());
 	}
 
 //	public static function createRoom(Request $request, Response $response, array $args){
