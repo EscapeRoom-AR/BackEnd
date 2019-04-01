@@ -161,7 +161,7 @@ class API extends \Slim\App {
 		}
 		$user = Api::auth($token);
 		if (!$user) { 
-			return Api::getErrorResp($response, "Token is incorrect."); 
+			return Api::getErrorResp($response, "Token is incorrect: ".$token); 
 		}
 		
 		
