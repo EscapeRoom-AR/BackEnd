@@ -169,12 +169,15 @@ class API extends \Slim\App {
 		if (is_null($room) || empty($room)) {
 			return Api::getErrorResp($response, "Invalid room code.");
 		} 
-		$room = $room->toArray();
-		$items = \API\Model\ItemQuery::create()->filterByRoomCode($args['code'])->find()->toArray();
-		for ($i = 0; $i < count($items); $i++) {
-			$items[$i]['hints'] = \API\Model\HintQuery::create()->filterByItemCode($items[$i]['Code'])->find()->toArray();
-		}
-		$room['items'] = $items;
+		// $room = $room->toArray();
+		// $items = \API\Model\ItemQuery::create()->filterByRoomCode($args['code'])->find()->toArray();
+
+		// $room['items'] = $items;
+		$room->getItems();
+		// $hints =[]
+		// for ($i = 0; $i < count($items); $i++) {
+		// 	$items[$i]['hints'] = \API\Model\HintQuery::create()->filterByItemCode($items[$i]['Code'])->find()->toArray();
+		// }
 		return Api::getOkResp($response, "Ok", $room);
 	}
 
