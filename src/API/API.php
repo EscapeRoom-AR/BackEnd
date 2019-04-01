@@ -23,6 +23,7 @@ class API extends \Slim\App {
 		$this->get('/user',						'\Api\API:getUser');
 		$this->get('/rooms',					'\API\API:getRooms');
 		$this->get('/room/{code}',				'\API\API:getRoom');
+		$this->put('/user',                    '\API\API::updateUser');
 
 
 		$this->get('/hint/{hint}/{item}',							'\API\API:tmpAddHint');
@@ -85,6 +86,22 @@ class API extends \Slim\App {
 		}
 		return Api::getOkResp($response, "Valid credentials", Array("token" => Api::generateToken($user)));
 	}
+
+	public static function updateUser(Request $request, Response $response, array $args){
+	    $token = $request->getParsedBody()['token'];
+	    $newUser = $request->getParsedBody()['user'];
+	    $user = Api::auth($token);
+        if (!$user) {
+            return Api::getErrorResp($response, "Token is incorrect.");
+        }
+        $user->setUsername($user->getUsername());
+        $user->setEmail($user->getEmail());
+        $user->setPassword($user->getPassword());
+        $user->setPremium($user->getPremium());
+        $user->setImage($user->getImage());
+        $user->setDescription($user->getDescription());
+        return Api::getOkResp($response, "User updated", Array("user" => $user));
+    }
 
 	public static function deleteUser(Request $request, Response $response, array $args) {
 		$token = $request->getParsedBody()['token'];
