@@ -111,7 +111,7 @@ class API extends \Slim\App {
 		$token = $request->getQueryParams()['token'];
 		$user = Api::auth($token);
 		if (!$user) { 
-			return Api::getErrorResp($response, "".$user); 
+			return Api::getErrorResp($response, "Token is incorrect."); 
 		}
 		$rooms = \API\Model\RoomQuery::create()->find();
 		if (!$rooms) {
@@ -138,8 +138,7 @@ class API extends \Slim\App {
 	// Generates a token from a User object.
 	public static function generateToken(User $user) {
 		$header= base64_encode(json_encode(array('alg'=> 'HS256', 'typ'=> 'JWT')) );
-		//$payload= base64_encode(json_encode($user->toArray()));
-		$payload = base64_encode(["code" => $user->getCode()]);
+		$payload= base64_encode(json_encode($user->toArray()));
 		$signature= base64_encode(hash_hmac('sha256', $header. '.'. $payload, Api::$secret_key, true));
 		$jwt_token= $header. '.'. $payload. '.'. $signature;
 		return $jwt_token;
@@ -147,15 +146,20 @@ class API extends \Slim\App {
 
 	// Returns false if token is incorrect, a User object otherwise.
 	public static function auth($token){
-		if (!isset($token) || $token == "") { return false; }
+		if (!isset($token) || $token == "") { 
+			return false; 
+		}
 		$jwt_values = explode('.', $token);
 		$signature = base64_encode(hash_hmac('sha256', $jwt_values[0]. '.'. $jwt_values[1], Api::$secret_key, true));
-		if ($jwt_values[2] != $signature) { return false; }
-		/*$user = new User();
-		$user->fromArray(json_decode(base64_decode($jwt_values[1]),true));*/
-		return base64_decode($jwt_values[1])['code'];
-		$user = \API\Model\UserQuery::create()->findPK(base64_decode($jwt_values[1]));
-		if ($user->getDeletedat() != null) { return false; }
+		if ($jwt_values[2] != $signature) { 
+			return false; 
+		}
+		$user = new User();
+		$user->fromArray(json_decode(base64_decode($jwt_values[1]),true));
+		$user = \API\Model\UserQuery::create()->findPK($user->getCode());
+		if ($user->getDeletedat() != null) { 
+			return false; 
+		}
 		return $user;
 	}
 
