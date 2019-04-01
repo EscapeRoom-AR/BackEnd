@@ -147,10 +147,10 @@ class API extends \Slim\App {
 
 	// Returns false if token is incorrect, a User object otherwise.
 	public static function auth($token){
-		if (!isset($token) || $token == "") { return false }
+		if (!isset($token) || $token == "") { return false; }
 		$jwt_values = explode('.', $token);
 		$signature = base64_encode(hash_hmac('sha256', $jwt_values[0]. '.'. $jwt_values[1], Api::$secret_key, true));
-		if ($jwt_values[2] != $signature) { return false }
+		if ($jwt_values[2] != $signature) { return false; }
 		/*$user = new User();
 		$user->fromArray(json_decode(base64_decode($jwt_values[1]),true));*/
 		$user = \API\Model\UserQuery::create()->findPK(base64_decode($jwt_values[1]),true));
