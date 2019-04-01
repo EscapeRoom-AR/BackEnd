@@ -214,7 +214,7 @@ class API extends \Slim\App {
 		$payload = base64_encode($user->getCode());
 		$signature= base64_encode(hash_hmac('sha256', $header. '.'. $payload, Api::$secret_key, true));
 		$jwt_token= $header. '.'. $payload. '.'. $signature;
-		return $jwt_token;
+		return urlencode($jwt_token);
 	}
 
 	// Returns false if token is incorrect, a User object otherwise.
@@ -222,7 +222,7 @@ class API extends \Slim\App {
 		if (!isset($token) || $token == "") { 
 			return false; 
 		}
-		$jwt_values = explode('.', $token);
+		$jwt_values = explode('.', urldecode($token));
 		$signature = base64_encode(hash_hmac('sha256', $jwt_values[0]. '.'. $jwt_values[1], Api::$secret_key, true));
 		if ($jwt_values[2] != $signature) { 
 			return false; 
