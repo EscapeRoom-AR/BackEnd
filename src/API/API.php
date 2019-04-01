@@ -156,7 +156,7 @@ class API extends \Slim\App {
 	// Generates a token from a User object.
 	public static function generateToken(User $user) {
 		$header= base64_encode(json_encode(array('alg'=> 'HS256', 'typ'=> 'JWT')) );
-		$payload = base64_encode($user->getCode());
+		$payload = base64_encode("aaaaa".$user->getCode());
 		$signature= base64_encode(hash_hmac('sha256', $header. '.'. $payload, Api::$secret_key, true));
 		$jwt_token= $header. '.'. $payload. '.'. $signature;
 		return $jwt_token;
