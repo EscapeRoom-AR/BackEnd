@@ -102,7 +102,7 @@ class API extends \Slim\App {
         $user->setImage($user->getImage());
         $user->setDescription($user->getDescription());
         $user->save();
-        return Api::getOkResp($response, "User updated successfully", Array("user" => $user));
+        return Api::getOkResp($response, "User updated successfully", Array("user" => $user->toArray()));
     }
 
 	public static function deleteUser(Request $request, Response $response, array $args) {
