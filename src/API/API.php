@@ -159,7 +159,7 @@ class API extends \Slim\App {
         $room = $request->getParsedBody()['room'];
 
         $user = Api::auth($token);
-        if (!$user.getUsername() == 'master'); {
+        if (!$user.getCode() == '0'); {
             return Api::getErrorResp($response, "Invalid user");
         }
         $room->save();
