@@ -17,7 +17,7 @@ class API extends \Slim\App {
 		$settings = [ 'displayErrorDetails' => true ];
 		parent::__construct(['settings' => $settings]);
 
-		checkIfMasterIsRegistered();
+		//checkIfMasterIsRegistered();
 		
 		$this->post('/register',				'\Api\API:register');
 		$this->get('/login',					'\Api\API:login');
