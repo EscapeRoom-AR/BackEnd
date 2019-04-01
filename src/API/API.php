@@ -24,6 +24,7 @@ class API extends \Slim\App {
 		$this->get('/rooms',					'\API\API:getRooms');
 		$this->get('/room/{code}',				'\API\API:getRoom');
 		$this->put('/user',                    '\API\API::updateUser');
+		$this->post('/game',                    'API\API::createRoom');
 
 
 		$this->get('/hint/{hint}/{item}',							'\API\API:tmpAddHint');
@@ -100,7 +101,8 @@ class API extends \Slim\App {
         $user->setPremium($user->getPremium());
         $user->setImage($user->getImage());
         $user->setDescription($user->getDescription());
-        return Api::getOkResp($response, "User updated", Array("user" => $user));
+        $user->save();
+        return Api::getOkResp($response, "User updated successfully", Array("user" => $user));
     }
 
 	public static function deleteUser(Request $request, Response $response, array $args) {
@@ -152,6 +154,18 @@ class API extends \Slim\App {
 		$room['items'] = $items;
 		return Api::getOkResp($response, "Ok", $room);
 	}
+
+	public static function createRoom(Request $request, Response $response, array $args){
+        $token = $request->getQueryParams()['token'];
+        $room = $request->getParsedBody()['room'];
+
+        $user = Api::auth($token);
+        if (!$user.getUsername() == 'master'); {
+            return Api::getErrorResp($response, "Invalid user");
+        }
+        $room->save();
+        return Api::getOkResp($response, "Room created successfully");
+    }
 	
 	// Generates a token from a User object.
 	public static function generateToken(User $user) {
