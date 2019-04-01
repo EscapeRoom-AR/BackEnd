@@ -88,7 +88,7 @@ class API extends \Slim\App {
 
 	public static function deleteUser(Request $request, Response $response, array $args) {
 		$token = $request->getParsedBody()['token'];
-		$user = Api::checkAuthentication($token);
+		$user = Api::auth($token);
 		if (!$user) { 
 			return Api::getErrorResp($response, "Token is incorrect."); 
 		}
@@ -100,7 +100,7 @@ class API extends \Slim\App {
 
 	public static function getUser(Request $request, Response $response, array $args) {
 		$token = $request->getQueryParams()['token'];
-		$user = Api::checkAuthentication($token);
+		$user = Api::auth($token);
 		if (!$user) { 
 			return Api::getErrorResp($response, "Token is incorrect."); 
 		}
@@ -109,7 +109,7 @@ class API extends \Slim\App {
 
 	public static function getRooms(Request $request, Response $response, array $args) {
 		$token = $request->getQueryParams()['token'];
-		$user = Api::checkAuthentication($token);
+		$user = Api::auth($token);
 		if (!$user) { 
 			return Api::getErrorResp($response, "Token is incorrect."); 
 		}
