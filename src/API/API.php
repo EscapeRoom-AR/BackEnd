@@ -17,7 +17,7 @@ class API extends \Slim\App {
 		$settings = [ 'displayErrorDetails' => true ];
 		parent::__construct(['settings' => $settings]);
 
-		//checkIfMasterIsRegistered();
+		checkIfMasterIsRegistered();
 		
 		$this->post('/register',				'\Api\API:register');
 		$this->get('/login',					'\Api\API:login');
@@ -51,7 +51,7 @@ class API extends \Slim\App {
 		*/
 	}
 
-	public static function checkIfMasterIsRegistered() {
+	public function checkIfMasterIsRegistered() {
 		$users = \API\Model\UserQuery::create()->find()->toArray();
 		if (count($users) != 0) { return; }
 		$user = new User();
@@ -64,7 +64,6 @@ class API extends \Slim\App {
 	}
 
 	public static function register(Request $request, Response $response, array $args) {
-		Api::checkIfMasterIsRegistered();
 		$paramMap = $request->getParsedBody();
 		if (!$paramMap['email'] || !$paramMap['username'] || !$paramMap['password']) {
 			return Api::getErrorResp($response, "Email, username, or password were not provided.");
