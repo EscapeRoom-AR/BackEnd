@@ -16,6 +16,8 @@ class API extends \Slim\App {
 	public function __construct() {
 		$settings = [ 'displayErrorDetails' => true ];
 		parent::__construct(['settings' => $settings]);
+
+		checkIfMasterIsRegistered();
 		
 		$this->post('/register',				'\Api\API:register');
 		$this->get('/login',					'\Api\API:login');
@@ -49,17 +51,30 @@ class API extends \Slim\App {
 		*/
 	}
 
+	public static function checkIfMasterIsRegistered() {
+		$users = \API\Model\UserQuery::create()->find()->toArray();
+		if (count($users) != 0) { return; }
+		$user = new User();
+		$user->setUsername("admin");
+		$user->setPassword("escape.room");
+		$user->setEmail($paramMap['email']);
+		$dateTime = new DateTime();
+		$user->setCreatedat($dateTime->getTimestamp());
+		$user->save();
+	}
+
 	public static function register(Request $request, Response $response, array $args) {
+		Api::checkIfMasterIsRegistered();
 		$paramMap = $request->getParsedBody();
-		if ($paramMap['email'] == null || $paramMap['username'] == null || $paramMap['password'] == null) {
+		if (!$paramMap['email'] || !$paramMap['username'] || !$paramMap['password']) {
 			return Api::getErrorResp($response, "Email, username, or password were not provided.");
 		}
 		$user = \API\Model\UserQuery::create()->filterByUsername($paramMap['username'])->find()->getFirst();
-		if ($user != null) {
+		if (!$user) {
 			return Api::getErrorResp($response, "Username in use.");
 		}
 		$user = \API\Model\UserQuery::create()->filterByEmail($paramMap['email'])->find()->getFirst();
-		if ($user != null) {
+		if (!$user) {
 			return Api::getErrorResp($response, "Email in use.");
 		}
 		$user = new User();
@@ -74,7 +89,7 @@ class API extends \Slim\App {
 
 	public static function login(Request $request, Response $response, array $args) {
 		$paramMap = $request->getQueryParams();
-		if ($paramMap['username'] == null || $paramMap['password'] == null) { 
+		if (!$paramMap['username'] || !$paramMap['password']) { 
 			return Api::getErrorResp($response, "Username or password were not provided.");
 		}
 		$user = \API\Model\UserQuery::create()
@@ -140,7 +155,17 @@ class API extends \Slim\App {
 	}
 
 	public static function getRoom(Request $request, Response $response, array $args) {
+		$token = $request->getQueryParams()['token'];
 		$code = $args['code'];
+		if (!$code) {
+			Api::getErrorResp($response, "Codigo de room es necesario."); 
+		}
+		$user = Api::auth($token);
+		if (!$user) { 
+			return Api::getErrorResp($response, "Token is incorrect."); 
+		}
+		
+		
 		$room = \API\Model\RoomQuery::create()->findPK($code);
 		if (is_null($room) || empty($room)) {
 			return Api::getErrorResp($response, "Invalid room code.");
