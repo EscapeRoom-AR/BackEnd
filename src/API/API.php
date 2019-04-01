@@ -69,11 +69,11 @@ class API extends \Slim\App {
 			return Api::getErrorResp($response, "Email, username, or password were not provided.");
 		}
 		$user = \API\Model\UserQuery::create()->filterByUsername($paramMap['username'])->find()->getFirst();
-		if (!$user) {
+		if ($user) {
 			return Api::getErrorResp($response, "Username in use.");
 		}
 		$user = \API\Model\UserQuery::create()->filterByEmail($paramMap['email'])->find()->getFirst();
-		if (!$user) {
+		if ($user) {
 			return Api::getErrorResp($response, "Email in use.");
 		}
 		$user = new User();
@@ -169,12 +169,15 @@ class API extends \Slim\App {
 		if (is_null($room) || empty($room)) {
 			return Api::getErrorResp($response, "Invalid room code.");
 		} 
-		$room = $room->toArray();
-		$items = \API\Model\ItemQuery::create()->filterByRoomCode($args['code'])->find()->toArray();
-		for ($i = 0; $i < count($items); $i++) {
-			$items[$i]['hints'] = \API\Model\HintQuery::create()->filterByItemCode($items[$i]['Code'])->find()->toArray();
-		}
-		$room['items'] = $items;
+		// $room = $room->toArray();
+		// $items = \API\Model\ItemQuery::create()->filterByRoomCode($args['code'])->find()->toArray();
+
+		// $room['items'] = $items;
+		$room->getItems();
+		// $hints =[]
+		// for ($i = 0; $i < count($items); $i++) {
+		// 	$items[$i]['hints'] = \API\Model\HintQuery::create()->filterByItemCode($items[$i]['Code'])->find()->toArray();
+		// }
 		return Api::getOkResp($response, "Ok", $room);
 	}
 
