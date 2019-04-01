@@ -90,6 +90,7 @@ class API extends \Slim\App {
 
 	public static function updateUser(Request $request, Response $response, array $args){
 	    $token = $request->getParsedBody()['token'];
+        return Api::getErrorResp($response, $token);
 	    $newUser = $request->getParsedBody()['user'];
 	    $user = Api::auth($token);
         if (!$user) {
