@@ -139,7 +139,7 @@ class API extends \Slim\App {
 	public static function generateToken(User $user) {
 		$header= base64_encode(json_encode(array('alg'=> 'HS256', 'typ'=> 'JWT')) );
 		//$payload= base64_encode(json_encode($user->toArray()));
-		$payload = base64_encode($user->getCode());
+		$payload = base64_encode(["code" => $user->getCode()]);
 		$signature= base64_encode(hash_hmac('sha256', $header. '.'. $payload, Api::$secret_key, true));
 		$jwt_token= $header. '.'. $payload. '.'. $signature;
 		return $jwt_token;
@@ -153,7 +153,7 @@ class API extends \Slim\App {
 		if ($jwt_values[2] != $signature) { return false; }
 		/*$user = new User();
 		$user->fromArray(json_decode(base64_decode($jwt_values[1]),true));*/
-		return base64_decode($jwt_values[1]);
+		return base64_decode($jwt_values[1])['code'];
 		$user = \API\Model\UserQuery::create()->findPK(base64_decode($jwt_values[1]));
 		if ($user->getDeletedat() != null) { return false; }
 		return $user;
