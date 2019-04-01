@@ -164,11 +164,12 @@ class API extends \Slim\App {
 
 	// Returns false if token is incorrect, a User object otherwise.
 	public static function auth($token) {
+		$jwt_values = explode('.', $token);
 		return $jwt_values[1];
 		if (!isset($token) || $token == "") { 
 			return false; 
 		}
-		$jwt_values = explode('.', $token);
+		
 		$signature = base64_encode(hash_hmac('sha256', $jwt_values[0]. '.'. $jwt_values[1], Api::$secret_key, true));
 		if ($jwt_values[2] != $signature) { 
 			return false; 
