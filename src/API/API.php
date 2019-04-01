@@ -65,7 +65,7 @@ class API extends \Slim\App {
 
 	public static function register(Request $request, Response $response, array $args) {
 		$paramMap = $request->getParsedBody();
-		if (!$paramMap['email'] || !$paramMap['username'] || !$paramMap['password']) {
+		if ($paramMap['email'] == null || $paramMap['username'] == null || !$paramMap['password'] == null) {
 			return Api::getErrorResp($response, "Email, username, or password were not provided.");
 		}
 		$user = \API\Model\UserQuery::create()->filterByUsername($paramMap['username'])->find()->getFirst();
@@ -163,8 +163,6 @@ class API extends \Slim\App {
 		if (!$user) { 
 			return Api::getErrorResp($response, "Token is incorrect: ".$token); 
 		}
-		
-		
 		$room = \API\Model\RoomQuery::create()->findPK($code);
 		if (is_null($room) || empty($room)) {
 			return Api::getErrorResp($response, "Invalid room code.");
