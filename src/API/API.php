@@ -111,7 +111,7 @@ class API extends \Slim\App {
 		$token = $request->getQueryParams()['token'];
 		$user = Api::auth($token);
 		if (!$user) { 
-			return Api::getErrorResp($response, "Token is incorrect."); 
+			return Api::getErrorResp($response, [$user]); 
 		}
 		$rooms = \API\Model\RoomQuery::create()->find();
 		if (!$rooms) {
@@ -153,6 +153,7 @@ class API extends \Slim\App {
 		if ($jwt_values[2] != $signature) { return false; }
 		/*$user = new User();
 		$user->fromArray(json_decode(base64_decode($jwt_values[1]),true));*/
+		return base64_decode($jwt_values[1]);
 		$user = \API\Model\UserQuery::create()->findPK(base64_decode($jwt_values[1]));
 		if ($user->getDeletedat() != null) { return false; }
 		return $user;
