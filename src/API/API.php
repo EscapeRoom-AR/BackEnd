@@ -108,7 +108,6 @@ class API extends \Slim\App {
 	public static function deleteUser(Request $request, Response $response, array $args) {
 		$token = $request->getParsedBody()['token'];
 		$user = Api::auth($token);
-		return Api::getErrorResp($response, "User code: ".$user);
 		if (!$user) { 
 			return Api::getErrorResp($response, "Token is incorrect."); 
 		}
@@ -186,9 +185,6 @@ class API extends \Slim\App {
 		if ($jwt_values[2] != $signature) { 
 			return false; 
 		}
-		/*$user = new User();
-		$user->fromArray(json_decode(base64_decode($jwt_values[1]),true));
-		$user = \API\Model\UserQuery::create()->findPK($user->getCode()); */
 		$user = \API\Model\UserQuery::create()->findPK(base64_decode($jwt_values[1]));
 		if ($user->getDeletedat() != null) { 
 			return false; 
