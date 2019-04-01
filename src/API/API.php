@@ -111,7 +111,7 @@ class API extends \Slim\App {
 		$token = $request->getQueryParams()['token'];
 		$user = Api::auth($token);
 		if (!$user) { 
-			return Api::getErrorResp($response, [$user]); 
+			return Api::getErrorResp($response, "".$user); 
 		}
 		$rooms = \API\Model\RoomQuery::create()->find();
 		if (!$rooms) {
