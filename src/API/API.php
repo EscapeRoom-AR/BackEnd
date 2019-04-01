@@ -57,7 +57,7 @@ class API extends \Slim\App {
 		$user = new User();
 		$user->setUsername("admin");
 		$user->setPassword("escape.room");
-		$user->setEmail($paramMap['email']);
+		$user->setEmail("escape.room.ar@gmail.com");
 		$dateTime = new DateTime();
 		$user->setCreatedat($dateTime->getTimestamp());
 		$user->save();
