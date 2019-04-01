@@ -58,6 +58,7 @@
   </table>
 
   <table name="hint">
+    <column name="id" type="integer" primaryKey="true" autoIncrement="true" required="true"/>
     <column name="hint" type="varchar" size="255" required="true" />
     <column name="item_code" type="integer" required="true" />
     <foreign-key foreignTable="item">
