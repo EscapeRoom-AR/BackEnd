@@ -5,21 +5,22 @@ namespace Controller;
 use \Psr\Http\Message\ServerRequestInterface as Request;
 use \Psr\Http\Message\ResponseInterface as Response;
 use \Propel\Runtime\ActiveQuery\Criteria as Criteria;
+use \Utils\Token as Token;
 
 class UserController {
 
 	public function register(Request $request, Response $response, array $args) {
 		$paramMap = $request->getParsedBody();
 		if ($paramMap['email'] == null || $paramMap['username'] == null || $paramMap['password'] == null) {
-			return Api::getErrorResp($response, "Email, username, or password were not provided.");
+			return $this->getErrorResp($response, "Email, username, or password were not provided.");
 		}
 		$user = \API\Model\UserQuery::create()->filterByUsername($paramMap['username'])->find()->getFirst();
 		if ($user) {
-			return Api::getErrorResp($response, "Username in use.");
+			return $this->getErrorResp($response, "Username in use.");
 		}
 		$user = \API\Model\UserQuery::create()->filterByEmail($paramMap['email'])->find()->getFirst();
 		if ($user) {
-			return Api::getErrorResp($response, "Email in use.");
+			return $this->getErrorResp($response, "Email in use.");
 		}
 		$user = new User();
 		$user->setUsername($paramMap['username']);
@@ -28,13 +29,13 @@ class UserController {
 		$dateTime = new DateTime();
 		$user->setCreatedat($dateTime->getTimestamp());
 		$user->save();
-		return Api::getOkResp($response, "Registered successfully", Array("token" => Api::generateToken($user)));
+		return $this->getOkResp($response, "Registered successfully", Array("token" => $this->generateToken($user)));
 	}
 
 	public function login(Request $request, Response $response, array $args) {
 		$paramMap = $request->getQueryParams();
 		if (is_null($paramMap['username']) || is_null($paramMap['password'])) { 
-			return Api::getErrorResp($response, "Username or password were not provided.");
+			return $this->getErrorResp($response, "Username or password were not provided.");
 		}
 		$user = \API\Model\UserQuery::create()
 			->filterByUsername($paramMap['username'])
@@ -42,27 +43,24 @@ class UserController {
 			->filterByDeletedat(null)
 			->find()->getFirst();
 		if (!$user) { 
-			return Api::getErrorResp($response, "Invalid credentials."); 
+			return $this->getErrorResp($response, "Invalid credentials."); 
 		}
-		return Api::getOkResp($response, "Valid credentials", Array("token" => Api::generateToken($user)));
+		return $this->getOkResp($response, Array("token" => $this->generateToken($user)));
 	}
 
 	public function getUser(Request $request, Response $response, array $args) {
-		$token = $request->getQueryParams()['token'];
-		$user = Api::auth($token);
+		$user = Token::auth($request->getQueryParams()['token']);
 		if (!$user) { 
-			return Api::getErrorResp($response, "Token is incorrect."); 
+			return $this->getErrorTokenResp($response); 
 		}
-		return Api::getOkResp($response, "Ok", $user->toArray());
+		return $this->getOkResp($response, $user->toArray());
 	}
 
 	public function updateUser(Request $request, Response $response, array $args){
-	    $token = $request->getParsedBody()['token'];
+	    if (!Token::auth($request->getParsedBody()['token'])) { 
+			return $this->getErrorTokenResp($response); 
+		}
 	    $newUser = $request->getParsedBody()['user'];
-	    $user = Api::auth($token);
-        if (!$user) {
-            return Api::getErrorResp($response, "Token is incorrect.");
-        }
         $user->setUsername($user->getUsername());
         $user->setEmail($user->getEmail());
         $user->setPassword($user->getPassword());
@@ -70,19 +68,18 @@ class UserController {
         $user->setImage($user->getImage());
         $user->setDescription($user->getDescription());
         $user->save();
-        return Api::getOkResp($response, "User updated successfully", Array("user" => $user->toArray()));
+        return $this->getOkResp($response, Array("user" => $user->toArray()));
     }
 
 	public function deleteUser(Request $request, Response $response, array $args) {
-		$token = $request->getParsedBody()['token'];
-		$user = Api::auth($token);
+		$user = Token::auth($request->getParsedBody()['token']);
 		if (!$user) { 
-			return Api::getErrorResp($response, "Token is incorrect."); 
+			return $this->getErrorTokenResp($response); 
 		}
 		$dateTime = new DateTime();
 		$user->setDeletedat($dateTime);
 		$user->save();
-		return Api::getOkResp($response, "User deleted successfully.");
+		return $this->getOkResp($response);
 	}
 
 } 

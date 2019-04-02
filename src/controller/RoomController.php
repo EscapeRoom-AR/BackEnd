@@ -16,7 +16,7 @@ class RoomController extends Controller {
 			return $this->getErrorTokenResp($response); 
 		}
 		$rooms = RoomQuery::create()->find();
-		return $this->getOkResp($response, "Ok", $rooms->toArray());
+		return $this->getOkResp($response, $rooms->toArray());
 	}
 
 	public function getRoom(Request $request, Response $response, array $args) {
