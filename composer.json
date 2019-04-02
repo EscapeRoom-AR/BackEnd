@@ -7,7 +7,6 @@
         }
     ],
     "autoload": {
-      "psr-4": { "API\\": "src/API/" },
       "classmap": ["src/"]
     },
     "require": {
