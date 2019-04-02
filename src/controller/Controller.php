@@ -2,6 +2,10 @@
 
 namespace Controller;
 
+use \Psr\Http\Message\ServerRequestInterface as Request;
+use \Psr\Http\Message\ResponseInterface as Response;
+use \Propel\Runtime\ActiveQuery\Criteria as Criteria;
+
 class Controller {
 	
 	// Generates success response, to always have the same format.
