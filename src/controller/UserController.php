@@ -14,7 +14,7 @@ class UserController extends Controller {
 	public function getUser(Request $request, Response $response, array $args) {
 		//$user = Token::auth($request->getQueryParams()['token']);
 		$user = Token::auth($request->getHeader('Authorization'));
-		$response->withJson(["code" => 1, "message" => "Ok", "data" => ["token" => $request->getHeader('Authorization')]], 200);
+		return $response->withJson(["code" => 1, "message" => "Ok", "data" => ["token" => $request->getHeader('Authorization')]], 200);
 		if (!$user) { 
 			return $this->getErrorTokenResp($response); 
 		}
