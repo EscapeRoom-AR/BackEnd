@@ -6,6 +6,8 @@ use \Psr\Http\Message\ServerRequestInterface as Request;
 use \Psr\Http\Message\ResponseInterface as Response;
 use \Propel\Runtime\ActiveQuery\Criteria as Criteria;
 use \Utils\Token as Token;
+use \DateTime as DateTime;
+use \API\Model\User as User;
 
 class UserController extends Controller {
 

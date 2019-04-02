@@ -8,6 +8,8 @@ use \Propel\Runtime\ActiveQuery\Criteria as Criteria;
 use \API\Model\HintQuery as HintQuery;
 use \API\Model\RoomQuery as RoomQuery;
 use \Utils\Token as Token;
+use \DateTime as DateTime;
+use \API\Model\User as User;
 
 class RoomController extends Controller {
 
