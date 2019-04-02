@@ -1,11 +1,15 @@
 {
   "ExpandedNodes": [
     "",
+    "\\model",
+    "\\model\\generated-conf",
+    "\\model\\schemas",
     "\\src",
     "\\src\\API",
-    "\\src\\API\\Model",
-    "\\src\\API\\Model\\Base"
+    "\\src\\API\\Model\\Base",
+    "\\src\\controller",
+    "\\web"
   ],
-  "SelectedNode": "\\src\\API\\Model\\Base\\HintQuery.php",
+  "SelectedNode": "\\src\\controller\\RoomController.php",
   "PreviewInSolutionExplorer": false
 }

@@ -25,7 +25,7 @@ class API extends \Slim\App {
 		$this->get('/user',						'\Api\API:getUser');
 		$this->get('/rooms',					'\API\API:getRooms');
 		$this->get('/room/{code}',				'\API\API:getRoom');
-		$this->put('/user',                    '\API\API::updateUser');
+		$this->put('/user',                     '\API\API::updateUser');
 		$this->post('/game',                    'API\API::createRoom');
 
 
@@ -161,7 +161,7 @@ class API extends \Slim\App {
 		}
 		$user = Api::auth($token);
 		if (!$user) { 
-			return Api::getErrorResp($response, "Token is incorrect: ".$token); 
+			return Api::getErrorResp($response, "Token is incorrect."); 
 		}
 		$room = \API\Model\RoomQuery::create()->findPK($code);
 		if (is_null($room) || empty($room)) {
@@ -240,10 +240,12 @@ class API extends \Slim\App {
 		return $response->withJson(["code" => 0, "message" => $message], 404);
 	}
 
+	// Encode to base64 in a uri friendly way.
 	public static function base64url_encode($data) {
 	  return rtrim( strtr( base64_encode( $data ), '+/', '-_'), '=');
 	}
 
+	// Decode from uri friendly base64. 
 	public static function base64url_decode($data) {
 	  return base64_decode( strtr( $data, '-_', '+/') . str_repeat('=', 3 - ( 3 + strlen( $data )) % 4 ));
 	} 
