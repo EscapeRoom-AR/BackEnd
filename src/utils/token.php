@@ -2,6 +2,7 @@
 
 namespace Utils;
 
+use \Psr\Http\Message\ServerRequestInterface as Request;
 use \Model\User as User;
 
 class Token {
@@ -17,7 +18,8 @@ class Token {
 	}
 
 	// Returns false if token is incorrect, a User object otherwise.
-	public static function auth($token) {
+	public static function auth(Request $request) {
+		$token = $request->getHeader('Authorization')[0];
 		if (!isset($token) || $token == "") { 
 			return false; 
 		}
