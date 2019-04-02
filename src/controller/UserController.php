@@ -11,18 +11,21 @@ use \Model\User as User;
 
 class UserController extends Controller {
 
+	// Gets user information. (GET: /user)
+	// Requires token in header.
 	public function getUser(Request $request, Response $response, array $args) {
-		//$user = Token::auth($request->getQueryParams()['token']);
 		$user = Token::auth($request);
-		//return $response->withJson(["code" => 1, "message" => "Ok", "data" => ["token" => $request->getHeader('Authorization')]], 200);
 		if (!$user) { 
 			return $this->getErrorTokenResp($response); 
 		}
 		return $this->getOkResp($response, $user->toArray());
 	}
 
+	// Updates user information. (PUT: /user)
+	// Requires token in header.
+	// Params in body with form-data format: entire user in json.
 	public function updateUser(Request $request, Response $response, array $args){
-	    if (!Token::auth($request->getParsedBody()['token'])) { 
+	    if (!Token::auth($request)) { 
 			return $this->getErrorTokenResp($response); 
 		}
 	    $newUser = $request->getParsedBody()['user'];
@@ -36,8 +39,10 @@ class UserController extends Controller {
         return $this->getOkResp($response, Array("user" => $user->toArray()));
     }
 
+	// Deletes user embedded in token. (DELETE: /user)
+	// Requires token in header.
 	public function deleteUser(Request $request, Response $response, array $args) {
-		$user = Token::auth($request->getParsedBody()['token']);
+		$user = Token::auth($request);
 		if (!$user) { 
 			return $this->getErrorTokenResp($response); 
 		}

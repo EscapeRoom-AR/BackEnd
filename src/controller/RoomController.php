@@ -13,16 +13,20 @@ use \Model\User as User;
 
 class RoomController extends Controller {
 
+	// Returns all rooms. (GET: /rooms)
+	// Requires token in header.
 	public function getRooms(Request $request, Response $response, array $args) {
-		if (!Token::auth($request->getQueryParams()['token'])) { 
+		if (!Token::auth($request)) { 
 			return $this->getErrorTokenResp($response); 
 		}
 		$rooms = RoomQuery::create()->find();
 		return $this->getOkResp($response, $rooms->toArray());
 	}
 
+	// Returns a specific room with all related data. (GET: /room/{code})
+	// Requires token in header.
 	public function getRoom(Request $request, Response $response, array $args) {
-		if (!Token::auth($request->getQueryParams()['token'])) { 
+		if (!Token::auth($request)) { 
 			return $this->getErrorTokenResp($response); 
 		}
 		$room = RoomQuery::create()->findPK($args['code']);
