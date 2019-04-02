@@ -6,11 +6,13 @@ use \API\Model\User as User;
 
 class Token {
 
+	private static $secret_key = '^cbV&Q@DeA4#pHuGaaVx';
+
 	// Generates a token from a User object.
 	public static function generateToken(User $user) {
 		$header= Token::base64url_encode(json_encode(array('alg'=> 'HS256', 'typ'=> 'JWT')) );
 		$payload = Token::base64url_encode($user->getCode());
-		$signature= Token::base64url_encode(hash_hmac('sha256', $header. '.'. $payload, Api::$secret_key, true));
+		$signature= Token::base64url_encode(hash_hmac('sha256', $header. '.'. $payload, Token::$secret_key, true));
 		return $header. '.'. $payload. '.'. $signature;
 	}
 
@@ -20,7 +22,7 @@ class Token {
 			return false; 
 		}
 		$jwt_values = explode('.', $token);
-		$signature = Token::base64url_encode(hash_hmac('sha256', $jwt_values[0]. '.'. $jwt_values[1], Api::$secret_key, true));
+		$signature = Token::base64url_encode(hash_hmac('sha256', $jwt_values[0]. '.'. $jwt_values[1], Token::$secret_key, true));
 		if ($jwt_values[2] != $signature) { 
 			return false; 
 		}
