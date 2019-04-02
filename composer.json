@@ -6,9 +6,10 @@
             "email": "dam2t02@stucom.flx.cat"
         }
     ],
-    "autoload": {
-      "classmap": ["src/"]
-    },
+  "autoload": {
+    "psr-4": { "":  "src/" }
+    
+  },
     "require": {
         "slim/slim": "^3.12",
         "propel/propel": "~2.0@dev",

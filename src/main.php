@@ -12,12 +12,6 @@ require_once('../vendor/autoload.php');
 # Propel configuration
 require_once('../model/generated-conf/config.php');
 
-# Autoload controllers
-//require_once('controller/autoload.php');
-
-# Load token class
-//require_once('utils/token.php');
-
 # Create instance of slim app (configured to show errors)
 $app = new \Slim\App(['settings' => ['displayErrorDetails' => true]]);
 
