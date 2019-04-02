@@ -2,6 +2,8 @@
 
 namespace Utils;
 
+use \API\Model\User as User;
+
 class Token {
 
 	// Generates a token from a User object.
