@@ -12,13 +12,13 @@ require_once('../vendor/autoload.php');
 # Propel configuration
 require_once('../model/generated-conf/config.php');
 
-# Create instance of slim app (configured to show errors)
+# Create instance of slim app (configured to show errors, should remove in production)
 $app = new \Slim\App(['settings' => ['displayErrorDetails' => true]]);
 
 # Add API routes
 require_once('routes/routes.php');
 
-# Insert admin if no users registered
+# Insert admin if no users registered (Remove in production)
 require_once('utils/adminuser.php');
 
 # Bootstrap application

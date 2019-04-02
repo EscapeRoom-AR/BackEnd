@@ -8,26 +8,27 @@ use \Propel\Runtime\ActiveQuery\Criteria as Criteria;
 use \Utils\Token as Token;
 use \DateTime as DateTime;
 use \Model\User as User;
+use \Model\UserQuery as UserQuery;
 
 class AuthController extends Controller {
 
 	public function register(Request $request, Response $response, array $args) {
-		$paramMap = $request->getParsedBody();
-		if ($paramMap['email'] == null || $paramMap['username'] == null || $paramMap['password'] == null) {
+		$params = $request->getParsedBody();
+		if ($params['email'] == null || $params['username'] == null || $params['password'] == null) {
 			return $this->getErrorResp($response, "Email, username, or password were not provided.");
 		}
-		$user = \Model\UserQuery::create()->filterByUsername($paramMap['username'])->find()->getFirst();
+		$user = UserQuery::create()->filterByUsername($params['username'])->find()->getFirst();
 		if ($user) {
 			return $this->getErrorResp($response, "Username in use.");
 		}
-		$user = \Model\UserQuery::create()->filterByEmail($paramMap['email'])->find()->getFirst();
+		$user = UserQuery::create()->filterByEmail($params['email'])->find()->getFirst();
 		if ($user) {
 			return $this->getErrorResp($response, "Email in use.");
 		}
 		$user = new User();
-		$user->setUsername($paramMap['username']);
-		$user->setPassword($paramMap['password']);
-		$user->setEmail($paramMap['email']);
+		$user->setUsername($params['username']);
+		$user->setPassword($params['password']);
+		$user->setEmail($params['email']);
 		$dateTime = new DateTime();
 		$user->setCreatedat($dateTime->getTimestamp());
 		$user->save();
@@ -35,13 +36,13 @@ class AuthController extends Controller {
 	}
 
 	public function login(Request $request, Response $response, array $args) {
-		$paramMap = $request->getQueryParams();
-		if (is_null($paramMap['username']) || is_null($paramMap['password'])) { 
+		$params = $request->getQueryParams();
+		if (is_null($params['username']) || is_null($params['password'])) { 
 			return $this->getErrorResp($response, "Username or password were not provided.");
 		}
-		$user = \Model\UserQuery::create()
-			->filterByUsername($paramMap['username'])
-			->filterByPassword($paramMap['password'])
+		$user = UserQuery::create()
+			->filterByUsername($params['username'])
+			->filterByPassword($params['password'])
 			->filterByDeletedat(null)
 			->find()->getFirst();
 		if (!$user) { 
