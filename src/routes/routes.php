@@ -1,8 +1,8 @@
 <?php
 
-$app->post('/register',		'\Controller\UserController:register');
+$app->post('/register',		'\Controller\AuthController:register');
 
-$app->get('/login',			'\Controller\UserController:login');
+$app->get('/login',			'\Controller\AuthController:login');
 
 $app->get('/user',			'\Controller\UserController:getUser');
 
