@@ -7,7 +7,7 @@ use \Psr\Http\Message\ResponseInterface as Response;
 use \Propel\Runtime\ActiveQuery\Criteria as Criteria;
 use \Utils\Token as Token;
 
-class UserController {
+class UserController extends Controller {
 
 	public function register(Request $request, Response $response, array $args) {
 		$paramMap = $request->getParsedBody();
