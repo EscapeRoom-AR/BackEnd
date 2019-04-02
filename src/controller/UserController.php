@@ -31,7 +31,7 @@ class UserController extends Controller {
 		$dateTime = new DateTime();
 		$user->setCreatedat($dateTime->getTimestamp());
 		$user->save();
-		return $this->getOkResp($response, "Registered successfully", Array("token" => Token::generateToken($user)));
+		return $this->getOkResp($response, Array("token" => Token::generateToken($user)));
 	}
 
 	public function login(Request $request, Response $response, array $args) {
