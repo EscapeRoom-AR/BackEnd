@@ -8,9 +8,9 @@ class Token {
 
 	// Generates a token from a User object.
 	public static function generateToken(User $user) {
-		$header= Api::base64url_encode(json_encode(array('alg'=> 'HS256', 'typ'=> 'JWT')) );
-		$payload = Api::base64url_encode($user->getCode());
-		$signature= Api::base64url_encode(hash_hmac('sha256', $header. '.'. $payload, Api::$secret_key, true));
+		$header= Token::base64url_encode(json_encode(array('alg'=> 'HS256', 'typ'=> 'JWT')) );
+		$payload = Token::base64url_encode($user->getCode());
+		$signature= Token::base64url_encode(hash_hmac('sha256', $header. '.'. $payload, Api::$secret_key, true));
 		return $header. '.'. $payload. '.'. $signature;
 	}
 
@@ -20,11 +20,11 @@ class Token {
 			return false; 
 		}
 		$jwt_values = explode('.', $token);
-		$signature = Api::base64url_encode(hash_hmac('sha256', $jwt_values[0]. '.'. $jwt_values[1], Api::$secret_key, true));
+		$signature = Token::base64url_encode(hash_hmac('sha256', $jwt_values[0]. '.'. $jwt_values[1], Api::$secret_key, true));
 		if ($jwt_values[2] != $signature) { 
 			return false; 
 		}
-		$user = \API\Model\UserQuery::create()->findPK(Api::base64url_decode($jwt_values[1]));
+		$user = \API\Model\UserQuery::create()->findPK(Token::base64url_decode($jwt_values[1]));
 		if ($user->getDeletedat() != null) { 
 			return false; 
 		}
