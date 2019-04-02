@@ -1,6 +1,6 @@
 <?php
 
-$users = \API\Model\UserQuery::create()->find()->toArray();
+$users = \Model\UserQuery::create()->find()->toArray();
 if (count($users) != 0) { return; }
 $user = new User();
 $user->setUsername("admin");

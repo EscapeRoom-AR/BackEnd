@@ -2,7 +2,7 @@
 
 namespace Utils;
 
-use \API\Model\User as User;
+use \Model\User as User;
 
 class Token {
 
@@ -26,7 +26,7 @@ class Token {
 		if ($jwt_values[2] != $signature) { 
 			return false; 
 		}
-		$user = \API\Model\UserQuery::create()->findPK(Token::base64url_decode($jwt_values[1]));
+		$user = \Model\UserQuery::create()->findPK(Token::base64url_decode($jwt_values[1]));
 		if ($user->getDeletedat() != null) { 
 			return false; 
 		}
