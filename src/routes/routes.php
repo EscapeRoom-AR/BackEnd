@@ -1,6 +1,6 @@
 <?php
 
-$app->post('/register',		'\Controllers\UserController:register');
+$app->post('/register',		'\Controller\UserController:register');
 
 /*$app->get('/login',			'\Api\API:login');
 
