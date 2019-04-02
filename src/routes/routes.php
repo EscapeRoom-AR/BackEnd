@@ -2,9 +2,9 @@
 
 $app->post('/register',		'\Controller\UserController:register');
 
-/*$app->get('/login',			'\Api\API:login');
+$app->get('/login',			'\Controller\UserController:login');
 
-$app->get('/user',			'\Api\API:getUser');
+/*$app->get('/user',			'\Api\API:getUser');
 
 $app->delete('/user',		'\Api\API:deleteUser');
 
