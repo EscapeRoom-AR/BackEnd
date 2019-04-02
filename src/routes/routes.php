@@ -1,8 +1,8 @@
 <?php
 
-$app->post('/register',		'\Api\API:register');
+$app->post('/register',		'\Controllers\UserController:register');
 
-$app->get('/login',			'\Api\API:login');
+/*$app->get('/login',			'\Api\API:login');
 
 $app->get('/user',			'\Api\API:getUser');
 
@@ -17,4 +17,4 @@ $app->put('/user',			'\API\API::updateUser');
 $app->post('/game',			'API\API::createRoom');
 
 
-$app->get('/hint/{hint}/{item}','\API\API:tmpAddHint');
+$app->get('/hint/{hint}/{item}','\API\API:tmpAddHint');*/
