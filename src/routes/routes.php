@@ -4,9 +4,9 @@ $app->post('/register',		'\Controller\UserController:register');
 
 $app->get('/login',			'\Controller\UserController:login');
 
-$app->get('/user',			'\Api\API:getUser');
+$app->get('/user',			'\Controller\UserController:getUser');
 
-$app->delete('/user',		'\Api\API:deleteUser');
+$app->delete('/user',		'\Controller\UserController:deleteUser');
 
 /*$app->get('/rooms',			'\API\API:getRooms');
 
