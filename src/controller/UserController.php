@@ -25,18 +25,31 @@ class UserController extends Controller {
 	// Requires token in header.
 	// Params in body with form-data format: entire user in json.
 	public function updateUser(Request $request, Response $response, array $args){
-	    if (!Token::auth($request)) { 
-			return $this->getErrorTokenResp($response); 
-		}
-	    $newUser = $request->getParsedBody()['user'];
+        $user = Token::auth($request);
+        if (!$user) {
+            return $this->getErrorTokenResp($response);
+        }
+        $paramMap = $request->getParsedBody();
+	    $newUser = $paramMap['user'];
+
+        //Storing image
+        define('UPLOAD_DIR','../../files/');
+        $dir = exec('dir');
+        $img = $request->base64;
+        $img = str_replace('data:image/png;base64,', '', $img);
+        $img = str_replace(' ', '+', $img);
+        $data = base64_decode($img);
+        $file = UPLOAD_DIR . uniqid() . '.png';
+        $success = file_put_contents($file, $data);
+
         $user->setUsername($user->getUsername());
         $user->setEmail($user->getEmail());
         $user->setPassword($user->getPassword());
         $user->setPremium($user->getPremium());
-        $user->setImage($user->getImage());
+        $user->setImage($file);
         $user->setDescription($user->getDescription());
         $user->save();
-        return $this->getOkResp($response, Array("user" => $user->toArray()));
+        return $this->getOkResp($response, Array("user" => $dir->toArray()));
     }
 
 	// Deletes user embedded in token. (DELETE: /user)
