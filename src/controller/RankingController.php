@@ -19,20 +19,18 @@ class RankingController extends Controller
 //        }
 
         $games = GameQuery::create()->find();
+        $gamesArray = $games->toArray();
 
         if (count($games) > 0) {
 
 //            for ($i = 0; $i < count($games); $i++) {
 //                $games[$i]->setTime($games[$i]->getTime() + ($games[$i]->getHintsUsed() * hintTime));
 //            }
-            usort($games, function ($g1, $g2) {
+            usort($gamesArray, function ($g1, $g2) {
                 return $g1->getTime() < $g2->getTime();
             });
         }
-        for ($i = 0; $i < count($games); $i++) {
-            echo [$i];
-        }
-        return $this->getOkResp($response, $games->toArray());
+        return $this->getOkResp($response, $gamesArray);
     }
 
 }
