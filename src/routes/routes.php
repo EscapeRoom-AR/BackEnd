@@ -14,6 +14,8 @@ $app->get('/rooms',			'\Controller\RoomController:getRooms');
 
 $app->get('/room/{code}',	'\Controller\RoomController:getRoom');
 
+$app->get('/ranking',      '\Controller\RankingController:getRankings');
+
 /*
 $app->post('/game',			'API\API::createRoom');
 
