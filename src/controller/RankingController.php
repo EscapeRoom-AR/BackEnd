@@ -3,6 +3,7 @@
 namespace Controller;
 
 
+use Model\GameQuery;
 use \Psr\Http\Message\ServerRequestInterface as Request;
 use \Psr\Http\Message\ResponseInterface as Response;
 
@@ -15,7 +16,7 @@ class RankingController extends Controller
 
         $games = GameQuery::create()->find();
         for ($i = 0; $i < count($games); $i++) {
-            $games[i]->time = $games[i]->time + ($games[i]->hintsUsed * hintTime);
+            $games[i]->setTime($games[i]->getTime() + ($games[i]->hintsUsed * hintTime));
         }
         usort($games, 'gamesComparator');
 
@@ -24,6 +25,6 @@ class RankingController extends Controller
 
     private function gamesComparator($game1, $game2)
     {
-        return $game1->time - $game2->time;
+        return $game1->getTime() - $game2->getTime();
     }
 }
