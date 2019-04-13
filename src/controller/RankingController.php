@@ -1,18 +1,15 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: alexc
- * Date: 03/04/2019
- * Time: 15:37
- */
 
 namespace Controller;
 
 
+use http\Client\Response;
+use http\Env\Request;
+
 class RankingController extends Controller
 {
 
-    public function getRankings()
+    public function getRankings(Request $request, Response $response, array $args)
     {
         define('hintTime', 150000); //Time in miliseconds of 2.5minutes
 
