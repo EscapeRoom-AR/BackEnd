@@ -16,7 +16,7 @@ class RankingController extends Controller
 
         $games = GameQuery::create()->find();
         for ($i = 0; $i < count($games); $i++) {
-            $games[i]->setTime($games[i]->getTime() + ($games[i]->hintsUsed * hintTime));
+            $games[i]->setTime($games[i]->getTime() + ($games[i]->getHintsUsed() * hintTime));
         }
         usort($games, 'gamesComparator');
 
