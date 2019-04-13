@@ -29,6 +29,9 @@ class RankingController extends Controller
                 return $g1->getTime() < $g2->getTime();
             });
         }
+        for ($i = 0; $i < count($games); $i++) {
+            echo [$i];
+        }
         return $this->getOkResp($response, $games->toArray());
     }
 
