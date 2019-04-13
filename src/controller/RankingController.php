@@ -14,9 +14,9 @@ class RankingController extends Controller
     public function getRankings(Request $request, Response $response, array $args)
     {
         define('hintTime', 150000); //Time in miliseconds of 2.5minutes
-//        if (!Token::auth($request)) {
-//            return $this->getErrorTokenResp($response);
-//        }
+        if (!Token::auth($request)) {
+            return $this->getErrorTokenResp($response);
+        }
 
         $games = GameQuery::create()->find();
         $gamesArray = [];
