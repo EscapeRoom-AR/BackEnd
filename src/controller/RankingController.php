@@ -15,12 +15,14 @@ class RankingController extends Controller
         define('hintTime', 150000); //Time in miliseconds of 2.5minutes
 
         $games = GameQuery::create()->find();
-        for ($i = 0; $i < count($games); $i++) {
-            $games[i]->setTime($games[i]->getTime() + ($games[i]->getHintsUsed() * hintTime));
-        }
-        usort($games, 'gamesComparator');
+        if (count($games) > 0) {
 
-        return $games;
+            for ($i = 0; $i < count($games); $i++) {
+                $games[i]->setTime($games[i]->getTime() + ($games[i]->getHintsUsed() * hintTime));
+            }
+            usort($games, 'gamesComparator');
+        }
+        return $this->getOkResp($response, $games->toArray());
     }
 
     private function gamesComparator($game1, $game2)
