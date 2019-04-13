@@ -18,10 +18,7 @@ class RankingController extends Controller
 //            return $this->getErrorTokenResp($response);
 //        }
 
-        $games = GameQuery::create()
-            ->select('game.time + game.hints_used*'.hintTime)
-            ->orderByTime()
-            ->find();
+        $games = GameQuery::create()->find();
         $gamesArray = $games->toArray();
 
 //        if (count($games) > 0) {
@@ -29,9 +26,9 @@ class RankingController extends Controller
 //            for ($i = 0; $i < count($games); $i++) {
 //                $games[$i]->setTime($games[$i]->getTime() + ($games[$i]->getHintsUsed() * hintTime));
 //            }
-//            usort($games, function ($g1, $g2) {
-//                return $g1->getTime() < $g2->getTime();
-//            });
+            usort($gamesArray, function ($g1, $g2) {
+                return $g1->getTime() < $g2->getTime();
+            });
 //        }
 //            echo "games";
 //            echo var_dump($games);
