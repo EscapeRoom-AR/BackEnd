@@ -32,8 +32,8 @@
   </table>
 
   <table name="game">
-    <column name="created" type="TIMESTAMP" required="true"/>
-    <column name="deleted" type="TIMESTAMP" />
+    <column name="createdAt" type="TIMESTAMP" required="true"/>
+    <column name="deletedAt" type="TIMESTAMP" />
     <column name="code" type="integer"  primaryKey="true" autoIncrement="true" required="true"/>
     <column name="hints_used" type="integer" required="true" defaultValue="0"/>
     <column name="time" type="integer" required="true" />
