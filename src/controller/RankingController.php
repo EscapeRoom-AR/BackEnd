@@ -15,6 +15,7 @@ class RankingController extends Controller
         define('hintTime', 150000); //Time in miliseconds of 2.5minutes
 
         $games = GameQuery::create()->find();
+
         if (count($games) > 0) {
 
             for ($i = 0; $i < count($games); $i++) {
