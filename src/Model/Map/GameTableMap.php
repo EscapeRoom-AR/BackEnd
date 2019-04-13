@@ -72,14 +72,14 @@ class GameTableMap extends TableMap
     const NUM_HYDRATE_COLUMNS = 7;
 
     /**
-     * the column name for the created field
+     * the column name for the createdAt field
      */
-    const COL_CREATED = 'game.created';
+    const COL_CREATEDAT = 'game.createdAt';
 
     /**
-     * the column name for the deleted field
+     * the column name for the deletedAt field
      */
-    const COL_DELETED = 'game.deleted';
+    const COL_DELETEDAT = 'game.deletedAt';
 
     /**
      * the column name for the code field
@@ -118,10 +118,10 @@ class GameTableMap extends TableMap
      * e.g. self::$fieldNames[self::TYPE_PHPNAME][0] = 'Id'
      */
     protected static $fieldNames = array (
-        self::TYPE_PHPNAME       => array('Created', 'Deleted', 'Code', 'HintsUsed', 'Time', 'UserCode', 'RoomCode', ),
-        self::TYPE_CAMELNAME     => array('created', 'deleted', 'code', 'hintsUsed', 'time', 'userCode', 'roomCode', ),
-        self::TYPE_COLNAME       => array(GameTableMap::COL_CREATED, GameTableMap::COL_DELETED, GameTableMap::COL_CODE, GameTableMap::COL_HINTS_USED, GameTableMap::COL_TIME, GameTableMap::COL_USER_CODE, GameTableMap::COL_ROOM_CODE, ),
-        self::TYPE_FIELDNAME     => array('created', 'deleted', 'code', 'hints_used', 'time', 'user_code', 'room_code', ),
+        self::TYPE_PHPNAME       => array('Createdat', 'Deletedat', 'Code', 'HintsUsed', 'Time', 'UserCode', 'RoomCode', ),
+        self::TYPE_CAMELNAME     => array('createdat', 'deletedat', 'code', 'hintsUsed', 'time', 'userCode', 'roomCode', ),
+        self::TYPE_COLNAME       => array(GameTableMap::COL_CREATEDAT, GameTableMap::COL_DELETEDAT, GameTableMap::COL_CODE, GameTableMap::COL_HINTS_USED, GameTableMap::COL_TIME, GameTableMap::COL_USER_CODE, GameTableMap::COL_ROOM_CODE, ),
+        self::TYPE_FIELDNAME     => array('createdAt', 'deletedAt', 'code', 'hints_used', 'time', 'user_code', 'room_code', ),
         self::TYPE_NUM           => array(0, 1, 2, 3, 4, 5, 6, )
     );
 
@@ -132,10 +132,10 @@ class GameTableMap extends TableMap
      * e.g. self::$fieldKeys[self::TYPE_PHPNAME]['Id'] = 0
      */
     protected static $fieldKeys = array (
-        self::TYPE_PHPNAME       => array('Created' => 0, 'Deleted' => 1, 'Code' => 2, 'HintsUsed' => 3, 'Time' => 4, 'UserCode' => 5, 'RoomCode' => 6, ),
-        self::TYPE_CAMELNAME     => array('created' => 0, 'deleted' => 1, 'code' => 2, 'hintsUsed' => 3, 'time' => 4, 'userCode' => 5, 'roomCode' => 6, ),
-        self::TYPE_COLNAME       => array(GameTableMap::COL_CREATED => 0, GameTableMap::COL_DELETED => 1, GameTableMap::COL_CODE => 2, GameTableMap::COL_HINTS_USED => 3, GameTableMap::COL_TIME => 4, GameTableMap::COL_USER_CODE => 5, GameTableMap::COL_ROOM_CODE => 6, ),
-        self::TYPE_FIELDNAME     => array('created' => 0, 'deleted' => 1, 'code' => 2, 'hints_used' => 3, 'time' => 4, 'user_code' => 5, 'room_code' => 6, ),
+        self::TYPE_PHPNAME       => array('Createdat' => 0, 'Deletedat' => 1, 'Code' => 2, 'HintsUsed' => 3, 'Time' => 4, 'UserCode' => 5, 'RoomCode' => 6, ),
+        self::TYPE_CAMELNAME     => array('createdat' => 0, 'deletedat' => 1, 'code' => 2, 'hintsUsed' => 3, 'time' => 4, 'userCode' => 5, 'roomCode' => 6, ),
+        self::TYPE_COLNAME       => array(GameTableMap::COL_CREATEDAT => 0, GameTableMap::COL_DELETEDAT => 1, GameTableMap::COL_CODE => 2, GameTableMap::COL_HINTS_USED => 3, GameTableMap::COL_TIME => 4, GameTableMap::COL_USER_CODE => 5, GameTableMap::COL_ROOM_CODE => 6, ),
+        self::TYPE_FIELDNAME     => array('createdAt' => 0, 'deletedAt' => 1, 'code' => 2, 'hints_used' => 3, 'time' => 4, 'user_code' => 5, 'room_code' => 6, ),
         self::TYPE_NUM           => array(0, 1, 2, 3, 4, 5, 6, )
     );
 
@@ -156,8 +156,8 @@ class GameTableMap extends TableMap
         $this->setPackage('Model');
         $this->setUseIdGenerator(true);
         // columns
-        $this->addColumn('created', 'Created', 'TIMESTAMP', true, null, null);
-        $this->addColumn('deleted', 'Deleted', 'TIMESTAMP', false, null, null);
+        $this->addColumn('createdAt', 'Createdat', 'TIMESTAMP', true, null, null);
+        $this->addColumn('deletedAt', 'Deletedat', 'TIMESTAMP', false, null, null);
         $this->addPrimaryKey('code', 'Code', 'INTEGER', true, null, null);
         $this->addColumn('hints_used', 'HintsUsed', 'INTEGER', true, null, 0);
         $this->addColumn('time', 'Time', 'INTEGER', true, null, null);
@@ -327,16 +327,16 @@ class GameTableMap extends TableMap
     public static function addSelectColumns(Criteria $criteria, $alias = null)
     {
         if (null === $alias) {
-            $criteria->addSelectColumn(GameTableMap::COL_CREATED);
-            $criteria->addSelectColumn(GameTableMap::COL_DELETED);
+            $criteria->addSelectColumn(GameTableMap::COL_CREATEDAT);
+            $criteria->addSelectColumn(GameTableMap::COL_DELETEDAT);
             $criteria->addSelectColumn(GameTableMap::COL_CODE);
             $criteria->addSelectColumn(GameTableMap::COL_HINTS_USED);
             $criteria->addSelectColumn(GameTableMap::COL_TIME);
             $criteria->addSelectColumn(GameTableMap::COL_USER_CODE);
             $criteria->addSelectColumn(GameTableMap::COL_ROOM_CODE);
         } else {
-            $criteria->addSelectColumn($alias . '.created');
-            $criteria->addSelectColumn($alias . '.deleted');
+            $criteria->addSelectColumn($alias . '.createdAt');
+            $criteria->addSelectColumn($alias . '.deletedAt');
             $criteria->addSelectColumn($alias . '.code');
             $criteria->addSelectColumn($alias . '.hints_used');
             $criteria->addSelectColumn($alias . '.time');

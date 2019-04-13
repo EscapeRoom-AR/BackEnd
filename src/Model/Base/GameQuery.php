@@ -20,16 +20,16 @@ use Propel\Runtime\Exception\PropelException;
  *
  *
  *
- * @method     ChildGameQuery orderByCreated($order = Criteria::ASC) Order by the created column
- * @method     ChildGameQuery orderByDeleted($order = Criteria::ASC) Order by the deleted column
+ * @method     ChildGameQuery orderByCreatedat($order = Criteria::ASC) Order by the createdAt column
+ * @method     ChildGameQuery orderByDeletedat($order = Criteria::ASC) Order by the deletedAt column
  * @method     ChildGameQuery orderByCode($order = Criteria::ASC) Order by the code column
  * @method     ChildGameQuery orderByHintsUsed($order = Criteria::ASC) Order by the hints_used column
  * @method     ChildGameQuery orderByTime($order = Criteria::ASC) Order by the time column
  * @method     ChildGameQuery orderByUserCode($order = Criteria::ASC) Order by the user_code column
  * @method     ChildGameQuery orderByRoomCode($order = Criteria::ASC) Order by the room_code column
  *
- * @method     ChildGameQuery groupByCreated() Group by the created column
- * @method     ChildGameQuery groupByDeleted() Group by the deleted column
+ * @method     ChildGameQuery groupByCreatedat() Group by the createdAt column
+ * @method     ChildGameQuery groupByDeletedat() Group by the deletedAt column
  * @method     ChildGameQuery groupByCode() Group by the code column
  * @method     ChildGameQuery groupByHintsUsed() Group by the hints_used column
  * @method     ChildGameQuery groupByTime() Group by the time column
@@ -69,8 +69,8 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildGame findOne(ConnectionInterface $con = null) Return the first ChildGame matching the query
  * @method     ChildGame findOneOrCreate(ConnectionInterface $con = null) Return the first ChildGame matching the query, or a new ChildGame object populated from the query conditions when no match is found
  *
- * @method     ChildGame findOneByCreated(string $created) Return the first ChildGame filtered by the created column
- * @method     ChildGame findOneByDeleted(string $deleted) Return the first ChildGame filtered by the deleted column
+ * @method     ChildGame findOneByCreatedat(string $createdAt) Return the first ChildGame filtered by the createdAt column
+ * @method     ChildGame findOneByDeletedat(string $deletedAt) Return the first ChildGame filtered by the deletedAt column
  * @method     ChildGame findOneByCode(int $code) Return the first ChildGame filtered by the code column
  * @method     ChildGame findOneByHintsUsed(int $hints_used) Return the first ChildGame filtered by the hints_used column
  * @method     ChildGame findOneByTime(int $time) Return the first ChildGame filtered by the time column
@@ -80,8 +80,8 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildGame requirePk($key, ConnectionInterface $con = null) Return the ChildGame by primary key and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildGame requireOne(ConnectionInterface $con = null) Return the first ChildGame matching the query and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  *
- * @method     ChildGame requireOneByCreated(string $created) Return the first ChildGame filtered by the created column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
- * @method     ChildGame requireOneByDeleted(string $deleted) Return the first ChildGame filtered by the deleted column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
+ * @method     ChildGame requireOneByCreatedat(string $createdAt) Return the first ChildGame filtered by the createdAt column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
+ * @method     ChildGame requireOneByDeletedat(string $deletedAt) Return the first ChildGame filtered by the deletedAt column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildGame requireOneByCode(int $code) Return the first ChildGame filtered by the code column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildGame requireOneByHintsUsed(int $hints_used) Return the first ChildGame filtered by the hints_used column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildGame requireOneByTime(int $time) Return the first ChildGame filtered by the time column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
@@ -89,8 +89,8 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildGame requireOneByRoomCode(int $room_code) Return the first ChildGame filtered by the room_code column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  *
  * @method     ChildGame[]|ObjectCollection find(ConnectionInterface $con = null) Return ChildGame objects based on current ModelCriteria
- * @method     ChildGame[]|ObjectCollection findByCreated(string $created) Return ChildGame objects filtered by the created column
- * @method     ChildGame[]|ObjectCollection findByDeleted(string $deleted) Return ChildGame objects filtered by the deleted column
+ * @method     ChildGame[]|ObjectCollection findByCreatedat(string $createdAt) Return ChildGame objects filtered by the createdAt column
+ * @method     ChildGame[]|ObjectCollection findByDeletedat(string $deletedAt) Return ChildGame objects filtered by the deletedAt column
  * @method     ChildGame[]|ObjectCollection findByCode(int $code) Return ChildGame objects filtered by the code column
  * @method     ChildGame[]|ObjectCollection findByHintsUsed(int $hints_used) Return ChildGame objects filtered by the hints_used column
  * @method     ChildGame[]|ObjectCollection findByTime(int $time) Return ChildGame objects filtered by the time column
@@ -194,7 +194,7 @@ abstract class GameQuery extends ModelCriteria
      */
     protected function findPkSimple($key, ConnectionInterface $con)
     {
-        $sql = 'SELECT created, deleted, code, hints_used, time, user_code, room_code FROM game WHERE code = :p0';
+        $sql = 'SELECT createdAt, deletedAt, code, hints_used, time, user_code, room_code FROM game WHERE code = :p0';
         try {
             $stmt = $con->prepare($sql);
             $stmt->bindValue(':p0', $key, PDO::PARAM_INT);
@@ -285,16 +285,16 @@ abstract class GameQuery extends ModelCriteria
     }
 
     /**
-     * Filter the query on the created column
+     * Filter the query on the createdAt column
      *
      * Example usage:
      * <code>
-     * $query->filterByCreated('2011-03-14'); // WHERE created = '2011-03-14'
-     * $query->filterByCreated('now'); // WHERE created = '2011-03-14'
-     * $query->filterByCreated(array('max' => 'yesterday')); // WHERE created > '2011-03-13'
+     * $query->filterByCreatedat('2011-03-14'); // WHERE createdAt = '2011-03-14'
+     * $query->filterByCreatedat('now'); // WHERE createdAt = '2011-03-14'
+     * $query->filterByCreatedat(array('max' => 'yesterday')); // WHERE createdAt > '2011-03-13'
      * </code>
      *
-     * @param     mixed $created The value to use as filter.
+     * @param     mixed $createdat The value to use as filter.
      *              Values can be integers (unix timestamps), DateTime objects, or strings.
      *              Empty strings are treated as NULL.
      *              Use scalar values for equality.
@@ -304,16 +304,16 @@ abstract class GameQuery extends ModelCriteria
      *
      * @return $this|ChildGameQuery The current query, for fluid interface
      */
-    public function filterByCreated($created = null, $comparison = null)
+    public function filterByCreatedat($createdat = null, $comparison = null)
     {
-        if (is_array($created)) {
+        if (is_array($createdat)) {
             $useMinMax = false;
-            if (isset($created['min'])) {
-                $this->addUsingAlias(GameTableMap::COL_CREATED, $created['min'], Criteria::GREATER_EQUAL);
+            if (isset($createdat['min'])) {
+                $this->addUsingAlias(GameTableMap::COL_CREATEDAT, $createdat['min'], Criteria::GREATER_EQUAL);
                 $useMinMax = true;
             }
-            if (isset($created['max'])) {
-                $this->addUsingAlias(GameTableMap::COL_CREATED, $created['max'], Criteria::LESS_EQUAL);
+            if (isset($createdat['max'])) {
+                $this->addUsingAlias(GameTableMap::COL_CREATEDAT, $createdat['max'], Criteria::LESS_EQUAL);
                 $useMinMax = true;
             }
             if ($useMinMax) {
@@ -324,20 +324,20 @@ abstract class GameQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(GameTableMap::COL_CREATED, $created, $comparison);
+        return $this->addUsingAlias(GameTableMap::COL_CREATEDAT, $createdat, $comparison);
     }
 
     /**
-     * Filter the query on the deleted column
+     * Filter the query on the deletedAt column
      *
      * Example usage:
      * <code>
-     * $query->filterByDeleted('2011-03-14'); // WHERE deleted = '2011-03-14'
-     * $query->filterByDeleted('now'); // WHERE deleted = '2011-03-14'
-     * $query->filterByDeleted(array('max' => 'yesterday')); // WHERE deleted > '2011-03-13'
+     * $query->filterByDeletedat('2011-03-14'); // WHERE deletedAt = '2011-03-14'
+     * $query->filterByDeletedat('now'); // WHERE deletedAt = '2011-03-14'
+     * $query->filterByDeletedat(array('max' => 'yesterday')); // WHERE deletedAt > '2011-03-13'
      * </code>
      *
-     * @param     mixed $deleted The value to use as filter.
+     * @param     mixed $deletedat The value to use as filter.
      *              Values can be integers (unix timestamps), DateTime objects, or strings.
      *              Empty strings are treated as NULL.
      *              Use scalar values for equality.
@@ -347,16 +347,16 @@ abstract class GameQuery extends ModelCriteria
      *
      * @return $this|ChildGameQuery The current query, for fluid interface
      */
-    public function filterByDeleted($deleted = null, $comparison = null)
+    public function filterByDeletedat($deletedat = null, $comparison = null)
     {
-        if (is_array($deleted)) {
+        if (is_array($deletedat)) {
             $useMinMax = false;
-            if (isset($deleted['min'])) {
-                $this->addUsingAlias(GameTableMap::COL_DELETED, $deleted['min'], Criteria::GREATER_EQUAL);
+            if (isset($deletedat['min'])) {
+                $this->addUsingAlias(GameTableMap::COL_DELETEDAT, $deletedat['min'], Criteria::GREATER_EQUAL);
                 $useMinMax = true;
             }
-            if (isset($deleted['max'])) {
-                $this->addUsingAlias(GameTableMap::COL_DELETED, $deleted['max'], Criteria::LESS_EQUAL);
+            if (isset($deletedat['max'])) {
+                $this->addUsingAlias(GameTableMap::COL_DELETEDAT, $deletedat['max'], Criteria::LESS_EQUAL);
                 $useMinMax = true;
             }
             if ($useMinMax) {
@@ -367,7 +367,7 @@ abstract class GameQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(GameTableMap::COL_DELETED, $deleted, $comparison);
+        return $this->addUsingAlias(GameTableMap::COL_DELETEDAT, $deletedat, $comparison);
     }
 
     /**
