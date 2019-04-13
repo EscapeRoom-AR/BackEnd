@@ -27,7 +27,7 @@ class RankingController extends Controller
 //                $games[$i]->setTime($games[$i]->getTime() + ($games[$i]->getHintsUsed() * hintTime));
 //            }
             usort($gamesArray, function ($g1, $g2) {
-                return $g1->getTime() < $g2->getTime();
+                return $g1->time < $g2->time;
             });
 //        }
 //            echo "games";
