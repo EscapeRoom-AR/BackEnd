@@ -19,7 +19,7 @@ class RankingController extends Controller
 //        }
 
         $games = GameQuery::create()
-            ->withColumn('SUM(time+time*'.hintTime .')')
+            ->withColumn('SUM(game.time+game.time*'.hintTime .')')
             ->orderByTime()
             ->find();
         $gamesArray = $games->toArray();
