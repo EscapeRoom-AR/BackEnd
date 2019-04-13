@@ -3,8 +3,8 @@
 namespace Controller;
 
 
-use http\Client\Response;
-use http\Env\Request;
+use \Psr\Http\Message\ServerRequestInterface as Request;
+use \Psr\Http\Message\ResponseInterface as Response;
 
 class RankingController extends Controller
 {
