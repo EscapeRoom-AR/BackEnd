@@ -26,14 +26,10 @@ class RankingController extends Controller
 //            for ($i = 0; $i < count($games); $i++) {
 //                $games[$i]->setTime($games[$i]->getTime() + ($games[$i]->getHintsUsed() * hintTime));
 //            }
-            usort($gamesArray, function ($g1, $g2) {
-                return $g1['time'] < $g2['time'];
-            });
+        usort($gamesArray, function ($g1, $g2) {
+            return $g1['Time'] < $g2['Time'];
+        });
 //        }
-//            echo "games";
-//            echo var_dump($games);
-//            echo "gamesarray";
-//            echo var_dump($gamesArray);
 
         return $this->getOkResp($response, $gamesArray);
     }
