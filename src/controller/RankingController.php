@@ -6,6 +6,7 @@ namespace Controller;
 use Model\GameQuery;
 use \Psr\Http\Message\ServerRequestInterface as Request;
 use \Psr\Http\Message\ResponseInterface as Response;
+use Utils\Token;
 
 class RankingController extends Controller
 {
