@@ -32,6 +32,6 @@ class RankingController extends Controller
 
     private function gamesComparator($game1, $game2)
     {
-        return $game1->getTime() - $game2->getTime();
+        return $game1->getTime() > $game2->getTime();
     }
 }
