@@ -35,7 +35,7 @@ class RankingController extends Controller
 //            echo "gamesarray";
 //            echo var_dump($gamesArray);
 
-        return $this->getOkResp($response, $games->toArray());
+        return $this->getOkResp($response, $gamesArray);
     }
 
 }
