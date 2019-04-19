@@ -17,8 +17,8 @@ class RankingController extends Controller
         if (!Token::auth($request)) {
             return $this->getErrorTokenResp($response);
         }
-
-        $games = GameQuery::create()->find();
+        $room = $request->getHeader('Room')[0];
+        $games = GameQuery::create()->findByRoomCode($room);
         $gamesArray = [];
 
         if (count($games) > 0) {
