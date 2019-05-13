@@ -66,18 +66,18 @@ abstract class Game implements ActiveRecordInterface
     protected $virtualColumns = array();
 
     /**
-     * The value for the created field.
+     * The value for the createdat field.
      *
      * @var        DateTime
      */
-    protected $created;
+    protected $createdat;
 
     /**
-     * The value for the deleted field.
+     * The value for the deletedat field.
      *
      * @var        DateTime
      */
-    protected $deleted;
+    protected $deletedat;
 
     /**
      * The value for the code field.
@@ -372,7 +372,7 @@ abstract class Game implements ActiveRecordInterface
     }
 
     /**
-     * Get the [optionally formatted] temporal [created] column value.
+     * Get the [optionally formatted] temporal [createdat] column value.
      *
      *
      * @param      string|null $format The date/time format string (either date()-style or strftime()-style).
@@ -382,17 +382,17 @@ abstract class Game implements ActiveRecordInterface
      *
      * @throws PropelException - if unable to parse/validate the date/time value.
      */
-    public function getCreated($format = NULL)
+    public function getCreatedat($format = NULL)
     {
         if ($format === null) {
-            return $this->created;
+            return $this->createdat;
         } else {
-            return $this->created instanceof \DateTimeInterface ? $this->created->format($format) : null;
+            return $this->createdat instanceof \DateTimeInterface ? $this->createdat->format($format) : null;
         }
     }
 
     /**
-     * Get the [optionally formatted] temporal [deleted] column value.
+     * Get the [optionally formatted] temporal [deletedat] column value.
      *
      *
      * @param      string|null $format The date/time format string (either date()-style or strftime()-style).
@@ -402,12 +402,12 @@ abstract class Game implements ActiveRecordInterface
      *
      * @throws PropelException - if unable to parse/validate the date/time value.
      */
-    public function getDeleted($format = NULL)
+    public function getDeletedat($format = NULL)
     {
         if ($format === null) {
-            return $this->deleted;
+            return $this->deletedat;
         } else {
-            return $this->deleted instanceof \DateTimeInterface ? $this->deleted->format($format) : null;
+            return $this->deletedat instanceof \DateTimeInterface ? $this->deletedat->format($format) : null;
         }
     }
 
@@ -462,44 +462,44 @@ abstract class Game implements ActiveRecordInterface
     }
 
     /**
-     * Sets the value of [created] column to a normalized version of the date/time value specified.
+     * Sets the value of [createdat] column to a normalized version of the date/time value specified.
      *
      * @param  mixed $v string, integer (timestamp), or \DateTimeInterface value.
      *               Empty strings are treated as NULL.
      * @return $this|\Model\Game The current object (for fluent API support)
      */
-    public function setCreated($v)
+    public function setCreatedat($v)
     {
         $dt = PropelDateTime::newInstance($v, null, 'DateTime');
-        if ($this->created !== null || $dt !== null) {
-            if ($this->created === null || $dt === null || $dt->format("Y-m-d H:i:s.u") !== $this->created->format("Y-m-d H:i:s.u")) {
-                $this->created = $dt === null ? null : clone $dt;
-                $this->modifiedColumns[GameTableMap::COL_CREATED] = true;
+        if ($this->createdat !== null || $dt !== null) {
+            if ($this->createdat === null || $dt === null || $dt->format("Y-m-d H:i:s.u") !== $this->createdat->format("Y-m-d H:i:s.u")) {
+                $this->createdat = $dt === null ? null : clone $dt;
+                $this->modifiedColumns[GameTableMap::COL_CREATEDAT] = true;
             }
         } // if either are not null
 
         return $this;
-    } // setCreated()
+    } // setCreatedat()
 
     /**
-     * Sets the value of [deleted] column to a normalized version of the date/time value specified.
+     * Sets the value of [deletedat] column to a normalized version of the date/time value specified.
      *
      * @param  mixed $v string, integer (timestamp), or \DateTimeInterface value.
      *               Empty strings are treated as NULL.
      * @return $this|\Model\Game The current object (for fluent API support)
      */
-    public function setDeleted($v)
+    public function setDeletedat($v)
     {
         $dt = PropelDateTime::newInstance($v, null, 'DateTime');
-        if ($this->deleted !== null || $dt !== null) {
-            if ($this->deleted === null || $dt === null || $dt->format("Y-m-d H:i:s.u") !== $this->deleted->format("Y-m-d H:i:s.u")) {
-                $this->deleted = $dt === null ? null : clone $dt;
-                $this->modifiedColumns[GameTableMap::COL_DELETED] = true;
+        if ($this->deletedat !== null || $dt !== null) {
+            if ($this->deletedat === null || $dt === null || $dt->format("Y-m-d H:i:s.u") !== $this->deletedat->format("Y-m-d H:i:s.u")) {
+                $this->deletedat = $dt === null ? null : clone $dt;
+                $this->modifiedColumns[GameTableMap::COL_DELETEDAT] = true;
             }
         } // if either are not null
 
         return $this;
-    } // setDeleted()
+    } // setDeletedat()
 
     /**
      * Set the value of [code] column.
@@ -649,17 +649,17 @@ abstract class Game implements ActiveRecordInterface
     {
         try {
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 0 + $startcol : GameTableMap::translateFieldName('Created', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 0 + $startcol : GameTableMap::translateFieldName('Createdat', TableMap::TYPE_PHPNAME, $indexType)];
             if ($col === '0000-00-00 00:00:00') {
                 $col = null;
             }
-            $this->created = (null !== $col) ? PropelDateTime::newInstance($col, null, 'DateTime') : null;
+            $this->createdat = (null !== $col) ? PropelDateTime::newInstance($col, null, 'DateTime') : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 1 + $startcol : GameTableMap::translateFieldName('Deleted', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 1 + $startcol : GameTableMap::translateFieldName('Deletedat', TableMap::TYPE_PHPNAME, $indexType)];
             if ($col === '0000-00-00 00:00:00') {
                 $col = null;
             }
-            $this->deleted = (null !== $col) ? PropelDateTime::newInstance($col, null, 'DateTime') : null;
+            $this->deletedat = (null !== $col) ? PropelDateTime::newInstance($col, null, 'DateTime') : null;
 
             $col = $row[TableMap::TYPE_NUM == $indexType ? 2 + $startcol : GameTableMap::translateFieldName('Code', TableMap::TYPE_PHPNAME, $indexType)];
             $this->code = (null !== $col) ? (int) $col : null;
@@ -911,11 +911,11 @@ abstract class Game implements ActiveRecordInterface
         }
 
          // check the columns in natural order for more readable SQL queries
-        if ($this->isColumnModified(GameTableMap::COL_CREATED)) {
-            $modifiedColumns[':p' . $index++]  = 'created';
+        if ($this->isColumnModified(GameTableMap::COL_CREATEDAT)) {
+            $modifiedColumns[':p' . $index++]  = 'createdAt';
         }
-        if ($this->isColumnModified(GameTableMap::COL_DELETED)) {
-            $modifiedColumns[':p' . $index++]  = 'deleted';
+        if ($this->isColumnModified(GameTableMap::COL_DELETEDAT)) {
+            $modifiedColumns[':p' . $index++]  = 'deletedAt';
         }
         if ($this->isColumnModified(GameTableMap::COL_CODE)) {
             $modifiedColumns[':p' . $index++]  = 'code';
@@ -943,11 +943,11 @@ abstract class Game implements ActiveRecordInterface
             $stmt = $con->prepare($sql);
             foreach ($modifiedColumns as $identifier => $columnName) {
                 switch ($columnName) {
-                    case 'created':
-                        $stmt->bindValue($identifier, $this->created ? $this->created->format("Y-m-d H:i:s.u") : null, PDO::PARAM_STR);
+                    case 'createdAt':
+                        $stmt->bindValue($identifier, $this->createdat ? $this->createdat->format("Y-m-d H:i:s.u") : null, PDO::PARAM_STR);
                         break;
-                    case 'deleted':
-                        $stmt->bindValue($identifier, $this->deleted ? $this->deleted->format("Y-m-d H:i:s.u") : null, PDO::PARAM_STR);
+                    case 'deletedAt':
+                        $stmt->bindValue($identifier, $this->deletedat ? $this->deletedat->format("Y-m-d H:i:s.u") : null, PDO::PARAM_STR);
                         break;
                     case 'code':
                         $stmt->bindValue($identifier, $this->code, PDO::PARAM_INT);
@@ -1027,10 +1027,10 @@ abstract class Game implements ActiveRecordInterface
     {
         switch ($pos) {
             case 0:
-                return $this->getCreated();
+                return $this->getCreatedat();
                 break;
             case 1:
-                return $this->getDeleted();
+                return $this->getDeletedat();
                 break;
             case 2:
                 return $this->getCode();
@@ -1077,8 +1077,8 @@ abstract class Game implements ActiveRecordInterface
         $alreadyDumpedObjects['Game'][$this->hashCode()] = true;
         $keys = GameTableMap::getFieldNames($keyType);
         $result = array(
-            $keys[0] => $this->getCreated(),
-            $keys[1] => $this->getDeleted(),
+            $keys[0] => $this->getCreatedat(),
+            $keys[1] => $this->getDeletedat(),
             $keys[2] => $this->getCode(),
             $keys[3] => $this->getHintsUsed(),
             $keys[4] => $this->getTime(),
@@ -1164,10 +1164,10 @@ abstract class Game implements ActiveRecordInterface
     {
         switch ($pos) {
             case 0:
-                $this->setCreated($value);
+                $this->setCreatedat($value);
                 break;
             case 1:
-                $this->setDeleted($value);
+                $this->setDeletedat($value);
                 break;
             case 2:
                 $this->setCode($value);
@@ -1211,10 +1211,10 @@ abstract class Game implements ActiveRecordInterface
         $keys = GameTableMap::getFieldNames($keyType);
 
         if (array_key_exists($keys[0], $arr)) {
-            $this->setCreated($arr[$keys[0]]);
+            $this->setCreatedat($arr[$keys[0]]);
         }
         if (array_key_exists($keys[1], $arr)) {
-            $this->setDeleted($arr[$keys[1]]);
+            $this->setDeletedat($arr[$keys[1]]);
         }
         if (array_key_exists($keys[2], $arr)) {
             $this->setCode($arr[$keys[2]]);
@@ -1272,11 +1272,11 @@ abstract class Game implements ActiveRecordInterface
     {
         $criteria = new Criteria(GameTableMap::DATABASE_NAME);
 
-        if ($this->isColumnModified(GameTableMap::COL_CREATED)) {
-            $criteria->add(GameTableMap::COL_CREATED, $this->created);
+        if ($this->isColumnModified(GameTableMap::COL_CREATEDAT)) {
+            $criteria->add(GameTableMap::COL_CREATEDAT, $this->createdat);
         }
-        if ($this->isColumnModified(GameTableMap::COL_DELETED)) {
-            $criteria->add(GameTableMap::COL_DELETED, $this->deleted);
+        if ($this->isColumnModified(GameTableMap::COL_DELETEDAT)) {
+            $criteria->add(GameTableMap::COL_DELETEDAT, $this->deletedat);
         }
         if ($this->isColumnModified(GameTableMap::COL_CODE)) {
             $criteria->add(GameTableMap::COL_CODE, $this->code);
@@ -1379,8 +1379,8 @@ abstract class Game implements ActiveRecordInterface
      */
     public function copyInto($copyObj, $deepCopy = false, $makeNew = true)
     {
-        $copyObj->setCreated($this->getCreated());
-        $copyObj->setDeleted($this->getDeleted());
+        $copyObj->setCreatedat($this->getCreatedat());
+        $copyObj->setDeletedat($this->getDeletedat());
         $copyObj->setHintsUsed($this->getHintsUsed());
         $copyObj->setTime($this->getTime());
         $copyObj->setUserCode($this->getUserCode());
@@ -1528,8 +1528,8 @@ abstract class Game implements ActiveRecordInterface
         if (null !== $this->aRoom) {
             $this->aRoom->removeGame($this);
         }
-        $this->created = null;
-        $this->deleted = null;
+        $this->createdat = null;
+        $this->deletedat = null;
         $this->code = null;
         $this->hints_used = null;
         $this->time = null;
