@@ -1,15 +1,16 @@
 {
   "ExpandedNodes": [
     "",
+    "\\bin",
     "\\model",
-    "\\model\\generated-conf",
     "\\model\\schemas",
     "\\src",
-    "\\src\\API",
-    "\\src\\API\\Model\\Base",
     "\\src\\controller",
-    "\\web"
+    "\\src\\Model",
+    "\\src\\Model\\Base",
+    "\\src\\routes",
+    "\\src\\utils"
   ],
-  "SelectedNode": "\\src\\controller\\RoomController.php",
+  "SelectedNode": "\\src\\controller\\AuthController.php",
   "PreviewInSolutionExplorer": false
 }

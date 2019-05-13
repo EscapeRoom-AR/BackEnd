@@ -1,6 +1,7 @@
 <?php
 
 $app->post('/register',		'\Controller\AuthController:register');
+$app->get('/register',		 '\Controller\AuthController:register')
 
 $app->get('/login',			'\Controller\AuthController:login');
 
