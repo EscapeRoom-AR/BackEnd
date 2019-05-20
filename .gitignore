@@ -5,3 +5,5 @@ tmp/*
 vendor/*
 /nbproject/private/
 README.txt
+.idea
+.vs
