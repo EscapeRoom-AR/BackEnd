@@ -14,7 +14,7 @@ class Controller {
 
 	// Generates error response, to always have the same format.
 	public function getErrorResp(Response $response, string $message) {
-		return $response->withJson(["code" => 0, "message" => $message], 404);
+		return $response->withJson(["code" => 0, "message" => $message], 200);
 	}
 
 	// Generates token error response.
